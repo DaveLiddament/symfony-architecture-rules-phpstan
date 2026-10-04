@@ -116,7 +116,7 @@ final readonly class InvoiceSender
 | `#[FormType]` | `final` | |
 | `#[QueueGateway]` | | A collaborator a `#[Service]` may depend on |
 | `#[QueueProcessor]` | `final readonly` | |
-| `#[Repository]` | `final readonly` | Properties come from `Doctrine\` (`repository.dependencyType`) |
+| `#[Repository]` | `final readonly` | Properties come from `Doctrine\` (`repository.dependencyType`). Public methods use a fixed vocabulary<sup>3</sup> (`repository.methodName`, `repository.methodReturn`) |
 | `#[Serializer]` | `final` | |
 | `#[Service]` | `final readonly` | Properties are collaborators<sup>2</sup> (`service.dependencyType`) |
 | `#[ValueObject]` | `final readonly` | Properties are values (`valueObject.propertyType`)<sup>1</sup> |
@@ -128,6 +128,18 @@ of these. Nullable variants are fine; bare `array`, string-keyed maps, `\DateTim
 <sup>2</sup> A collaborator is a class with `#[Service]`, `#[Repository]`, `#[QueueGateway]`, `#[Serializer]` or
 `#[ConfigProvider]`, an interface, code from outside the app namespace (vendor code, Lib), or an iterable of these. No
 primitives: configuration arrives through a `#[ConfigProvider]`.
+
+<sup>3</sup> Repository methods:
+
+| Prefix | Meaning | Must return |
+|---|---|---|
+| `find*` | Look up a single entity | A nullable, non-iterable value |
+| `get*` | Query (collections, counts, ...) | Anything except `null` |
+| `persist*` / `update*` / `delete*` | Writes, which flush internally | `void` |
+| `has*` / `is*` | Boolean queries | Anything |
+
+The prefix must end at a camelCase boundary, so `getaway()` is not a `get`. A nullable iterable is never allowed:
+return an empty list instead.
 
 The "must be" rules have the identifier `<role>.final` or `<role>.finalReadonly`, e.g. `service.finalReadonly`.
 Commands and form types extend non-readonly Symfony base classes, so they only need to be `final`.

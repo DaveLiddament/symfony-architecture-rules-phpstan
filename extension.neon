@@ -124,6 +124,9 @@ services:
         arguments:
             doctrineNamespace: 'Doctrine'
 
+    -
+        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\RepositoryMethodRule
+
 conditionalTags:
     DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\LibIsolationRule:
         phpstan.rules.rule: %symfonyArchitecture.boundaries.enabled%
@@ -164,4 +167,6 @@ conditionalTags:
     DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ServiceDependencyRule:
         phpstan.rules.rule: %symfonyArchitecture.roles.service%
     DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\RepositoryDependencyRule:
+        phpstan.rules.rule: %symfonyArchitecture.roles.repository%
+    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\RepositoryMethodRule:
         phpstan.rules.rule: %symfonyArchitecture.roles.repository%
