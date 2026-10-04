@@ -16,6 +16,7 @@ use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\DtoDeclarationRule
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\FormTypeDeclarationRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\QueueProcessorDeclarationRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\RepositoryDeclarationRule;
+use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\RepositoryDependencyRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\SerializerDeclarationRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ServiceDeclarationRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ServiceDependencyRule;
@@ -60,6 +61,7 @@ final class RuleSets
         ],
         'repository' => [
             RepositoryDeclarationRule::class,
+            RepositoryDependencyRule::class,
         ],
         'serializer' => [
             SerializerDeclarationRule::class,
