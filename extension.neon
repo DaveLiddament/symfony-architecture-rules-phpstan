@@ -110,6 +110,9 @@ services:
     -
         class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ConfigProviderPropertyTypeRule
 
+    -
+        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ConfigProviderUsageRule
+
 conditionalTags:
     DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\LibIsolationRule:
         phpstan.rules.rule: %symfonyArchitecture.boundaries.enabled%
@@ -144,4 +147,6 @@ conditionalTags:
     DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ViewModelPropertyTypeRule:
         phpstan.rules.rule: %symfonyArchitecture.roles.viewModel%
     DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ConfigProviderPropertyTypeRule:
+        phpstan.rules.rule: %symfonyArchitecture.roles.configProvider%
+    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ConfigProviderUsageRule:
         phpstan.rules.rule: %symfonyArchitecture.roles.configProvider%

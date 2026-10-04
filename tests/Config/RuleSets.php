@@ -11,6 +11,7 @@ use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\SharedIsolati
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\CommandDeclarationRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ConfigProviderDeclarationRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ConfigProviderPropertyTypeRule;
+use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ConfigProviderUsageRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\DtoDeclarationRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\FormTypeDeclarationRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\QueueProcessorDeclarationRule;
@@ -39,6 +40,7 @@ final class RuleSets
         CommandDeclarationRule::class,
         ConfigProviderDeclarationRule::class,
         ConfigProviderPropertyTypeRule::class,
+        ConfigProviderUsageRule::class,
         DtoDeclarationRule::class,
         FormTypeDeclarationRule::class,
         QueueProcessorDeclarationRule::class,
