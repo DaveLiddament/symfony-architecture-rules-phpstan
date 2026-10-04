@@ -22,6 +22,7 @@ use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\QueueProcessorDecl
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\RepositoryDeclarationRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\RepositoryDependencyRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\RepositoryMethodRule;
+use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\RoleRequiredRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\SerializerDeclarationRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ServiceDeclarationRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ServiceDependencyRule;
@@ -42,6 +43,10 @@ final class RuleSets
         NurseryIsolationRule::class,
         RoleLocationRule::class,
         SharedIsolationRule::class,
+    ];
+
+    public const array ROLE_REQUIRED = [
+        RoleRequiredRule::class,
     ];
 
     /**

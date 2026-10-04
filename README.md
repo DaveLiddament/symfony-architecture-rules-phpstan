@@ -185,6 +185,21 @@ parameters:
             viewModel: true
 ```
 
+### Every class declares a role
+
+`RoleRequiredRule` (`architecture.roleRequired`) reports any class in a domain, Shared or the Nursery that carries no
+role attribute (or Doctrine's `#[ORM\Entity]`): an unattributed class is invisible to every role contract. Enums,
+interfaces, traits, framework glue directly in `App\` and ignored namespaces are exempt.
+
+```neon
+parameters:
+    symfonyArchitecture:
+        roleRequired:
+            enabled: true
+            exemptClasses:    # other framework glue that may stay roleless
+                - 'App\Security\DevAutoLoginAuthenticator'
+```
+
 ### The attributes and `require-dev`
 
 The attributes currently ship in this package, which you install with `--dev`, but you use them in production code.

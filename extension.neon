@@ -28,6 +28,11 @@ parameters:
             service: true
             valueObject: true
             viewModel: true
+        roleRequired:
+            # Set to false to stop requiring every application class to declare a role.
+            enabled: true
+            # Classes that may stay roleless, e.g. framework glue outside the app root.
+            exemptClasses: []
 
 parametersSchema:
     symfonyArchitecture: structure([
@@ -52,6 +57,10 @@ parametersSchema:
             service: bool()
             valueObject: bool()
             viewModel: bool()
+        ])
+        roleRequired: structure([
+            enabled: bool()
+            exemptClasses: listOf(string())
         ])
     ])
 
@@ -152,6 +161,12 @@ services:
         arguments:
             allowedReturnTypes: %symfonyArchitecture.controllerReturnTypes%
 
+    -
+        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\RoleRequiredRule
+        arguments:
+            entityAttribute: 'Doctrine\ORM\Mapping\Entity'
+            exemptClasses: %symfonyArchitecture.roleRequired.exemptClasses%
+
 conditionalTags:
     DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\LibIsolationRule:
         phpstan.rules.rule: %symfonyArchitecture.boundaries.enabled%
@@ -203,3 +218,5 @@ conditionalTags:
         phpstan.rules.rule: %symfonyArchitecture.roles.serializer%
     DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ControllerMethodReturnTypeRule:
         phpstan.rules.rule: %symfonyArchitecture.roles.controller%
+    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\RoleRequiredRule:
+        phpstan.rules.rule: %symfonyArchitecture.roleRequired.enabled%

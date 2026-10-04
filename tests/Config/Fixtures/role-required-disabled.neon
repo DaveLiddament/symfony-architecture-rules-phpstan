@@ -1,0 +1,4 @@
+parameters:
+    symfonyArchitecture:
+        roleRequired:
+            enabled: false
