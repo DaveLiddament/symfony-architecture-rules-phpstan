@@ -112,7 +112,7 @@ final readonly class InvoiceSender
 | `#[Serializer]` | `final` | |
 | `#[Service]` | `final readonly` | |
 | `#[ValueObject]` | `final readonly` | Properties are values (`valueObject.propertyType`)<sup>1</sup> |
-| `#[ViewModel]` | `final readonly` | |
+| `#[ViewModel]` | `final readonly` | Properties are values, but may hold view models instead of value objects (`viewModel.propertyType`)<sup>1</sup> |
 
 <sup>1</sup> A value is a primitive, `\DateTimeImmutable`, an enum, another class with the same attribute, or a `list<>`
 of these. Nullable variants are fine; bare `array`, string-keyed maps, `\DateTime` and untyped properties are not.

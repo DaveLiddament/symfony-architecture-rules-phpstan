@@ -104,6 +104,9 @@ services:
     -
         class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ValueObjectPropertyTypeRule
 
+    -
+        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ViewModelPropertyTypeRule
+
 conditionalTags:
     DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\LibIsolationRule:
         phpstan.rules.rule: %symfonyArchitecture.boundaries.enabled%
@@ -135,3 +138,5 @@ conditionalTags:
         phpstan.rules.rule: %symfonyArchitecture.roles.viewModel%
     DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ValueObjectPropertyTypeRule:
         phpstan.rules.rule: %symfonyArchitecture.roles.valueObject%
+    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ViewModelPropertyTypeRule:
+        phpstan.rules.rule: %symfonyArchitecture.roles.viewModel%

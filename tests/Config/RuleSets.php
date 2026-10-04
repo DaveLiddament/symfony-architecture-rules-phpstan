@@ -19,6 +19,7 @@ use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ServiceDeclaration
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ValueObjectDeclarationRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ValueObjectPropertyTypeRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ViewModelDeclarationRule;
+use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ViewModelPropertyTypeRule;
 use PHPStan\DependencyInjection\Container;
 
 /**
@@ -45,6 +46,7 @@ final class RuleSets
         ValueObjectDeclarationRule::class,
         ValueObjectPropertyTypeRule::class,
         ViewModelDeclarationRule::class,
+        ViewModelPropertyTypeRule::class,
     ];
 
     /**
