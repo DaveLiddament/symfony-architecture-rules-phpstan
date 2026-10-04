@@ -27,6 +27,6 @@ final class BoundariesDisabledConfigTest extends PHPStanTestCase
     #[Test]
     public function roleRulesAreUnaffected(): void
     {
-        self::assertSame(RuleSets::ROLES, RuleSets::enabledIn(self::getContainer(), RuleSets::ROLES));
+        self::assertSame(RuleSets::roles(), RuleSets::enabledIn(self::getContainer(), RuleSets::roles()));
     }
 }

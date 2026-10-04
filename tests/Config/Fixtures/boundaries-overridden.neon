@@ -1,7 +1,7 @@
 parameters:
     symfonyArchitecture:
+        appNamespace: 'Acme'
         boundaries:
-            appNamespace: 'Acme'
             libNamespace: null
             sharedNamespace: 'Common'
             nurseryNamespace: null

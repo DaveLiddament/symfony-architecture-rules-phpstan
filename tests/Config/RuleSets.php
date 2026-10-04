@@ -18,6 +18,7 @@ use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\QueueProcessorDecl
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\RepositoryDeclarationRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\SerializerDeclarationRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ServiceDeclarationRule;
+use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ServiceDependencyRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ValueObjectDeclarationRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ValueObjectPropertyTypeRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ViewModelDeclarationRule;
@@ -36,22 +37,66 @@ final class RuleSets
         SharedIsolationRule::class,
     ];
 
+    /**
+     * The rules turned off by each role's switch.
+     */
     public const array ROLES = [
-        CommandDeclarationRule::class,
-        ConfigProviderDeclarationRule::class,
-        ConfigProviderPropertyTypeRule::class,
-        ConfigProviderUsageRule::class,
-        DtoDeclarationRule::class,
-        FormTypeDeclarationRule::class,
-        QueueProcessorDeclarationRule::class,
-        RepositoryDeclarationRule::class,
-        SerializerDeclarationRule::class,
-        ServiceDeclarationRule::class,
-        ValueObjectDeclarationRule::class,
-        ValueObjectPropertyTypeRule::class,
-        ViewModelDeclarationRule::class,
-        ViewModelPropertyTypeRule::class,
+        'command' => [
+            CommandDeclarationRule::class,
+        ],
+        'configProvider' => [
+            ConfigProviderDeclarationRule::class,
+            ConfigProviderPropertyTypeRule::class,
+            ConfigProviderUsageRule::class,
+        ],
+        'dto' => [
+            DtoDeclarationRule::class,
+        ],
+        'formType' => [
+            FormTypeDeclarationRule::class,
+        ],
+        'queueProcessor' => [
+            QueueProcessorDeclarationRule::class,
+        ],
+        'repository' => [
+            RepositoryDeclarationRule::class,
+        ],
+        'serializer' => [
+            SerializerDeclarationRule::class,
+        ],
+        'service' => [
+            ServiceDeclarationRule::class,
+            ServiceDependencyRule::class,
+        ],
+        'valueObject' => [
+            ValueObjectDeclarationRule::class,
+            ValueObjectPropertyTypeRule::class,
+        ],
+        'viewModel' => [
+            ViewModelDeclarationRule::class,
+            ViewModelPropertyTypeRule::class,
+        ],
     ];
+
+    /**
+     * All the role rules, sorted by class name.
+     *
+     * @param list<string> $exceptRoles
+     *
+     * @return list<string>
+     */
+    public static function roles(array $exceptRoles = []): array
+    {
+        $rules = [];
+        foreach (self::ROLES as $role => $roleRules) {
+            if (!in_array($role, $exceptRoles, true)) {
+                $rules = [...$rules, ...$roleRules];
+            }
+        }
+        sort($rules);
+
+        return $rules;
+    }
 
     /**
      * The rules from $ruleSet that PHPStan will run with the container's config.

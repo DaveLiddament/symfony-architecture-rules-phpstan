@@ -30,7 +30,7 @@ final class DefaultConfigTest extends PHPStanTestCase
     #[Test]
     public function allRoleRulesAreEnabled(): void
     {
-        self::assertSame(RuleSets::ROLES, RuleSets::enabledIn(self::getContainer(), RuleSets::ROLES));
+        self::assertSame(RuleSets::roles(), RuleSets::enabledIn(self::getContainer(), RuleSets::roles()));
     }
 
     #[Test]

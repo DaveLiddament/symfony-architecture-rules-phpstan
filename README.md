@@ -32,6 +32,14 @@ includes:
     - vendor/dave-liddament/symfony-architecture-rules-phpstan/extension.neon
 ```
 
+Your application code is assumed to live in `App\`. If it doesn't, set the namespace in your `phpstan.neon`:
+
+```neon
+parameters:
+    symfonyArchitecture:
+        appNamespace: 'Acme'
+```
+
 ## Architectural boundaries
 
 Code is split into four kinds of area:
@@ -76,7 +84,6 @@ parameters:
     symfonyArchitecture:
         boundaries:
             enabled: true                    # false turns off all the boundary rules
-            appNamespace: 'App'
             libNamespace: 'Lib'              # null turns off LibIsolationRule
             sharedNamespace: 'App\Shared'    # null turns off SharedIsolationRule
             nurseryNamespace: 'App\Nursery'  # null turns off NurseryIsolationRule
@@ -107,15 +114,20 @@ final readonly class InvoiceSender
 | `#[ConfigProvider]` | `final readonly` | Properties are scalars or `list<>`s of scalars (`configProvider.propertyType`). Only a `#[Service]` may hold one (`configProvider.onlyInService`) |
 | `#[Dto]` | `final` | |
 | `#[FormType]` | `final` | |
+| `#[QueueGateway]` | | A collaborator a `#[Service]` may depend on |
 | `#[QueueProcessor]` | `final readonly` | |
 | `#[Repository]` | `final readonly` | |
 | `#[Serializer]` | `final` | |
-| `#[Service]` | `final readonly` | |
+| `#[Service]` | `final readonly` | Properties are collaborators<sup>2</sup> (`service.dependencyType`) |
 | `#[ValueObject]` | `final readonly` | Properties are values (`valueObject.propertyType`)<sup>1</sup> |
 | `#[ViewModel]` | `final readonly` | Properties are values, but may hold view models instead of value objects (`viewModel.propertyType`)<sup>1</sup> |
 
 <sup>1</sup> A value is a primitive, `\DateTimeImmutable`, an enum, another class with the same attribute, or a `list<>`
 of these. Nullable variants are fine; bare `array`, string-keyed maps, `\DateTime` and untyped properties are not.
+
+<sup>2</sup> A collaborator is a class with `#[Service]`, `#[Repository]`, `#[QueueGateway]`, `#[Serializer]` or
+`#[ConfigProvider]`, an interface, code from outside the app namespace (vendor code, Lib), or an iterable of these. No
+primitives: configuration arrives through a `#[ConfigProvider]`.
 
 The "must be" rules have the identifier `<role>.final` or `<role>.finalReadonly`, e.g. `service.finalReadonly`.
 Commands and form types extend non-readonly Symfony base classes, so they only need to be `final`.
