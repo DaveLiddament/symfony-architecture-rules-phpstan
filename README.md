@@ -115,26 +115,51 @@ final readonly class InvoiceSender
 | Attribute | Must be | Also checked |
 |---|---|---|
 | `#[Command]` | `final` | |
-| `#[ConfigProvider]` | `final readonly` | Properties are scalars or `list<>`s of scalars (`configProvider.propertyType`). Only a `#[Service]` may hold one (`configProvider.onlyInService`) |
-| `#[Controller]` | | Public methods return an allowed type<sup>5</sup> (`architecture.controllerReturnType`) |
+| `#[ConfigProvider]` | `final readonly` | [Properties and who may hold it](#config-providers) |
+| `#[Controller]` | | [Return types](#controllers) |
 | `#[Dto]` | `final` | |
 | `#[FormType]` | `final` | |
-| `#[QueueGateway]` | | A collaborator a `#[Service]` may depend on |
+| `#[QueueGateway]` | | Nothing: it marks a collaborator a [service](#services) may depend on |
 | `#[QueueProcessor]` | `final readonly` | |
-| `#[Repository]` | `final readonly` | Properties come from `Doctrine\` (`repository.dependencyType`). Public methods use a fixed vocabulary<sup>3</sup> (`repository.methodName`, `repository.methodReturn`). Only a repository may hold the entity manager (`entityManager.onlyInRepository`) |
-| `#[Serializer]` | `final` | The only class whose public methods may return array shapes (`arrayShape.onlyInSerializer`)<sup>4</sup> |
-| `#[Service]` | `final readonly` | Properties are collaborators<sup>2</sup> (`service.dependencyType`) |
-| `#[ValueObject]` | `final readonly` | Properties are values (`valueObject.propertyType`)<sup>1</sup> |
-| `#[ViewModel]` | `final readonly` | Properties are values, but may hold view models instead of value objects (`viewModel.propertyType`)<sup>1</sup> |
+| `#[Repository]` | `final readonly` | [Dependencies and method names](#repositories) |
+| `#[Serializer]` | `final` | [May return array shapes](#serializers-and-array-shapes) |
+| `#[Service]` | `final readonly` | [Dependencies](#services) |
+| `#[ValueObject]` | `final readonly` | [Properties](#value-objects-and-view-models) |
+| `#[ViewModel]` | `final readonly` | [Properties](#value-objects-and-view-models) |
 
-<sup>1</sup> A value is a primitive, `\DateTimeImmutable`, an enum, another class with the same attribute, or a `list<>`
-of these. Nullable variants are fine; bare `array`, string-keyed maps, `\DateTime` and untyped properties are not.
+The "must be" rules have the identifier `<role>.final` or `<role>.finalReadonly`, e.g. `service.finalReadonly`.
+Commands and form types extend non-readonly Symfony base classes, so they only need to be `final`.
 
-<sup>2</sup> A collaborator is a class with `#[Service]`, `#[Repository]`, `#[QueueGateway]`, `#[Serializer]` or
+### Value objects and view models
+
+`valueObject.propertyType`, `viewModel.propertyType`
+
+Every property is a value: a primitive, `\DateTimeImmutable`, an enum, another value object, or a `list<>` of these.
+Nullable variants are fine; bare `array`, string-keyed maps, `\DateTime` and untyped properties are not. A view model
+follows the same rule, but holds other view models instead of value objects: it renders formatted values rather than
+carrying domain values.
+
+### Services
+
+`service.dependencyType`
+
+Every property is a collaborator: a class with `#[Service]`, `#[Repository]`, `#[QueueGateway]`, `#[Serializer]` or
 `#[ConfigProvider]`, an interface, code from outside the app namespace (vendor code, Lib), or an iterable of these. No
-primitives: configuration arrives through a `#[ConfigProvider]`.
+primitives: configuration arrives through a config provider.
 
-<sup>3</sup> Repository methods:
+### Config providers
+
+`configProvider.propertyType`, `configProvider.onlyInService`
+
+Properties are scalars or `list<>`s of scalars, not even enums or dates. Only a `#[Service]` may hold a config provider;
+this is checked on every class.
+
+### Repositories
+
+`repository.dependencyType`, `repository.methodName`, `repository.methodReturn`, `entityManager.onlyInRepository`
+
+Every property comes from `Doctrine\`, and only a repository may hold the entity manager (checked on every class).
+Public methods use a fixed vocabulary:
 
 | Prefix | Meaning | Must return |
 |---|---|---|
@@ -146,11 +171,21 @@ primitives: configuration arrives through a `#[ConfigProvider]`.
 The prefix must end at a camelCase boundary, so `getaway()` is not a `get`. A nullable iterable is never allowed:
 return an empty list instead.
 
-<sup>4</sup> Checked on every class: a public method returning `array{...}`, directly or inside a list, should return a
-value object, DTO or view model instead. Private methods may use shapes freely.
+### Serializers and array shapes
 
-<sup>5</sup> By default, `Symfony\Component\HttpFoundation\Response` or any subclass, or a union of these. Never
-nullable. To allow only specific types, replace the list:
+`arrayShape.onlyInSerializer`
+
+Checked on every class: a public method must not return an array shape (`array{...}`), directly or inside a list. A
+shape crossing a class boundary should be a value object, DTO or view model. Serializers are exempt, since producing
+wire-format arrays is their job. Private methods may use shapes freely.
+
+### Controllers
+
+`architecture.controllerReturnType`
+
+Every public method declares a return type that is an allowed type (or a subclass), or a union of these, and is never
+nullable. By default the only allowed type is `Symfony\Component\HttpFoundation\Response`. To allow only specific
+types, replace the list:
 
 ```neon
 parameters:
@@ -161,10 +196,7 @@ parameters:
             - 'Symfony\Component\HttpFoundation\RedirectResponse'
 ```
 
-The "must be" rules have the identifier `<role>.final` or `<role>.finalReadonly`, e.g. `service.finalReadonly`.
-Commands and form types extend non-readonly Symfony base classes, so they only need to be `final`.
-
-### Configuration
+### Turning roles off
 
 Every role is on by default. Set a role to `false` to turn off all the rules for it:
 
