@@ -1,0 +1,90 @@
+{
+  "name": "dave-liddament/symfony-architecture-rules-phpstan",
+  "description": "PHPStan rules for enforcing architecture in Symfony applications",
+  "keywords": [
+    "static analysis",
+    "phpstan",
+    "symfony",
+    "architecture"
+  ],
+  "type": "phpstan-extension",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Dave Liddament",
+      "email": "dave@lampbristol.com"
+    }
+  ],
+  "require": {
+    "php": "~8.3.0 || ~8.4.0 || ~8.5.0",
+    "phpstan/phpstan": "^2.1"
+  },
+  "require-dev": {
+    "bamarni/composer-bin-plugin": "^1.8",
+    "dave-liddament/phpstan-php-language-extensions": "^0.10.0",
+    "dave-liddament/phpstan-rule-test-helper": "^0.6.0",
+    "phpstan/phpstan-phpunit": "^2.0",
+    "phpstan/phpstan-strict-rules": "^2.0",
+    "phpunit/phpunit": "^12.0 || ^13.0",
+    "spaze/phpstan-disallowed-calls": "^4.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "DaveLiddament\\SymfonyArchitectureRulesPhpstan\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "DaveLiddament\\SymfonyArchitectureRulesPhpstan\\Tests\\": "tests/"
+    }
+  },
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "bamarni/composer-bin-plugin": true
+    }
+  },
+  "scripts": {
+    "setup": [
+      "@composer install",
+      "@composer bin all install"
+    ],
+    "ci": [
+      "@composer-validate",
+      "@lint",
+      "@composer-unused",
+      "@composer-require-checker",
+      "@cs",
+      "@phpstan",
+      "@test"
+    ],
+    "ci-local": [
+      "@composer-validate",
+      "@lint",
+      "@composer-unused",
+      "@composer-require-checker",
+      "@cs-fix",
+      "@phpstan",
+      "@test"
+    ],
+    "composer-validate": "@composer validate --no-check-all --strict",
+    "lint": "parallel-lint src tests",
+    "composer-unused": "composer-unused",
+    "composer-require-checker": "composer-require-checker check --config-file=composer-require-checker.json",
+    "cs": "php-cs-fixer fix -v --dry-run",
+    "cs-fix": "php-cs-fixer fix -v",
+    "phpstan": "phpstan analyse --no-progress",
+    "test": "phpunit"
+  },
+  "extra": {
+    "bamarni-bin": {
+      "bin-links": true,
+      "forward-command": true
+    },
+    "phpstan": {
+      "includes": [
+        "extension.neon"
+      ]
+    }
+  }
+}

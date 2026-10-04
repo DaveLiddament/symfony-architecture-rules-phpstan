@@ -1,0 +1,51 @@
+name: "Full checks"
+
+on:
+  schedule:
+    - cron: '0 10 * * *'
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  full-checks:
+    name: "Full CI checks for all supported PHP versions"
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        dependencies:
+          - "lowest"
+          - "highest"
+        php-version:
+          - "8.3"
+          - "8.4"
+          - "8.5"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          coverage: none
+          php-version: "${{ matrix.php-version }}"
+          tools: composer
+
+      - name: "Install lowest dependencies"
+        if: ${{ matrix.dependencies == 'lowest' }}
+        run: "composer update --prefer-lowest --no-interaction --no-progress"
+
+      - name: "Install highest dependencies"
+        if: ${{ matrix.dependencies == 'highest' }}
+        run: "composer update --no-interaction --no-progress"
+
+      - name: "Install tools"
+        run: "composer bin all install --no-interaction --no-progress"
+
+      - name: "Full CI"
+        run: "composer ci"
