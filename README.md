@@ -116,7 +116,7 @@ final readonly class InvoiceSender
 | `#[FormType]` | `final` | |
 | `#[QueueGateway]` | | A collaborator a `#[Service]` may depend on |
 | `#[QueueProcessor]` | `final readonly` | |
-| `#[Repository]` | `final readonly` | Properties come from `Doctrine\` (`repository.dependencyType`). Public methods use a fixed vocabulary<sup>3</sup> (`repository.methodName`, `repository.methodReturn`) |
+| `#[Repository]` | `final readonly` | Properties come from `Doctrine\` (`repository.dependencyType`). Public methods use a fixed vocabulary<sup>3</sup> (`repository.methodName`, `repository.methodReturn`). Only a repository may hold the entity manager (`entityManager.onlyInRepository`) |
 | `#[Serializer]` | `final` | |
 | `#[Service]` | `final readonly` | Properties are collaborators<sup>2</sup> (`service.dependencyType`) |
 | `#[ValueObject]` | `final readonly` | Properties are values (`valueObject.propertyType`)<sup>1</sup> |

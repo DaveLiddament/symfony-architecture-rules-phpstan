@@ -13,6 +13,7 @@ use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ConfigProviderDecl
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ConfigProviderPropertyTypeRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ConfigProviderUsageRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\DtoDeclarationRule;
+use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\EntityManagerUsageRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\FormTypeDeclarationRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\QueueProcessorDeclarationRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\RepositoryDeclarationRule;
@@ -61,6 +62,7 @@ final class RuleSets
             QueueProcessorDeclarationRule::class,
         ],
         'repository' => [
+            EntityManagerUsageRule::class,
             RepositoryDeclarationRule::class,
             RepositoryDependencyRule::class,
             RepositoryMethodRule::class,
