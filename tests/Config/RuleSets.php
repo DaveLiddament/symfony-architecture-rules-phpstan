@@ -7,6 +7,7 @@ namespace DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Config;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\DomainInternalRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\LibIsolationRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\NurseryIsolationRule;
+use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\RoleLocationRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\SharedIsolationRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ArrayShapeReturnRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\CommandDeclarationRule;
@@ -39,6 +40,7 @@ final class RuleSets
         DomainInternalRule::class,
         LibIsolationRule::class,
         NurseryIsolationRule::class,
+        RoleLocationRule::class,
         SharedIsolationRule::class,
     ];
 

@@ -89,6 +89,18 @@ final class BoundaryClassifierTest extends TestCase
         self::assertEquals(Area::domain('Nursery', true), $classifier->classifyClass('App\Nursery\NewThing'), 'An empty namespace means no nursery');
     }
 
+    #[Test]
+    public function givesTheNamespaceEachAreaIsRootedAt(): void
+    {
+        $classifier = new BoundaryClassifier('App', 'Lib', 'Common', 'App\Nursery', ['App\Tests']);
+
+        self::assertSame('App\Registration', $classifier->getAreaNamespace(Area::domain('Registration', false)));
+        self::assertSame('Common', $classifier->getAreaNamespace(Area::of(AreaType::Shared)));
+        self::assertSame('App\Nursery', $classifier->getAreaNamespace(Area::of(AreaType::Nursery)));
+        self::assertNull($classifier->getAreaNamespace(Area::of(AreaType::Lib)));
+        self::assertNull($classifier->getAreaNamespace(Area::of(AreaType::AppRoot)));
+    }
+
     private function defaultClassifier(): BoundaryClassifier
     {
         return new BoundaryClassifier('App', 'Lib', 'App\Shared', 'App\Nursery', ['App\Tests']);

@@ -78,6 +78,11 @@ services:
         class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\NurseryIsolationRule
 
     -
+        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\RoleLocationRule
+        arguments:
+            entityAttribute: 'Doctrine\ORM\Mapping\Entity'
+
+    -
         class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\CommandDeclarationRule
 
     -
@@ -155,6 +160,8 @@ conditionalTags:
     DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\DomainInternalRule:
         phpstan.rules.rule: %symfonyArchitecture.boundaries.enabled%
     DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\NurseryIsolationRule:
+        phpstan.rules.rule: %symfonyArchitecture.boundaries.enabled%
+    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\RoleLocationRule:
         phpstan.rules.rule: %symfonyArchitecture.boundaries.enabled%
     DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\CommandDeclarationRule:
         phpstan.rules.rule: %symfonyArchitecture.roles.command%

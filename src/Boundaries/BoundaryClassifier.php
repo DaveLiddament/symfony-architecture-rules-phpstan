@@ -82,6 +82,21 @@ final readonly class BoundaryClassifier
         return Area::of(AreaType::External);
     }
 
+    /**
+     * The namespace an area is rooted at, e.g. "App\Registration" for the
+     * Registration domain. Null for areas without a root (Lib, external
+     * code, ...).
+     */
+    public function getAreaNamespace(Area $area): ?string
+    {
+        return match ($area->type) {
+            AreaType::Shared => $this->sharedNamespace,
+            AreaType::Nursery => $this->nurseryNamespace,
+            AreaType::Domain => $this->appNamespace.'\\'.$area->domain,
+            default => null,
+        };
+    }
+
     private static function isWithin(string $namespace, ?string $parent): bool
     {
         if (null === $parent) {

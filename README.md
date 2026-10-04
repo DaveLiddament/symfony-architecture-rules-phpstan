@@ -74,6 +74,10 @@ class, that's the signal to move it.
 | `SharedIsolationRule` | `architecture.sharedIsolation` | Shared depending on a domain or the Nursery |
 | `DomainInternalRule` | `architecture.domainInternal` | A domain's internals used from another domain or the Nursery |
 | `NurseryIsolationRule` | `architecture.nurseryIsolation` | A domain depending on the Nursery |
+| `RoleLocationRule` | `architecture.roleLocation` | A controller, command or entity outside its role directory, e.g. `App\Registration\Controller`, or a repository outside `Repository\` or the area root |
+
+Role directories are relative to the area's root, so the same applies inside Shared (`App\Shared\Entity`) and the
+Nursery. Entities are recognised by Doctrine's `#[ORM\Entity]`.
 
 Every class name used in code is checked (type declarations, `new`, static calls, `instanceof`, `extends`,
 attributes, ...). Class names that appear only in PHPDoc are not.
