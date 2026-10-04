@@ -10,6 +10,7 @@ use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\NurseryIsolat
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\SharedIsolationRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\CommandDeclarationRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ConfigProviderDeclarationRule;
+use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ConfigProviderPropertyTypeRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\DtoDeclarationRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\FormTypeDeclarationRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\QueueProcessorDeclarationRule;
@@ -37,6 +38,7 @@ final class RuleSets
     public const array ROLES = [
         CommandDeclarationRule::class,
         ConfigProviderDeclarationRule::class,
+        ConfigProviderPropertyTypeRule::class,
         DtoDeclarationRule::class,
         FormTypeDeclarationRule::class,
         QueueProcessorDeclarationRule::class,

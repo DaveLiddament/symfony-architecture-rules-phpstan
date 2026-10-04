@@ -104,7 +104,7 @@ final readonly class InvoiceSender
 | Attribute | Must be | Also checked |
 |---|---|---|
 | `#[Command]` | `final` | |
-| `#[ConfigProvider]` | `final readonly` | |
+| `#[ConfigProvider]` | `final readonly` | Properties are scalars or `list<>`s of scalars (`configProvider.propertyType`) |
 | `#[Dto]` | `final` | |
 | `#[FormType]` | `final` | |
 | `#[QueueProcessor]` | `final readonly` | |

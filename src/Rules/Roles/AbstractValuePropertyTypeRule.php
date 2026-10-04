@@ -16,9 +16,10 @@ use PHPStan\Type\UnionType;
 
 /**
  * Every property of a class carrying the role attribute must be a value:
- * a primitive (int, float, string, bool), a \DateTimeImmutable (or
- * subclass), an enum, another class carrying the same role attribute, or a
- * list of any of these. Nullable variants are allowed.
+ * a primitive (int, float, string, bool), an allowed class, or a list of
+ * any of these. Nullable variants are allowed. By default the allowed
+ * classes are \DateTimeImmutable (and subclasses), enums and other classes
+ * carrying the same role attribute.
  *
  * @implements Rule<ClassPropertyNode>
  */
@@ -97,11 +98,7 @@ abstract class AbstractValuePropertyTypeRule implements Rule
         }
 
         foreach ($classReflections as $classReflection) {
-            if (
-                !$classReflection->isEnum()
-                && !self::isDateTimeImmutable($classReflection)
-                && !RoleAttribute::isOn($classReflection, $this->getAttributeClass())
-            ) {
+            if (!$this->isAllowedClass($classReflection)) {
                 return false;
             }
         }
@@ -109,9 +106,11 @@ abstract class AbstractValuePropertyTypeRule implements Rule
         return true;
     }
 
-    private static function isDateTimeImmutable(ClassReflection $classReflection): bool
+    protected function isAllowedClass(ClassReflection $classReflection): bool
     {
-        return \DateTimeImmutable::class === $classReflection->getName()
-            || $classReflection->isSubclassOf(\DateTimeImmutable::class);
+        return $classReflection->isEnum()
+            || \DateTimeImmutable::class === $classReflection->getName()
+            || $classReflection->isSubclassOf(\DateTimeImmutable::class)
+            || RoleAttribute::isOn($classReflection, $this->getAttributeClass());
     }
 }
