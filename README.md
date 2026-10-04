@@ -32,12 +32,15 @@ includes:
     - vendor/dave-liddament/symfony-architecture-rules-phpstan/extension.neon
 ```
 
-Your application code is assumed to live in `App\`. If it doesn't, set the namespace in your `phpstan.neon`:
+Your application code is assumed to live in `App\`, and code in `App\Tests\` is not checked. To change either, set
+these in your `phpstan.neon`:
 
 ```neon
 parameters:
     symfonyArchitecture:
         appNamespace: 'Acme'
+        ignoredNamespaces!:   # the ! replaces the default list instead of adding to it
+            - 'Acme\Tests'
 ```
 
 ## Architectural boundaries
@@ -53,7 +56,7 @@ Code is split into four kinds of area:
 
 A domain's root classes (`App\Registration\*`) are its public API. Everything in its subdirectories
 (`App\Registration\Entity\*`) is internal to it. Classes directly in `App\` (e.g. `App\Kernel`) are framework glue
-and are not checked, nor is `App\Tests\`.
+and are not checked.
 
 | From ↓ / To → | Lib | Shared | Domain (public) | Domain (internal) | Nursery |
 |---|---|---|---|---|---|
@@ -87,13 +90,10 @@ parameters:
             libNamespace: 'Lib'              # null turns off LibIsolationRule
             sharedNamespace: 'App\Shared'    # null turns off SharedIsolationRule
             nurseryNamespace: 'App\Nursery'  # null turns off NurseryIsolationRule
-            ignoredNamespaces:
-                - 'App\Tests'
 ```
 
 - Shared and the Nursery can be any namespace, not just under `App\`. When one is `null`, its namespace becomes an
   ordinary domain.
-- PHPStan merges lists with the defaults. To replace `ignoredNamespaces` instead, write `ignoredNamespaces!:`.
 
 ## Role contracts
 
@@ -117,7 +117,7 @@ final readonly class InvoiceSender
 | `#[QueueGateway]` | | A collaborator a `#[Service]` may depend on |
 | `#[QueueProcessor]` | `final readonly` | |
 | `#[Repository]` | `final readonly` | Properties come from `Doctrine\` (`repository.dependencyType`). Public methods use a fixed vocabulary<sup>3</sup> (`repository.methodName`, `repository.methodReturn`). Only a repository may hold the entity manager (`entityManager.onlyInRepository`) |
-| `#[Serializer]` | `final` | |
+| `#[Serializer]` | `final` | The only class whose public methods may return array shapes (`arrayShape.onlyInSerializer`)<sup>4</sup> |
 | `#[Service]` | `final readonly` | Properties are collaborators<sup>2</sup> (`service.dependencyType`) |
 | `#[ValueObject]` | `final readonly` | Properties are values (`valueObject.propertyType`)<sup>1</sup> |
 | `#[ViewModel]` | `final readonly` | Properties are values, but may hold view models instead of value objects (`viewModel.propertyType`)<sup>1</sup> |
@@ -140,6 +140,9 @@ primitives: configuration arrives through a `#[ConfigProvider]`.
 
 The prefix must end at a camelCase boundary, so `getaway()` is not a `get`. A nullable iterable is never allowed:
 return an empty list instead.
+
+<sup>4</sup> Checked on every class: a public method returning `array{...}`, directly or inside a list, should return a
+value object, DTO or view model instead. Private methods may use shapes freely.
 
 The "must be" rules have the identifier `<role>.final` or `<role>.finalReadonly`, e.g. `service.finalReadonly`.
 Commands and form types extend non-readonly Symfony base classes, so they only need to be `final`.

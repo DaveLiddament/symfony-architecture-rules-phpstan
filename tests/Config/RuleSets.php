@@ -8,6 +8,7 @@ use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\DomainInterna
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\LibIsolationRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\NurseryIsolationRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\SharedIsolationRule;
+use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ArrayShapeReturnRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\CommandDeclarationRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ConfigProviderDeclarationRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ConfigProviderPropertyTypeRule;
@@ -68,6 +69,7 @@ final class RuleSets
             RepositoryMethodRule::class,
         ],
         'serializer' => [
+            ArrayShapeReturnRule::class,
             SerializerDeclarationRule::class,
         ],
         'service' => [

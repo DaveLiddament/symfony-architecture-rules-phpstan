@@ -2,6 +2,9 @@ parameters:
     symfonyArchitecture:
         # The namespace your application code lives in.
         appNamespace: 'App'
+        # Code in these namespaces is ignored by the architecture rules.
+        ignoredNamespaces:
+            - 'App\Tests'
         boundaries:
             # Set to false to turn off all the architectural boundary rules.
             enabled: true
@@ -9,10 +12,6 @@ parameters:
             libNamespace: 'Lib'
             sharedNamespace: 'App\Shared'
             nurseryNamespace: 'App\Nursery'
-            # Code in these namespaces is ignored by the boundary rules.
-            ignoredNamespaces:
-                - 'App\Tests'
-
         roles:
             # Set any of these to false to turn off all the rules for that role.
             command: true
@@ -29,12 +28,12 @@ parameters:
 parametersSchema:
     symfonyArchitecture: structure([
         appNamespace: string()
+        ignoredNamespaces: listOf(string())
         boundaries: structure([
             enabled: bool()
             libNamespace: schema(string(), nullable())
             sharedNamespace: schema(string(), nullable())
             nurseryNamespace: schema(string(), nullable())
-            ignoredNamespaces: listOf(string())
         ])
         roles: structure([
             command: bool()
@@ -58,7 +57,7 @@ services:
             libNamespace: %symfonyArchitecture.boundaries.libNamespace%
             sharedNamespace: %symfonyArchitecture.boundaries.sharedNamespace%
             nurseryNamespace: %symfonyArchitecture.boundaries.nurseryNamespace%
-            ignoredNamespaces: %symfonyArchitecture.boundaries.ignoredNamespaces%
+            ignoredNamespaces: %symfonyArchitecture.ignoredNamespaces%
 
     -
         class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\LibIsolationRule
@@ -132,6 +131,11 @@ services:
         arguments:
             entityManagerInterface: 'Doctrine\ORM\EntityManagerInterface'
 
+    -
+        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ArrayShapeReturnRule
+        arguments:
+            ignoredNamespaces: %symfonyArchitecture.ignoredNamespaces%
+
 conditionalTags:
     DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\LibIsolationRule:
         phpstan.rules.rule: %symfonyArchitecture.boundaries.enabled%
@@ -177,3 +181,5 @@ conditionalTags:
         phpstan.rules.rule: %symfonyArchitecture.roles.repository%
     DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\EntityManagerUsageRule:
         phpstan.rules.rule: %symfonyArchitecture.roles.repository%
+    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ArrayShapeReturnRule:
+        phpstan.rules.rule: %symfonyArchitecture.roles.serializer%
