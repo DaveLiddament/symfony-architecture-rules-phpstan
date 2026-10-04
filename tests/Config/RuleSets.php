@@ -17,6 +17,7 @@ use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\RepositoryDeclarat
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\SerializerDeclarationRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ServiceDeclarationRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ValueObjectDeclarationRule;
+use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ValueObjectPropertyTypeRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ViewModelDeclarationRule;
 use PHPStan\DependencyInjection\Container;
 
@@ -42,6 +43,7 @@ final class RuleSets
         SerializerDeclarationRule::class,
         ServiceDeclarationRule::class,
         ValueObjectDeclarationRule::class,
+        ValueObjectPropertyTypeRule::class,
         ViewModelDeclarationRule::class,
     ];
 

@@ -46,15 +46,11 @@ abstract class AbstractDeclarationRule implements Rule
     final public function processNode(Node $node, Scope $scope): array
     {
         $reflection = $node->getClassReflection();
-        if ($reflection->isAnonymous()) {
+        if ($reflection->isAnonymous() || !RoleAttribute::isOn($reflection, $this->getAttributeClass())) {
             return [];
         }
 
         $native = $reflection->getNativeReflection();
-        if ([] === $native->getAttributes($this->getAttributeClass())) {
-            return [];
-        }
-
         if ($native->isFinal() && (!$this->mustBeReadonly() || $native->isReadOnly())) {
             return [];
         }

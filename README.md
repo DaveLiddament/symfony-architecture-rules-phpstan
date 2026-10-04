@@ -101,19 +101,23 @@ final readonly class InvoiceSender
 }
 ```
 
-| Attribute | Must be | Identifier |
+| Attribute | Must be | Also checked |
 |---|---|---|
-| `#[Command]` | `final` | `command.final` |
-| `#[ConfigProvider]` | `final readonly` | `configProvider.finalReadonly` |
-| `#[Dto]` | `final` | `dto.final` |
-| `#[FormType]` | `final` | `formType.final` |
-| `#[QueueProcessor]` | `final readonly` | `queueProcessor.finalReadonly` |
-| `#[Repository]` | `final readonly` | `repository.finalReadonly` |
-| `#[Serializer]` | `final` | `serializer.final` |
-| `#[Service]` | `final readonly` | `service.finalReadonly` |
-| `#[ValueObject]` | `final readonly` | `valueObject.finalReadonly` |
-| `#[ViewModel]` | `final readonly` | `viewModel.finalReadonly` |
+| `#[Command]` | `final` | |
+| `#[ConfigProvider]` | `final readonly` | |
+| `#[Dto]` | `final` | |
+| `#[FormType]` | `final` | |
+| `#[QueueProcessor]` | `final readonly` | |
+| `#[Repository]` | `final readonly` | |
+| `#[Serializer]` | `final` | |
+| `#[Service]` | `final readonly` | |
+| `#[ValueObject]` | `final readonly` | Properties are values (`valueObject.propertyType`)<sup>1</sup> |
+| `#[ViewModel]` | `final readonly` | |
 
+<sup>1</sup> A value is a primitive, `\DateTimeImmutable`, an enum, another class with the same attribute, or a `list<>`
+of these. Nullable variants are fine; bare `array`, string-keyed maps, `\DateTime` and untyped properties are not.
+
+The "must be" rules have the identifier `<role>.final` or `<role>.finalReadonly`, e.g. `service.finalReadonly`.
 Commands and form types extend non-readonly Symfony base classes, so they only need to be `final`.
 
 ### Configuration

@@ -3,9 +3,13 @@
         "PhpParser\\Node",
         "PhpParser\\Node\\Name",
         "PHPStan\\Analyser\\Scope",
+        "PHPStan\\Node\\ClassPropertyNode",
         "PHPStan\\Node\\InClassNode",
+        "PHPStan\\Reflection\\ClassReflection",
         "PHPStan\\Rules\\IdentifierRuleError",
         "PHPStan\\Rules\\Rule",
-        "PHPStan\\Rules\\RuleErrorBuilder"
+        "PHPStan\\Rules\\RuleErrorBuilder",
+        "PHPStan\\Type\\Type",
+        "PHPStan\\Type\\UnionType"
     ]
 }
