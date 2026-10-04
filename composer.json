@@ -31,6 +31,7 @@
   },
   "autoload": {
     "psr-4": {
+      "DaveLiddament\\SymfonyArchitecture\\Attribute\\": "attributes/",
       "DaveLiddament\\SymfonyArchitectureRulesPhpstan\\": "src/"
     }
   },
@@ -70,7 +71,7 @@
       "@test"
     ],
     "composer-validate": "@composer validate --no-check-all --strict",
-    "lint": "parallel-lint src tests build",
+    "lint": "parallel-lint attributes src tests build",
     "composer-unused": "composer-unused",
     "composer-require-checker": "composer-require-checker check --config-file=composer-require-checker.json",
     "cs": "php-cs-fixer fix -v --dry-run",

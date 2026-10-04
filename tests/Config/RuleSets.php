@@ -8,6 +8,16 @@ use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\DomainInterna
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\LibIsolationRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\NurseryIsolationRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\SharedIsolationRule;
+use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\CommandDeclarationRule;
+use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ConfigProviderDeclarationRule;
+use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\DtoDeclarationRule;
+use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\FormTypeDeclarationRule;
+use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\QueueProcessorDeclarationRule;
+use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\RepositoryDeclarationRule;
+use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\SerializerDeclarationRule;
+use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ServiceDeclarationRule;
+use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ValueObjectDeclarationRule;
+use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ViewModelDeclarationRule;
 use PHPStan\DependencyInjection\Container;
 
 /**
@@ -20,6 +30,19 @@ final class RuleSets
         LibIsolationRule::class,
         NurseryIsolationRule::class,
         SharedIsolationRule::class,
+    ];
+
+    public const array ROLES = [
+        CommandDeclarationRule::class,
+        ConfigProviderDeclarationRule::class,
+        DtoDeclarationRule::class,
+        FormTypeDeclarationRule::class,
+        QueueProcessorDeclarationRule::class,
+        RepositoryDeclarationRule::class,
+        SerializerDeclarationRule::class,
+        ServiceDeclarationRule::class,
+        ValueObjectDeclarationRule::class,
+        ViewModelDeclarationRule::class,
     ];
 
     /**

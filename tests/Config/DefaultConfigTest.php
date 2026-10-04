@@ -28,6 +28,12 @@ final class DefaultConfigTest extends PHPStanTestCase
     }
 
     #[Test]
+    public function allRoleRulesAreEnabled(): void
+    {
+        self::assertSame(RuleSets::ROLES, RuleSets::enabledIn(self::getContainer(), RuleSets::ROLES));
+    }
+
+    #[Test]
     public function defaultNamespacesAreUsed(): void
     {
         $classifier = self::getContainer()->getByType(BoundaryClassifier::class);

@@ -13,8 +13,10 @@ time, until nobody can say where anything belongs.
 This [PHPStan](https://phpstan.org) extension turns those rules into errors. You get a sensible architecture out of
 the box, every rule is configurable, and any part can be switched off.
 
-It currently checks **[architectural boundaries](#architectural-boundaries)**: which parts of the app may depend on
-which.
+It checks two things:
+
+- **[Architectural boundaries](#architectural-boundaries)**: which parts of the app may depend on which.
+- **[Role contracts](#role-contracts)**: mark a class with its role, e.g. `#[Service]`, and its declaration is checked.
 
 ## Installation
 
@@ -85,6 +87,62 @@ parameters:
 - Shared and the Nursery can be any namespace, not just under `App\`. When one is `null`, its namespace becomes an
   ordinary domain.
 - PHPStan merges lists with the defaults. To replace `ignoredNamespaces` instead, write `ignoredNamespaces!:`.
+
+## Role contracts
+
+Mark each class with the role it plays, using an attribute from `DaveLiddament\SymfonyArchitecture\Attribute`:
+
+```php
+use DaveLiddament\SymfonyArchitecture\Attribute\Service;
+
+#[Service]
+final readonly class InvoiceSender
+{
+}
+```
+
+| Attribute | Must be | Identifier |
+|---|---|---|
+| `#[Command]` | `final` | `command.final` |
+| `#[ConfigProvider]` | `final readonly` | `configProvider.finalReadonly` |
+| `#[Dto]` | `final` | `dto.final` |
+| `#[FormType]` | `final` | `formType.final` |
+| `#[QueueProcessor]` | `final readonly` | `queueProcessor.finalReadonly` |
+| `#[Repository]` | `final readonly` | `repository.finalReadonly` |
+| `#[Serializer]` | `final` | `serializer.final` |
+| `#[Service]` | `final readonly` | `service.finalReadonly` |
+| `#[ValueObject]` | `final readonly` | `valueObject.finalReadonly` |
+| `#[ViewModel]` | `final readonly` | `viewModel.finalReadonly` |
+
+Commands and form types extend non-readonly Symfony base classes, so they only need to be `final`.
+
+### Configuration
+
+Every role is on by default. Set a role to `false` to turn off all the rules for it:
+
+```neon
+parameters:
+    symfonyArchitecture:
+        roles:
+            command: true
+            configProvider: true
+            dto: true
+            formType: true
+            queueProcessor: true
+            repository: true
+            serializer: true
+            service: true
+            valueObject: true
+            viewModel: true
+```
+
+### The attributes and `require-dev`
+
+The attributes currently ship in this package, which you install with `--dev`, but you use them in production code.
+That is safe: PHP doesn't load an attribute's class unless something instantiates it. Tools that check your
+dependencies will notice, though. For `composer-require-checker`, add the attributes to `symbol-whitelist`.
+
+The attributes may move to their own package in future. Their namespace won't change.
 
 ## Contributing
 

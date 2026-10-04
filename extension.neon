@@ -12,6 +12,19 @@ parameters:
             ignoredNamespaces:
                 - 'App\Tests'
 
+        roles:
+            # Set any of these to false to turn off all the rules for that role.
+            command: true
+            configProvider: true
+            dto: true
+            formType: true
+            queueProcessor: true
+            repository: true
+            serializer: true
+            service: true
+            valueObject: true
+            viewModel: true
+
 parametersSchema:
     symfonyArchitecture: structure([
         boundaries: structure([
@@ -21,6 +34,18 @@ parametersSchema:
             sharedNamespace: schema(string(), nullable())
             nurseryNamespace: schema(string(), nullable())
             ignoredNamespaces: listOf(string())
+        ])
+        roles: structure([
+            command: bool()
+            configProvider: bool()
+            dto: bool()
+            formType: bool()
+            queueProcessor: bool()
+            repository: bool()
+            serializer: bool()
+            service: bool()
+            valueObject: bool()
+            viewModel: bool()
         ])
     ])
 
@@ -46,6 +71,36 @@ services:
     -
         class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\NurseryIsolationRule
 
+    -
+        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\CommandDeclarationRule
+
+    -
+        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ConfigProviderDeclarationRule
+
+    -
+        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\DtoDeclarationRule
+
+    -
+        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\FormTypeDeclarationRule
+
+    -
+        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\QueueProcessorDeclarationRule
+
+    -
+        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\RepositoryDeclarationRule
+
+    -
+        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\SerializerDeclarationRule
+
+    -
+        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ServiceDeclarationRule
+
+    -
+        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ValueObjectDeclarationRule
+
+    -
+        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ViewModelDeclarationRule
+
 conditionalTags:
     DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\LibIsolationRule:
         phpstan.rules.rule: %symfonyArchitecture.boundaries.enabled%
@@ -55,3 +110,23 @@ conditionalTags:
         phpstan.rules.rule: %symfonyArchitecture.boundaries.enabled%
     DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\NurseryIsolationRule:
         phpstan.rules.rule: %symfonyArchitecture.boundaries.enabled%
+    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\CommandDeclarationRule:
+        phpstan.rules.rule: %symfonyArchitecture.roles.command%
+    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ConfigProviderDeclarationRule:
+        phpstan.rules.rule: %symfonyArchitecture.roles.configProvider%
+    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\DtoDeclarationRule:
+        phpstan.rules.rule: %symfonyArchitecture.roles.dto%
+    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\FormTypeDeclarationRule:
+        phpstan.rules.rule: %symfonyArchitecture.roles.formType%
+    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\QueueProcessorDeclarationRule:
+        phpstan.rules.rule: %symfonyArchitecture.roles.queueProcessor%
+    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\RepositoryDeclarationRule:
+        phpstan.rules.rule: %symfonyArchitecture.roles.repository%
+    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\SerializerDeclarationRule:
+        phpstan.rules.rule: %symfonyArchitecture.roles.serializer%
+    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ServiceDeclarationRule:
+        phpstan.rules.rule: %symfonyArchitecture.roles.service%
+    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ValueObjectDeclarationRule:
+        phpstan.rules.rule: %symfonyArchitecture.roles.valueObject%
+    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ViewModelDeclarationRule:
+        phpstan.rules.rule: %symfonyArchitecture.roles.viewModel%

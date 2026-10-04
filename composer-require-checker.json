@@ -3,6 +3,7 @@
         "PhpParser\\Node",
         "PhpParser\\Node\\Name",
         "PHPStan\\Analyser\\Scope",
+        "PHPStan\\Node\\InClassNode",
         "PHPStan\\Rules\\IdentifierRuleError",
         "PHPStan\\Rules\\Rule",
         "PHPStan\\Rules\\RuleErrorBuilder"

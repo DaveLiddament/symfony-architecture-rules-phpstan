@@ -1,0 +1,5 @@
+parameters:
+    symfonyArchitecture:
+        roles:
+            dto: false
+            service: false
