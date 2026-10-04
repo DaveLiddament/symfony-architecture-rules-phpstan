@@ -23,6 +23,7 @@
     "bamarni/composer-bin-plugin": "^1.8",
     "dave-liddament/phpstan-php-language-extensions": "^0.10.0",
     "dave-liddament/phpstan-rule-test-helper": "^0.6.0",
+    "nette/neon": "^3.4",
     "phpstan/phpstan-phpunit": "^2.0",
     "phpstan/phpstan-strict-rules": "^2.0",
     "phpunit/phpunit": "^12.0 || ^13.0",
@@ -35,7 +36,8 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "DaveLiddament\\SymfonyArchitectureRulesPhpstan\\Tests\\": "tests/"
+      "DaveLiddament\\SymfonyArchitectureRulesPhpstan\\Tests\\": "tests/",
+      "DaveLiddament\\SymfonyArchitectureRulesPhpstan\\Build\\": "build/"
     }
   },
   "config": {
@@ -68,7 +70,7 @@
       "@test"
     ],
     "composer-validate": "@composer validate --no-check-all --strict",
-    "lint": "parallel-lint src tests",
+    "lint": "parallel-lint src tests build",
     "composer-unused": "composer-unused",
     "composer-require-checker": "composer-require-checker check --config-file=composer-require-checker.json",
     "cs": "php-cs-fixer fix -v --dry-run",

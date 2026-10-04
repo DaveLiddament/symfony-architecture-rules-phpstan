@@ -3,6 +3,7 @@ parameters:
     paths:
         - src
         - tests
+        - build
     excludePaths:
         analyse:
             # Fixtures intentionally contain rule violations; they are
@@ -13,6 +14,30 @@ parameters:
     checkUninitializedProperties: true
     checkMissingOverrideMethodAttribute: true
     rememberPossiblyImpureFunctionValues: false
+
+services:
+    # Internal check: every rule in this package is registered in extension.neon.
+    -
+        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Build\PHPStan\Rules\CheckRuleIsInExtension
+        arguments:
+            extensionFile: %currentWorkingDirectory%/extension.neon
+            namespace: 'DaveLiddament\SymfonyArchitectureRulesPhpstan'
+            excludedNamespaces:
+                - 'DaveLiddament\SymfonyArchitectureRulesPhpstan\Build'
+                - 'DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests'
+        tags:
+            - phpstan.rules.rule
+
+    # Internal check: every rule in this package has a test with fixtures.
+    -
+        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Build\PHPStan\Rules\CheckRuleHasTest
+        arguments:
+            ruleDirectories:
+                - %currentWorkingDirectory%/src
+                - %currentWorkingDirectory%/build
+            testsDirectory: %currentWorkingDirectory%/tests
+        tags:
+            - phpstan.rules.rule
 
 includes:
     - vendor/phpstan/phpstan-phpunit/extension.neon

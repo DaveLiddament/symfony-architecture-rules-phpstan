@@ -1,0 +1,3 @@
+<?php
+
+// Fake fixture file.
