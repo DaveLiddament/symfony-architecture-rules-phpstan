@@ -1,0 +1,29 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries;
+
+use DaveLiddament\SymfonyArchitectureRulesPhpstan\Boundaries\Area;
+use DaveLiddament\SymfonyArchitectureRulesPhpstan\Boundaries\AreaType;
+use PHPStan\Rules\IdentifierRuleError;
+
+/**
+ * Lib holds application-agnostic code, so it must not depend on any
+ * application code: app-root classes, domains, Shared or the Nursery.
+ */
+final class LibIsolationRule extends AbstractBoundaryRule
+{
+    #[\Override]
+    protected function check(Area $source, Area $target, string $targetName): ?IdentifierRuleError
+    {
+        if (!$source->is(AreaType::Lib) || !$target->isAppCode()) {
+            return null;
+        }
+
+        return $this->error(
+            sprintf('Lib code must stay application-agnostic and cannot depend on %s.', $targetName),
+            'architecture.libIsolation',
+        );
+    }
+}

@@ -1,2 +1,57 @@
-# Rules provided by this extension are registered here.
-services: []
+parameters:
+    symfonyArchitecture:
+        boundaries:
+            # Set to false to turn off all the architectural boundary rules.
+            enabled: true
+            appNamespace: 'App'
+            # Set any of these to null to turn off the rule that guards it.
+            libNamespace: 'Lib'
+            sharedNamespace: 'App\Shared'
+            nurseryNamespace: 'App\Nursery'
+            # Code in these namespaces is ignored by the boundary rules.
+            ignoredNamespaces:
+                - 'App\Tests'
+
+parametersSchema:
+    symfonyArchitecture: structure([
+        boundaries: structure([
+            enabled: bool()
+            appNamespace: string()
+            libNamespace: schema(string(), nullable())
+            sharedNamespace: schema(string(), nullable())
+            nurseryNamespace: schema(string(), nullable())
+            ignoredNamespaces: listOf(string())
+        ])
+    ])
+
+services:
+    -
+        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Boundaries\BoundaryClassifier
+        arguments:
+            appNamespace: %symfonyArchitecture.boundaries.appNamespace%
+            libNamespace: %symfonyArchitecture.boundaries.libNamespace%
+            sharedNamespace: %symfonyArchitecture.boundaries.sharedNamespace%
+            nurseryNamespace: %symfonyArchitecture.boundaries.nurseryNamespace%
+            ignoredNamespaces: %symfonyArchitecture.boundaries.ignoredNamespaces%
+
+    -
+        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\LibIsolationRule
+
+    -
+        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\SharedIsolationRule
+
+    -
+        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\DomainInternalRule
+
+    -
+        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\NurseryIsolationRule
+
+conditionalTags:
+    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\LibIsolationRule:
+        phpstan.rules.rule: %symfonyArchitecture.boundaries.enabled%
+    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\SharedIsolationRule:
+        phpstan.rules.rule: %symfonyArchitecture.boundaries.enabled%
+    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\DomainInternalRule:
+        phpstan.rules.rule: %symfonyArchitecture.boundaries.enabled%
+    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\NurseryIsolationRule:
+        phpstan.rules.rule: %symfonyArchitecture.boundaries.enabled%

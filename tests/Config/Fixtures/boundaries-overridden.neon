@@ -1,0 +1,9 @@
+parameters:
+    symfonyArchitecture:
+        boundaries:
+            appNamespace: 'Acme'
+            libNamespace: null
+            sharedNamespace: 'Common'
+            nurseryNamespace: null
+            ignoredNamespaces!:
+                - 'Acme\Tests'

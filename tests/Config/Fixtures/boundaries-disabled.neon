@@ -1,0 +1,4 @@
+parameters:
+    symfonyArchitecture:
+        boundaries:
+            enabled: false

@@ -1,0 +1,96 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Boundaries;
+
+use DaveLiddament\SymfonyArchitectureRulesPhpstan\Boundaries\Area;
+use DaveLiddament\SymfonyArchitectureRulesPhpstan\Boundaries\AreaType;
+use DaveLiddament\SymfonyArchitectureRulesPhpstan\Boundaries\BoundaryClassifier;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\TestCase;
+
+final class BoundaryClassifierTest extends TestCase
+{
+    /**
+     * @return iterable<string, array{string, Area}>
+     */
+    public static function defaultClassesProvider(): iterable
+    {
+        yield 'lib' => ['Lib\Clock', Area::of(AreaType::Lib)];
+        yield 'lib sub-namespace' => ['Lib\Time\Clock', Area::of(AreaType::Lib)];
+        yield 'shared' => ['App\Shared\User', Area::of(AreaType::Shared)];
+        yield 'shared sub-namespace' => ['App\Shared\Entity\User', Area::of(AreaType::Shared)];
+        yield 'nursery' => ['App\Nursery\NewThing', Area::of(AreaType::Nursery)];
+        yield 'nursery sub-namespace' => ['App\Nursery\Controller\NewController', Area::of(AreaType::Nursery)];
+        yield 'app root' => ['App\Kernel', Area::of(AreaType::AppRoot)];
+        yield 'domain root' => ['App\Registration\RegistrationService', Area::domain('Registration', true)];
+        yield 'domain internal' => ['App\Registration\Entity\User', Area::domain('Registration', false)];
+        yield 'domain deep internal' => ['App\Registration\Entity\Sub\User', Area::domain('Registration', false)];
+        yield 'ignored' => ['App\Tests\SomeTest', Area::of(AreaType::Ignored)];
+        yield 'ignored sub-namespace' => ['App\Tests\Registration\SomeTest', Area::of(AreaType::Ignored)];
+        yield 'vendor' => ['Symfony\Component\HttpFoundation\Response', Area::of(AreaType::External)];
+        yield 'global namespace' => ['DateTimeImmutable', Area::of(AreaType::External)];
+        yield 'prefix of app is not app' => ['Application\Foo\Bar', Area::of(AreaType::External)];
+        yield 'prefix of shared is a domain' => ['App\SharedThings\Foo', Area::domain('SharedThings', true)];
+    }
+
+    #[Test]
+    #[DataProvider('defaultClassesProvider')]
+    public function classifiesClassesUsingTheDefaultNamespaces(string $className, Area $expected): void
+    {
+        self::assertEquals($expected, $this->defaultClassifier()->classifyClass($className));
+    }
+
+    #[Test]
+    public function classifiesNamespaces(): void
+    {
+        $classifier = $this->defaultClassifier();
+
+        self::assertEquals(Area::of(AreaType::AppRoot), $classifier->classifyNamespace('App'));
+        self::assertEquals(Area::domain('Registration', true), $classifier->classifyNamespace('App\Registration'));
+        self::assertEquals(Area::domain('Registration', false), $classifier->classifyNamespace('App\Registration\Entity'));
+        self::assertEquals(Area::of(AreaType::External), $classifier->classifyNamespace(null));
+        self::assertEquals(Area::of(AreaType::External), $classifier->classifyNamespace(''));
+    }
+
+    #[Test]
+    public function nullNamespacesTurnAreasIntoOrdinaryCode(): void
+    {
+        $classifier = new BoundaryClassifier('App', null, null, null, []);
+
+        self::assertEquals(Area::of(AreaType::External), $classifier->classifyClass('Lib\Clock'));
+        self::assertEquals(Area::domain('Shared', true), $classifier->classifyClass('App\Shared\User'));
+        self::assertEquals(Area::domain('Nursery', true), $classifier->classifyClass('App\Nursery\NewThing'));
+        self::assertEquals(Area::domain('Tests', true), $classifier->classifyClass('App\Tests\SomeTest'));
+    }
+
+    #[Test]
+    public function sharedAndNurseryCanLiveOutsideTheAppNamespace(): void
+    {
+        $classifier = new BoundaryClassifier('Acme\App', 'Acme\Lib', 'Acme\Shared', 'Acme\Nursery', []);
+
+        self::assertEquals(Area::of(AreaType::Shared), $classifier->classifyClass('Acme\Shared\User'));
+        self::assertEquals(Area::of(AreaType::Nursery), $classifier->classifyClass('Acme\Nursery\NewThing'));
+        self::assertEquals(Area::of(AreaType::Lib), $classifier->classifyClass('Acme\Lib\Clock'));
+        self::assertEquals(Area::domain('Billing', true), $classifier->classifyClass('Acme\App\Billing\Invoice'));
+        self::assertEquals(Area::of(AreaType::External), $classifier->classifyClass('App\Shared\User'));
+    }
+
+    #[Test]
+    public function leadingAndTrailingBackslashesAreIgnored(): void
+    {
+        $classifier = new BoundaryClassifier('\App\\', '\Lib\\', '\App\Shared\\', '', ['\App\Tests\\']);
+
+        self::assertEquals(Area::of(AreaType::Lib), $classifier->classifyClass('Lib\Clock'));
+        self::assertEquals(Area::of(AreaType::Shared), $classifier->classifyClass('App\Shared\User'));
+        self::assertEquals(Area::of(AreaType::Ignored), $classifier->classifyClass('App\Tests\SomeTest'));
+        self::assertEquals(Area::domain('Nursery', true), $classifier->classifyClass('App\Nursery\NewThing'), 'An empty namespace means no nursery');
+    }
+
+    private function defaultClassifier(): BoundaryClassifier
+    {
+        return new BoundaryClassifier('App', 'Lib', 'App\Shared', 'App\Nursery', ['App\Tests']);
+    }
+}
