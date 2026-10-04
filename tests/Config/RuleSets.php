@@ -13,6 +13,7 @@ use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\CommandDeclaration
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ConfigProviderDeclarationRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ConfigProviderPropertyTypeRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ConfigProviderUsageRule;
+use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ControllerMethodReturnTypeRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\DtoDeclarationRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\EntityManagerUsageRule;
 use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\FormTypeDeclarationRule;
@@ -52,6 +53,9 @@ final class RuleSets
             ConfigProviderDeclarationRule::class,
             ConfigProviderPropertyTypeRule::class,
             ConfigProviderUsageRule::class,
+        ],
+        'controller' => [
+            ControllerMethodReturnTypeRule::class,
         ],
         'dto' => [
             DtoDeclarationRule::class,

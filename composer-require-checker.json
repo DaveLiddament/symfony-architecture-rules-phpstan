@@ -1,12 +1,16 @@
 {
     "symbol-whitelist": [
         "PhpParser\\Node",
+        "PhpParser\\Node\\ComplexType",
+        "PhpParser\\Node\\Identifier",
         "PhpParser\\Node\\Name",
+        "PhpParser\\Node\\UnionType",
         "PHPStan\\Analyser\\Scope",
         "PHPStan\\Node\\ClassPropertyNode",
         "PHPStan\\Node\\InClassMethodNode",
         "PHPStan\\Node\\InClassNode",
         "PHPStan\\Reflection\\ClassReflection",
+        "PHPStan\\Reflection\\ReflectionProvider",
         "PHPStan\\Rules\\IdentifierRuleError",
         "PHPStan\\Rules\\Rule",
         "PHPStan\\Rules\\RuleErrorBuilder",

@@ -112,6 +112,7 @@ final readonly class InvoiceSender
 |---|---|---|
 | `#[Command]` | `final` | |
 | `#[ConfigProvider]` | `final readonly` | Properties are scalars or `list<>`s of scalars (`configProvider.propertyType`). Only a `#[Service]` may hold one (`configProvider.onlyInService`) |
+| `#[Controller]` | | Public methods return an allowed type<sup>5</sup> (`architecture.controllerReturnType`) |
 | `#[Dto]` | `final` | |
 | `#[FormType]` | `final` | |
 | `#[QueueGateway]` | | A collaborator a `#[Service]` may depend on |
@@ -144,6 +145,18 @@ return an empty list instead.
 <sup>4</sup> Checked on every class: a public method returning `array{...}`, directly or inside a list, should return a
 value object, DTO or view model instead. Private methods may use shapes freely.
 
+<sup>5</sup> By default, `Symfony\Component\HttpFoundation\Response` or any subclass, or a union of these. Never
+nullable. To allow only specific types, replace the list:
+
+```neon
+parameters:
+    symfonyArchitecture:
+        controllerReturnTypes!:
+            - 'App\Shared\Page'
+            - 'Symfony\Component\HttpFoundation\JsonResponse'
+            - 'Symfony\Component\HttpFoundation\RedirectResponse'
+```
+
 The "must be" rules have the identifier `<role>.final` or `<role>.finalReadonly`, e.g. `service.finalReadonly`.
 Commands and form types extend non-readonly Symfony base classes, so they only need to be `final`.
 
@@ -157,6 +170,7 @@ parameters:
         roles:
             command: true
             configProvider: true
+            controller: true
             dto: true
             formType: true
             queueProcessor: true

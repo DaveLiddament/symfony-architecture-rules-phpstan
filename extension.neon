@@ -5,6 +5,9 @@ parameters:
         # Code in these namespaces is ignored by the architecture rules.
         ignoredNamespaces:
             - 'App\Tests'
+        # Public #[Controller] methods must return one of these (or a subclass), or a union of them.
+        controllerReturnTypes:
+            - 'Symfony\Component\HttpFoundation\Response'
         boundaries:
             # Set to false to turn off all the architectural boundary rules.
             enabled: true
@@ -16,6 +19,7 @@ parameters:
             # Set any of these to false to turn off all the rules for that role.
             command: true
             configProvider: true
+            controller: true
             dto: true
             formType: true
             queueProcessor: true
@@ -29,6 +33,7 @@ parametersSchema:
     symfonyArchitecture: structure([
         appNamespace: string()
         ignoredNamespaces: listOf(string())
+        controllerReturnTypes: listOf(string())
         boundaries: structure([
             enabled: bool()
             libNamespace: schema(string(), nullable())
@@ -38,6 +43,7 @@ parametersSchema:
         roles: structure([
             command: bool()
             configProvider: bool()
+            controller: bool()
             dto: bool()
             formType: bool()
             queueProcessor: bool()
@@ -136,6 +142,11 @@ services:
         arguments:
             ignoredNamespaces: %symfonyArchitecture.ignoredNamespaces%
 
+    -
+        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ControllerMethodReturnTypeRule
+        arguments:
+            allowedReturnTypes: %symfonyArchitecture.controllerReturnTypes%
+
 conditionalTags:
     DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\LibIsolationRule:
         phpstan.rules.rule: %symfonyArchitecture.boundaries.enabled%
@@ -183,3 +194,5 @@ conditionalTags:
         phpstan.rules.rule: %symfonyArchitecture.roles.repository%
     DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ArrayShapeReturnRule:
         phpstan.rules.rule: %symfonyArchitecture.roles.serializer%
+    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ControllerMethodReturnTypeRule:
+        phpstan.rules.rule: %symfonyArchitecture.roles.controller%
