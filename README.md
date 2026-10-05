@@ -2,6 +2,7 @@
 
 [![PHP versions: 8.3 to 8.5](https://img.shields.io/badge/php-8.3|8.4|8.5-blue.svg)](https://packagist.org/packages/dave-liddament/symfony-architecture-rules-phpstan)
 [![PHPStan max level](https://img.shields.io/badge/PHPStan-max%20level-brightgreen.svg)](phpstan.neon)
+[![License](https://poser.pugx.org/dave-liddament/symfony-architecture-rules-phpstan/license)](https://github.com/DaveLiddament/symfony-architecture-rules-phpstan/blob/main/LICENSE.md)
 
 ## The problem
 
