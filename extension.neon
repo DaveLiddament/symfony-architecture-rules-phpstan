@@ -22,6 +22,8 @@ parameters:
             libNamespace: 'Lib'
             sharedNamespace: 'App\Shared'
             pendingNamespace: 'App\Pending'
+            # Set to false to allow dependencies between domains to go round in a circle.
+            cycles: true
         roles:
             # Set any of these to false to turn off all the rules for that role.
             cliCommand: true
@@ -69,6 +71,7 @@ parametersSchema:
             libNamespace: schema(string(), nullable())
             sharedNamespace: schema(string(), nullable())
             pendingNamespace: schema(string(), nullable())
+            cycles: bool()
         ])
         roles: structure([
             cliCommand: bool()
@@ -205,6 +208,12 @@ services:
     -
         class: DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\CrossDomainRepositoryWriteRule
 
+    -
+        class: DaveLiddament\PhpstanArchitectureRules\Boundaries\DomainDependencyCollector
+
+    -
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\DomainCycleRule
+
 
     -
         class: DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\RoleLocationRule
@@ -299,6 +308,10 @@ conditionalTags:
         phpstan.rules.rule: %architecture.boundaries.enabled%
     DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\CrossDomainRepositoryWriteRule:
         phpstan.rules.rule: %architecture.boundaries.enabled%
+    DaveLiddament\PhpstanArchitectureRules\Boundaries\DomainDependencyCollector:
+        phpstan.collector: [%architecture.boundaries.enabled%, %architecture.boundaries.cycles%]
+    DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\DomainCycleRule:
+        phpstan.rules.rule: [%architecture.boundaries.enabled%, %architecture.boundaries.cycles%]
     DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\RoleLocationRule:
         phpstan.rules.rule: %architecture.boundaries.enabled%
     DaveLiddament\PhpstanArchitectureRules\Rules\Roles\CliCommandDeclarationRule:

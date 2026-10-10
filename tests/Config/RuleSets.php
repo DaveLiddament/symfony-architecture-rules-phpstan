@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Tests\Config;
 
+use DaveLiddament\PhpstanArchitectureRules\Boundaries\DomainDependencyCollector;
 use DaveLiddament\PhpstanArchitectureRules\Boundaries\DomainExportCollector;
 use DaveLiddament\PhpstanArchitectureRules\Placement\CrossAreaReferenceCollector;
 use DaveLiddament\PhpstanArchitectureRules\Placement\PlacedClassCollector;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\CrossDomainRepositoryWriteRule;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\DomainCycleRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\DomainInternalRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\ExportedDeclarationRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\ExportedToUnknownDomainRule;
@@ -48,6 +50,7 @@ final class RuleSets
 {
     public const array BOUNDARIES = [
         CrossDomainRepositoryWriteRule::class,
+        DomainCycleRule::class,
         DomainInternalRule::class,
         ExportedDeclarationRule::class,
         ExportedToUnknownDomainRule::class,
@@ -57,6 +60,7 @@ final class RuleSets
     ];
 
     public const array BOUNDARY_COLLECTORS = [
+        DomainDependencyCollector::class,
         DomainExportCollector::class,
     ];
 

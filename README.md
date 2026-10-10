@@ -90,11 +90,17 @@ throughout the app belongs in Shared rather than being exported (see
 | `ExportedDeclarationRule` | `architecture.notExportable` | `#[Exported]` on a trait, or on a role nothing outside its domain should use: CLI command, config provider, controller, form type, queue processor, serializer or view model |
 | | `architecture.exportedToNone` | `#[Exported(to: [])]`, which exports to no domain |
 | `ExportedToUnknownDomainRule` | `architecture.exportedToUnknownDomain` | A domain in `to` that doesn't exist, e.g. a typo or a renamed domain |
+| `DomainCycleRule` | `architecture.domainCycle` | Domains depending on each other in a circle, directly (Registration → Walks → Registration) or through others. Each cycle is reported once, with an example reference for each step |
 | `CrossDomainRepositoryWriteRule` | `architecture.repositoryWrite` | Another domain calling a repository method that isn't a read (`find*`, `get*`, `has*`, `is*`). Writes go through a service the owning domain exports |
 | <a id="role-location"></a>`RoleLocationRule` | `architecture.roleLocation` | A controller, CLI command or entity outside its role directory, e.g. `App\Registration\Controller`, or a repository outside `Repository\` or the area root |
 
+Domains in a cycle can't be understood, changed or extracted on their own, so in practice they are one domain. A
+common cause is a two-way ORM association, e.g. `Walk::$member` and `Member::$walks`. Keep the association one way
+(`Walk` → `Member`) and fetch a member's walks through the walk repository instead.
+
 A domain exists when at least one analysed class lives in it, so `ExportedToUnknownDomainRule` needs the whole app
-analysed: analysing a single directory may report domains outside it as unknown.
+analysed: analysing a single directory may report domains outside it as unknown. `DomainCycleRule` likewise only sees
+the dependencies in the analysed code.
 
 Role directories are relative to the area's root, so the same applies inside Shared (`App\Shared\Entity`) and
 Pending. Roles are recognised by their attribute or a [role alias](#role-aliases).
@@ -298,6 +304,7 @@ parameters:
             libNamespace: 'Lib'
             sharedNamespace: 'App\Shared'
             pendingNamespace: 'App\Pending'
+            cycles: true
         roles:
             cliCommand: true
             configProvider: true
@@ -377,6 +384,7 @@ aliases are added to those of the [framework presets](#framework-presets).
 |---|---|
 | All the architectural boundary rules | `boundaries.enabled: false` |
 | `LibIsolationRule` | `boundaries.libNamespace: null` |
+| `DomainCycleRule` | `boundaries.cycles: false` |
 | `SharedIsolationRule` | `boundaries.sharedNamespace: null` (`App\Shared` then becomes an ordinary domain) |
 | The Pending area | `boundaries.pendingNamespace: null` (`App\Pending` then becomes an ordinary domain, and the placement report stops treating it as Pending) |
 | All the rules for one role | `roles.<role>: false`, e.g. `roles.service: false` |

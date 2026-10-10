@@ -1,0 +1,4 @@
+parameters:
+    architecture:
+        boundaries:
+            cycles: false
