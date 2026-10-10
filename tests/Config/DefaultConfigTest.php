@@ -50,7 +50,7 @@ final class DefaultConfigTest extends PHPStanTestCase
 
         self::assertEquals(Area::of(AreaType::Lib), $classifier->classifyClass('Lib\Clock'));
         self::assertEquals(Area::of(AreaType::Shared), $classifier->classifyClass('App\Shared\User'));
-        self::assertEquals(Area::of(AreaType::Nursery), $classifier->classifyClass('App\Nursery\NewThing'));
+        self::assertEquals(Area::pending('Pending'), $classifier->classifyClass('App\Pending\NewThing'));
         self::assertEquals(Area::of(AreaType::Ignored), $classifier->classifyClass('App\Tests\SomeTest'));
         self::assertEquals(Area::of(AreaType::AppRoot), $classifier->classifyClass('App\Kernel'));
         self::assertEquals(Area::domain('Registration'), $classifier->classifyClass('App\Registration\Service'));

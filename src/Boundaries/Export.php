@@ -53,11 +53,9 @@ final readonly class Export
     }
 
     /**
-     * Whether code in the given domain may use the class. Null means code
-     * outside any domain (e.g. the Nursery), which may only use classes
-     * exported to every domain.
+     * Whether code in the given domain (or Pending) may use the class.
      */
-    public function allows(?string $domain): bool
+    public function allows(string $domain): bool
     {
         return null === $this->to || in_array($domain, $this->to, true);
     }

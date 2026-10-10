@@ -6,4 +6,4 @@ parameters:
         boundaries:
             libNamespace: null
             sharedNamespace: 'Common'
-            nurseryNamespace: null
+            pendingNamespace: null

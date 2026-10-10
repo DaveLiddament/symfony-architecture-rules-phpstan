@@ -15,7 +15,7 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 
 /**
- * Every application class (in a domain, Shared or the Nursery) plays a role,
+ * Every application class (in a domain, Shared or Pending) plays a role,
  * through a role attribute or a role alias, so the role contracts can see
  * it: a class without a role is invisible to every other role rule. Enums,
  * interfaces and traits are exempt, as are framework-glue classes directly
@@ -26,7 +26,7 @@ use PHPStan\Rules\RuleErrorBuilder;
  */
 final class RoleRequiredRule implements Rule
 {
-    private const array CHECKED_AREAS = [AreaType::Domain, AreaType::Shared, AreaType::Nursery];
+    private const array CHECKED_AREAS = [AreaType::Domain, AreaType::Shared, AreaType::Pending];
 
     /**
      * @param list<string> $exemptClasses

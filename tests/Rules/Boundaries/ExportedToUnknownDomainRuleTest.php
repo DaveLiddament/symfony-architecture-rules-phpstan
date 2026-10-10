@@ -32,7 +32,7 @@ final class ExportedToUnknownDomainRuleTest extends AbstractRuleTestCase
     {
         $this->assertIssuesReported(
             ExportedFixtures::file('Stats/StatsReport.php'),
-            ExportedFixtures::file('Nursery/NurseryHelper.php'),
+            ExportedFixtures::file('Pending/PendingHelper.php'),
             ...ExportedFixtures::filesIn('Walks/Exportable'),
             ...ExportedFixtures::filesIn('Walks/ExportedTo'),
         );

@@ -22,8 +22,8 @@ final class BoundaryClassifierTest extends TestCase
         yield 'lib sub-namespace' => ['Lib\Time\Clock', Area::of(AreaType::Lib)];
         yield 'shared' => ['App\Shared\User', Area::of(AreaType::Shared)];
         yield 'shared sub-namespace' => ['App\Shared\Entity\User', Area::of(AreaType::Shared)];
-        yield 'nursery' => ['App\Nursery\NewThing', Area::of(AreaType::Nursery)];
-        yield 'nursery sub-namespace' => ['App\Nursery\Controller\NewController', Area::of(AreaType::Nursery)];
+        yield 'pending' => ['App\Pending\NewThing', Area::pending('Pending')];
+        yield 'pending sub-namespace' => ['App\Pending\Controller\NewController', Area::pending('Pending')];
         yield 'app root' => ['App\Kernel', Area::of(AreaType::AppRoot)];
         yield 'domain' => ['App\Registration\RegistrationService', Area::domain('Registration')];
         yield 'domain sub-namespace' => ['App\Registration\Entity\User', Area::domain('Registration')];
@@ -62,17 +62,26 @@ final class BoundaryClassifierTest extends TestCase
 
         self::assertEquals(Area::of(AreaType::External), $classifier->classifyClass('Lib\Clock'));
         self::assertEquals(Area::domain('Shared'), $classifier->classifyClass('App\Shared\User'));
-        self::assertEquals(Area::domain('Nursery'), $classifier->classifyClass('App\Nursery\NewThing'));
+        self::assertEquals(Area::domain('Pending'), $classifier->classifyClass('App\Pending\NewThing'));
         self::assertEquals(Area::domain('Tests'), $classifier->classifyClass('App\Tests\SomeTest'));
     }
 
     #[Test]
-    public function sharedAndNurseryCanLiveOutsideTheAppNamespace(): void
+    public function pendingIsNamedAfterTheLastPartOfItsNamespace(): void
     {
-        $classifier = new BoundaryClassifier('Acme\App', 'Acme\Lib', 'Acme\Shared', 'Acme\Nursery', []);
+        $classifier = new BoundaryClassifier('App', 'Lib', 'App\Shared', 'App\Work\Incubating', []);
+
+        self::assertEquals(Area::pending('Incubating'), $classifier->classifyClass('App\Work\Incubating\NewThing'));
+        self::assertTrue($classifier->classifyClass('App\Work\Incubating\NewThing')->actsAsDomain());
+    }
+
+    #[Test]
+    public function sharedAndPendingCanLiveOutsideTheAppNamespace(): void
+    {
+        $classifier = new BoundaryClassifier('Acme\App', 'Acme\Lib', 'Acme\Shared', 'Acme\Pending', []);
 
         self::assertEquals(Area::of(AreaType::Shared), $classifier->classifyClass('Acme\Shared\User'));
-        self::assertEquals(Area::of(AreaType::Nursery), $classifier->classifyClass('Acme\Nursery\NewThing'));
+        self::assertEquals(Area::pending('Pending'), $classifier->classifyClass('Acme\Pending\NewThing'));
         self::assertEquals(Area::of(AreaType::Lib), $classifier->classifyClass('Acme\Lib\Clock'));
         self::assertEquals(Area::domain('Billing'), $classifier->classifyClass('Acme\App\Billing\Invoice'));
         self::assertEquals(Area::of(AreaType::External), $classifier->classifyClass('App\Shared\User'));
@@ -86,23 +95,23 @@ final class BoundaryClassifierTest extends TestCase
         self::assertEquals(Area::of(AreaType::Lib), $classifier->classifyClass('Lib\Clock'));
         self::assertEquals(Area::of(AreaType::Shared), $classifier->classifyClass('App\Shared\User'));
         self::assertEquals(Area::of(AreaType::Ignored), $classifier->classifyClass('App\Tests\SomeTest'));
-        self::assertEquals(Area::domain('Nursery'), $classifier->classifyClass('App\Nursery\NewThing'), 'An empty namespace means no nursery');
+        self::assertEquals(Area::domain('Pending'), $classifier->classifyClass('App\Pending\NewThing'), 'An empty namespace means no Pending area');
     }
 
     #[Test]
     public function givesTheNamespaceEachAreaIsRootedAt(): void
     {
-        $classifier = new BoundaryClassifier('App', 'Lib', 'Common', 'App\Nursery', ['App\Tests']);
+        $classifier = new BoundaryClassifier('App', 'Lib', 'Common', 'App\Pending', ['App\Tests']);
 
         self::assertSame('App\Registration', $classifier->getAreaNamespace(Area::domain('Registration')));
         self::assertSame('Common', $classifier->getAreaNamespace(Area::of(AreaType::Shared)));
-        self::assertSame('App\Nursery', $classifier->getAreaNamespace(Area::of(AreaType::Nursery)));
+        self::assertSame('App\Pending', $classifier->getAreaNamespace(Area::pending('Pending')));
         self::assertNull($classifier->getAreaNamespace(Area::of(AreaType::Lib)));
         self::assertNull($classifier->getAreaNamespace(Area::of(AreaType::AppRoot)));
     }
 
     private function defaultClassifier(): BoundaryClassifier
     {
-        return new BoundaryClassifier('App', 'Lib', 'App\Shared', 'App\Nursery', ['App\Tests']);
+        return new BoundaryClassifier('App', 'Lib', 'App\Shared', 'App\Pending', ['App\Tests']);
     }
 }

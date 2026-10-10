@@ -33,9 +33,15 @@ final class DomainInternalRuleTest extends AbstractRuleTestCase
     }
 
     #[Test]
-    public function theNurseryCanOnlyUseClassesExportedToEveryDomain(): void
+    public function pendingCodeCanOnlyUseClassesExportedToIt(): void
     {
-        $this->assertIssuesReported(BoundaryFixtures::file('App/Nursery/UsesDomainInternal.php'));
+        $this->assertIssuesReported(BoundaryFixtures::file('App/Pending/UsesDomainInternal.php'));
+    }
+
+    #[Test]
+    public function domainsCanOnlyUseExportedPendingCode(): void
+    {
+        $this->assertIssuesReported(BoundaryFixtures::file('App/Gym/UsesPending.php'));
     }
 
     #[Test]

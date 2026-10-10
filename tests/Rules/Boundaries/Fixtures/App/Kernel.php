@@ -8,7 +8,7 @@ final class Kernel
 {
     public function usesAnything(
         Gym\Repository\GymRepository $repository,
-        Nursery\NewFeature $feature,
+        Pending\NewFeature $feature,
         Shared\User $user,
         \DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures\Lib\Clock $clock,
     ): void {

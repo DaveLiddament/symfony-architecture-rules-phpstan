@@ -34,8 +34,8 @@ final class CrossDomainRepositoryWriteRuleTest extends AbstractRuleTestCase
     }
 
     #[Test]
-    public function theNurseryMayOnlyRead(): void
+    public function pendingCodeMayOnlyRead(): void
     {
-        $this->assertIssuesReported(ExportedFixtures::file('Nursery/NurseryUsesWalkRepository.php'));
+        $this->assertIssuesReported(ExportedFixtures::file('Pending/PendingUsesWalkRepository.php'));
     }
 }

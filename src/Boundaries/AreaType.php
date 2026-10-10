@@ -12,8 +12,11 @@ enum AreaType
     /** Application code used throughout the app (e.g. App\Shared\*). */
     case Shared;
 
-    /** Application code whose domain is not known yet (e.g. App\Nursery\*). */
-    case Nursery;
+    /**
+     * Application code whose domain is not known yet (e.g. App\Pending\*).
+     * It acts as a domain until its classes move to their real one.
+     */
+    case Pending;
 
     /** Application code in a domain (e.g. App\Registration\*). */
     case Domain;

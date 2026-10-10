@@ -8,7 +8,7 @@ final class GymRepositoryTestHelper
 {
     public function testsAnything(
         \DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures\App\Gym\Repository\GymRepository $repository,
-        \DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures\App\Nursery\Helper $helper,
+        \DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures\App\Pending\Helper $helper,
     ): void {
     }
 }

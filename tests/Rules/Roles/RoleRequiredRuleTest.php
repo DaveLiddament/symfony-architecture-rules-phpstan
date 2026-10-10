@@ -27,7 +27,7 @@ final class RoleRequiredRuleTest extends AbstractRuleTestCase
             self::FAKE_APP,
             null,
             self::FAKE_APP.'\Shared',
-            self::FAKE_APP.'\Nursery',
+            self::FAKE_APP.'\Pending',
             [self::FAKE_APP.'\Tests'],
         );
 
@@ -57,13 +57,13 @@ final class RoleRequiredRuleTest extends AbstractRuleTestCase
     }
 
     #[Test]
-    public function rolelessClassesInDomainsSharedAndTheNurseryAreReported(): void
+    public function rolelessClassesInDomainsSharedAndPendingAreReported(): void
     {
         $this->assertIssuesReported(
             __DIR__.'/Fixtures/RoleRequired/FakeApp/Gym/Naked.php',
             __DIR__.'/Fixtures/RoleRequired/FakeApp/Gym/Internal/NakedInternal.php',
             __DIR__.'/Fixtures/RoleRequired/FakeApp/Shared/NakedShared.php',
-            __DIR__.'/Fixtures/RoleRequired/FakeApp/Nursery/NakedNursery.php',
+            __DIR__.'/Fixtures/RoleRequired/FakeApp/Pending/NakedPending.php',
         );
     }
 

@@ -14,7 +14,7 @@ final class BadShared
     {
     }
 
-    public function usesNurseryCode(\DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures\App\Nursery\Helper $helper): void // ERROR Shared code cannot depend on nursery code (DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures\App\Nursery\Helper).
+    public function usesPendingCode(\DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures\App\Pending\Helper $helper): void // ERROR Shared code cannot depend on domain code (DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures\App\Pending\Helper is in domain "Pending").
     {
     }
 }

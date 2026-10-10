@@ -10,7 +10,6 @@ use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\DomainInternalRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\ExportedDeclarationRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\ExportedToUnknownDomainRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\LibIsolationRule;
-use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\NurseryIsolationRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\RoleLocationRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\SharedIsolationRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ArrayShapeReturnRule;
@@ -48,7 +47,6 @@ final class RuleSets
         ExportedDeclarationRule::class,
         ExportedToUnknownDomainRule::class,
         LibIsolationRule::class,
-        NurseryIsolationRule::class,
         RoleLocationRule::class,
         SharedIsolationRule::class,
     ];

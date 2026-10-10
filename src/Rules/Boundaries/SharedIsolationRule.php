@@ -9,8 +9,8 @@ use DaveLiddament\PhpstanArchitectureRules\Boundaries\AreaType;
 use PHPStan\Rules\IdentifierRuleError;
 
 /**
- * Shared is used by every domain, so it must not depend on any domain or on
- * the Nursery: dependencies only flow from domains to Shared.
+ * Shared is used by every domain, so it must not depend on any domain,
+ * including Pending: dependencies only flow from domains to Shared.
  */
 final class SharedIsolationRule extends AbstractBoundaryRule
 {
@@ -21,16 +21,9 @@ final class SharedIsolationRule extends AbstractBoundaryRule
             return null;
         }
 
-        if ($target->is(AreaType::Domain)) {
+        if ($target->actsAsDomain()) {
             return $this->error(
                 sprintf('Shared code cannot depend on domain code (%s is in domain "%s").', $targetName, $target->domain),
-                'architecture.sharedIsolation',
-            );
-        }
-
-        if ($target->is(AreaType::Nursery)) {
-            return $this->error(
-                sprintf('Shared code cannot depend on nursery code (%s).', $targetName),
                 'architecture.sharedIsolation',
             );
         }

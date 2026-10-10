@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries;
 
-use DaveLiddament\PhpstanArchitectureRules\Boundaries\AreaType;
 use DaveLiddament\PhpstanArchitectureRules\Boundaries\BoundaryClassifier;
 use DaveLiddament\PhpstanArchitectureRules\Roles\RepositoryMethodKind;
 use DaveLiddament\PhpstanArchitectureRules\Roles\Role;
@@ -18,10 +17,9 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 
 /**
- * Code outside a repository's domain (another domain or the Nursery) may
- * only read through it: find*, get*, has* and is*. Writes go through a
- * service the owning domain exports. A method outside the repository
- * vocabulary counts as a write.
+ * Code in another domain (or Pending) may only read through a repository:
+ * find*, get*, has* and is*. Writes go through a service the owning domain
+ * exports. A method outside the repository vocabulary counts as a write.
  *
  * @implements Rule<MethodCall>
  */
@@ -55,7 +53,7 @@ final class CrossDomainRepositoryWriteRule implements Rule
         }
 
         $source = $this->classifier->classifyNamespace($scope->getNamespace());
-        if (!$source->is(AreaType::Domain) && !$source->is(AreaType::Nursery)) {
+        if (!$source->actsAsDomain()) {
             return [];
         }
 
@@ -63,7 +61,7 @@ final class CrossDomainRepositoryWriteRule implements Rule
         foreach ($scope->getType($node->var)->getObjectClassReflections() as $classReflection) {
             $target = $this->classifier->classifyClass($classReflection->getName());
             if (
-                !$target->is(AreaType::Domain)
+                !$target->actsAsDomain()
                 || $target->domain === $source->domain
                 || !$this->roleResolver->plays($classReflection, Role::Repository)
             ) {

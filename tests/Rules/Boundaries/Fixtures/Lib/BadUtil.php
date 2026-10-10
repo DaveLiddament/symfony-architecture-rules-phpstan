@@ -16,7 +16,7 @@ final class BadUtil
     {
     }
 
-    public function usesNurseryCode(\DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures\App\Nursery\Helper $helper): void // ERROR Lib code must stay application-agnostic and cannot depend on DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures\App\Nursery\Helper.
+    public function usesPendingCode(\DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures\App\Pending\Helper $helper): void // ERROR Lib code must stay application-agnostic and cannot depend on DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures\App\Pending\Helper.
     {
     }
 

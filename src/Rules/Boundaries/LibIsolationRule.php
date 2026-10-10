@@ -10,7 +10,7 @@ use PHPStan\Rules\IdentifierRuleError;
 
 /**
  * Lib holds application-agnostic code, so it must not depend on any
- * application code: app-root classes, domains, Shared or the Nursery.
+ * application code: app-root classes, domains, Shared or Pending.
  */
 final class LibIsolationRule extends AbstractBoundaryRule
 {

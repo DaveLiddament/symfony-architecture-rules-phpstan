@@ -8,14 +8,14 @@ use DaveLiddament\PhpstanArchitectureRules\Boundaries\BoundaryClassifier;
 
 /**
  * The fixtures are a small app: App\Gym, App\Home and App\Stats are domains, alongside
- * App\Shared, App\Nursery, App\Tests (ignored) and Lib.
+ * App\Shared, App\Pending, App\Tests (ignored) and Lib.
  */
 final class BoundaryFixtures
 {
     private const string NAMESPACE = 'DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures';
     private const string LIB = self::NAMESPACE.'\Lib';
     private const string SHARED = self::NAMESPACE.'\App\Shared';
-    private const string NURSERY = self::NAMESPACE.'\App\Nursery';
+    private const string PENDING = self::NAMESPACE.'\App\Pending';
 
     /**
      * Files that respect every boundary rule.
@@ -34,21 +34,22 @@ final class BoundaryFixtures
         'App/Stats/StatsApi.php',
         'App/Shared/User.php',
         'App/Shared/Money.php',
-        'App/Nursery/Helper.php',
-        'App/Nursery/NewFeature.php',
+        'App/Pending/Helper.php',
+        'App/Pending/NewFeature.php',
+        'App/Pending/PendingApi.php',
         'App/Tests/GymRepositoryTestHelper.php',
     ];
 
     public static function classifier(
         ?string $libNamespace = self::LIB,
         ?string $sharedNamespace = self::SHARED,
-        ?string $nurseryNamespace = self::NURSERY,
+        ?string $pendingNamespace = self::PENDING,
     ): BoundaryClassifier {
         return new BoundaryClassifier(
             self::NAMESPACE.'\App',
             $libNamespace,
             $sharedNamespace,
-            $nurseryNamespace,
+            $pendingNamespace,
             [self::NAMESPACE.'\App\Tests'],
         );
     }

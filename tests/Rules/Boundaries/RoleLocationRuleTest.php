@@ -26,7 +26,7 @@ final class RoleLocationRuleTest extends AbstractRuleTestCase
             self::FIXTURES.'\App',
             self::FIXTURES.'\Lib',
             self::FIXTURES.'\App\Shared',
-            self::FIXTURES.'\App\Nursery',
+            self::FIXTURES.'\App\Pending',
             [self::FIXTURES.'\App\Tests'],
         );
 
@@ -49,7 +49,7 @@ final class RoleLocationRuleTest extends AbstractRuleTestCase
             $this->fixture('App/Gym/Repository/MemberRepository.php'),
             $this->fixture('App/Shared/Entity/User.php'),
             $this->fixture('App/Shared/Repository/UserRepository.php'),
-            $this->fixture('App/Nursery/Controller/NewController.php'),
+            $this->fixture('App/Pending/Controller/NewController.php'),
         );
     }
 
@@ -66,7 +66,7 @@ final class RoleLocationRuleTest extends AbstractRuleTestCase
             $this->fixture('App/Gym/BadController.php'),
             $this->fixture('App/Gym/RootEntity.php'),
             $this->fixture('App/Shared/SharedEntity.php'),
-            $this->fixture('App/Nursery/NurseryController.php'),
+            $this->fixture('App/Pending/PendingController.php'),
         );
     }
 

@@ -21,7 +21,7 @@ parameters:
             # Set any of these to null to turn off the rule that guards it.
             libNamespace: 'Lib'
             sharedNamespace: 'App\Shared'
-            nurseryNamespace: 'App\Nursery'
+            pendingNamespace: 'App\Pending'
         roles:
             # Set any of these to false to turn off all the rules for that role.
             cliCommand: true
@@ -62,7 +62,7 @@ parametersSchema:
             enabled: bool()
             libNamespace: schema(string(), nullable())
             sharedNamespace: schema(string(), nullable())
-            nurseryNamespace: schema(string(), nullable())
+            pendingNamespace: schema(string(), nullable())
         ])
         roles: structure([
             cliCommand: bool()
@@ -170,7 +170,7 @@ services:
             appNamespace: %architecture.appNamespace%
             libNamespace: %architecture.boundaries.libNamespace%
             sharedNamespace: %architecture.boundaries.sharedNamespace%
-            nurseryNamespace: %architecture.boundaries.nurseryNamespace%
+            pendingNamespace: %architecture.boundaries.pendingNamespace%
             ignoredNamespaces: %architecture.ignoredNamespaces%
 
     -
@@ -194,8 +194,6 @@ services:
     -
         class: DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\CrossDomainRepositoryWriteRule
 
-    -
-        class: DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\NurseryIsolationRule
 
     -
         class: DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\RoleLocationRule
@@ -289,8 +287,6 @@ conditionalTags:
     DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\ExportedToUnknownDomainRule:
         phpstan.rules.rule: %architecture.boundaries.enabled%
     DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\CrossDomainRepositoryWriteRule:
-        phpstan.rules.rule: %architecture.boundaries.enabled%
-    DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\NurseryIsolationRule:
         phpstan.rules.rule: %architecture.boundaries.enabled%
     DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\RoleLocationRule:
         phpstan.rules.rule: %architecture.boundaries.enabled%

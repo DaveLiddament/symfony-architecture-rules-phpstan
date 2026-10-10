@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures\Exported\App\Nursery;
+namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures\Exported\App\Pending;
 
 use DaveLiddament\Architecture\Attribute\Service;
 use DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures\Exported\App\Walks\Exportable\WalkRepository;
 
 #[Service]
-final readonly class NurseryUsesWalkRepository
+final readonly class PendingUsesWalkRepository
 {
     public function __construct(
         private WalkRepository $walkRepository,

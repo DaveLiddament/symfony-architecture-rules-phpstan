@@ -25,6 +25,14 @@ final readonly class Area
         return new self(AreaType::Domain, $name);
     }
 
+    /**
+     * Pending code, which acts as a domain with the given name.
+     */
+    public static function pending(string $name): self
+    {
+        return new self(AreaType::Pending, $name);
+    }
+
     public function is(AreaType $type): bool
     {
         return $type === $this->type;
@@ -32,6 +40,14 @@ final readonly class Area
 
     public function isAppCode(): bool
     {
-        return in_array($this->type, [AreaType::AppRoot, AreaType::Domain, AreaType::Shared, AreaType::Nursery], true);
+        return in_array($this->type, [AreaType::AppRoot, AreaType::Domain, AreaType::Shared, AreaType::Pending], true);
+    }
+
+    /**
+     * Whether the area acts as a domain: a domain, or Pending.
+     */
+    public function actsAsDomain(): bool
+    {
+        return $this->is(AreaType::Domain) || $this->is(AreaType::Pending);
     }
 }

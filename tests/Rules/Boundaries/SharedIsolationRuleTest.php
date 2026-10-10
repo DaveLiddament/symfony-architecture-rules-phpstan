@@ -30,7 +30,7 @@ final class SharedIsolationRuleTest extends AbstractRuleTestCase
     }
 
     #[Test]
-    public function sharedCannotDependOnDomainsOrTheNursery(): void
+    public function sharedCannotDependOnDomainsOrPending(): void
     {
         $this->assertIssuesReported(BoundaryFixtures::file('App/Shared/BadShared.php'));
     }

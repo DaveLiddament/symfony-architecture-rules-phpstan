@@ -18,7 +18,7 @@ use PHPStan\Rules\RuleErrorBuilder;
 /**
  * Location is enforced only for roles where placement carries weight,
  * relative to the root of the class's area (a domain, Shared or the
- * Nursery):
+ * Pending):
  *
  * - Controllers and CLI commands (framework-invoked entry points) and
  *   entities (ORM mappings scan a known directory) must always live in
@@ -31,7 +31,7 @@ use PHPStan\Rules\RuleErrorBuilder;
  */
 final class RoleLocationRule implements Rule
 {
-    private const array CHECKED_AREAS = [AreaType::Domain, AreaType::Shared, AreaType::Nursery];
+    private const array CHECKED_AREAS = [AreaType::Domain, AreaType::Shared, AreaType::Pending];
 
     /** @var array<string, array{directory: string, allowedAtAreaRoot: bool}> role => location */
     private const array ROLE_LOCATIONS = [

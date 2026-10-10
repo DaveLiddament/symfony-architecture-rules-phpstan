@@ -46,7 +46,7 @@ Code is split into four kinds of area:
 |---|---|---|
 | **Lib** | `Lib\` | Code you could take to another project. Any domain word disqualifies it. |
 | **Shared** | `App\Shared\` | Application code used throughout the app, e.g. a `User` entity. Permanent. |
-| **Nursery** | `App\Nursery\` | New code whose domain isn't clear yet. It moves into a domain once its home is obvious. |
+| **Pending** | `App\Pending\` | Code whose domain isn't clear yet. It acts as a domain called `Pending` until its classes move to their real home. |
 | **Domain** | `App\<Name>\` | Every other namespace directly under `App\`, e.g. `App\Registration\`. |
 
 A domain's classes are internal to it, wherever they live in the domain. Another domain may use a class only if it is
@@ -66,33 +66,32 @@ final class Walk {}
 final readonly class WalkPlanner {}
 ```
 
-| From ↓ / To → | Lib | Shared | Domain (exported) | Domain (not exported) | Nursery |
-|---|---|---|---|---|---|
-| **Lib** | ✅ | ❌ | ❌ | ❌ | ❌ |
-| **Shared** | ✅ | ✅ | ❌ | ❌ | ❌ |
-| **Domain** | ✅ | ✅ | ✅ (if listed in `to`) | own domain only | ❌ |
-| **Nursery** | ✅ | ✅ | ✅ (unless it has `to`) | ❌ | ✅ |
+| From ↓ / To → | Lib | Shared | Domain or Pending (exported) | Domain or Pending (not exported) |
+|---|---|---|---|---|
+| **Lib** | ✅ | ❌ | ❌ | ❌ |
+| **Shared** | ✅ | ✅ | ❌ | ❌ |
+| **Domain or Pending** | ✅ | ✅ | ✅ (if listed in `to`) | own domain only |
 
-Dependencies flow one way: domains → Shared → Lib. Nothing may depend on the Nursery. When a domain needs a nursery
-class, that's the signal to move it. Anything used throughout the app belongs in Shared rather than being exported.
+Dependencies flow one way: domains → Shared → Lib. Pending is treated like any other domain: another domain may use a
+Pending class only if it is exported, and `to` can name it, e.g. `#[Exported(to: ['Pending'])]`. Anything used
+throughout the app belongs in Shared rather than being exported.
 
 | Rule | Identifier | Reports |
 |---|---|---|
 | `LibIsolationRule` | `architecture.libIsolation` | Lib depending on application code |
-| `SharedIsolationRule` | `architecture.sharedIsolation` | Shared depending on a domain or the Nursery |
-| `DomainInternalRule` | `architecture.domainInternal` | A domain class used from another domain or the Nursery without being exported to it |
+| `SharedIsolationRule` | `architecture.sharedIsolation` | Shared depending on a domain or Pending |
+| `DomainInternalRule` | `architecture.domainInternal` | A class used from another domain without being exported to it (Pending counts as a domain) |
 | `ExportedDeclarationRule` | `architecture.notExportable` | `#[Exported]` on a trait, or on a role nothing outside its domain should use: CLI command, config provider, controller, form type, queue processor, serializer or view model |
 | | `architecture.exportedToNone` | `#[Exported(to: [])]`, which exports to no domain |
 | `ExportedToUnknownDomainRule` | `architecture.exportedToUnknownDomain` | A domain in `to` that doesn't exist, e.g. a typo or a renamed domain |
-| `CrossDomainRepositoryWriteRule` | `architecture.repositoryWrite` | Another domain or the Nursery calling a repository method that isn't a read (`find*`, `get*`, `has*`, `is*`). Writes go through a service the owning domain exports |
-| `NurseryIsolationRule` | `architecture.nurseryIsolation` | A domain depending on the Nursery |
+| `CrossDomainRepositoryWriteRule` | `architecture.repositoryWrite` | Another domain calling a repository method that isn't a read (`find*`, `get*`, `has*`, `is*`). Writes go through a service the owning domain exports |
 | <a id="role-location"></a>`RoleLocationRule` | `architecture.roleLocation` | A controller, CLI command or entity outside its role directory, e.g. `App\Registration\Controller`, or a repository outside `Repository\` or the area root |
 
 A domain exists when at least one analysed class lives in it, so `ExportedToUnknownDomainRule` needs the whole app
 analysed: analysing a single directory may report domains outside it as unknown.
 
-Role directories are relative to the area's root, so the same applies inside Shared (`App\Shared\Entity`) and the
-Nursery. Roles are recognised by their attribute or a [role alias](#role-aliases).
+Role directories are relative to the area's root, so the same applies inside Shared (`App\Shared\Entity`) and
+Pending. Roles are recognised by their attribute or a [role alias](#role-aliases).
 
 Every class name used in code is checked (type declarations, `new`, static calls, `instanceof`, `extends`,
 attributes, ...). Class names that appear only in PHPDoc are not.
@@ -101,7 +100,7 @@ To configure or turn off these rules, see [Configuration](#configuration).
 
 ## Role contracts
 
-Every class in a domain, Shared or the Nursery must declare the role it plays, using an attribute from
+Every class in a domain, Shared or Pending must declare the role it plays, using an attribute from
 `DaveLiddament\Architecture\Attribute`, or one of your own mapped onto a role with a [role alias](#role-aliases)
 (`architecture.roleRequired`). A class without a role is invisible to the role rules, so it is reported. Enums, interfaces, traits,
 framework glue directly in `App\` and ignored namespaces are exempt.
@@ -272,7 +271,7 @@ parameters:
             enabled: true
             libNamespace: 'Lib'
             sharedNamespace: 'App\Shared'
-            nurseryNamespace: 'App\Nursery'
+            pendingNamespace: 'App\Pending'
         roles:
             cliCommand: true
             configProvider: true
@@ -349,12 +348,12 @@ aliases are added to those of the [framework presets](#framework-presets).
 | All the architectural boundary rules | `boundaries.enabled: false` |
 | `LibIsolationRule` | `boundaries.libNamespace: null` |
 | `SharedIsolationRule` | `boundaries.sharedNamespace: null` (`App\Shared` then becomes an ordinary domain) |
-| `NurseryIsolationRule` | `boundaries.nurseryNamespace: null` (`App\Nursery` then becomes an ordinary domain) |
 | All the rules for one role | `roles.<role>: false`, e.g. `roles.service: false` |
 | Requiring every class to declare a role | `roleRequired.enabled: false` |
 | The role requirement for a single class | Add it to `roleRequired.exemptClasses` |
 
-Shared and the Nursery can also be moved to any namespace, not just under `App\`.
+Shared and Pending can also be moved to any namespace, not just under `App\`. Pending is named after the last part
+of its namespace, e.g. `Incubating` for `App\Incubating`.
 
 To silence one kind of error without turning a rule off, ignore it by its identifier using PHPStan's
 [`ignoreErrors`](https://phpstan.org/user-guide/ignoring-errors), e.g. `identifier: repository.methodName`.

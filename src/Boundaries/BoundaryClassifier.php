@@ -7,16 +7,17 @@ namespace DaveLiddament\PhpstanArchitectureRules\Boundaries;
 /**
  * Works out which architectural area a namespace or class belongs to.
  *
- * Any namespace directly under the app namespace that is not Shared, the
- * Nursery or ignored is a domain. A null Lib, Shared or Nursery namespace
- * means that area does not exist, so the rules that guard it never fire.
+ * Any namespace directly under the app namespace that is not Shared,
+ * Pending or ignored is a domain. Pending acts as a domain named after the
+ * last part of its namespace, e.g. "Pending" for App\Pending. A null Lib,
+ * Shared or Pending namespace means that area does not exist.
  */
 final readonly class BoundaryClassifier
 {
     private string $appNamespace;
     private ?string $libNamespace;
     private ?string $sharedNamespace;
-    private ?string $nurseryNamespace;
+    private ?string $pendingNamespace;
 
     /** @var list<string> */
     private array $ignoredNamespaces;
@@ -28,13 +29,13 @@ final readonly class BoundaryClassifier
         string $appNamespace,
         ?string $libNamespace,
         ?string $sharedNamespace,
-        ?string $nurseryNamespace,
+        ?string $pendingNamespace,
         array $ignoredNamespaces,
     ) {
         $this->appNamespace = self::normalise($appNamespace);
         $this->libNamespace = self::normaliseNullable($libNamespace);
         $this->sharedNamespace = self::normaliseNullable($sharedNamespace);
-        $this->nurseryNamespace = self::normaliseNullable($nurseryNamespace);
+        $this->pendingNamespace = self::normaliseNullable($pendingNamespace);
         $this->ignoredNamespaces = array_map(self::normalise(...), $ignoredNamespaces);
     }
 
@@ -65,8 +66,10 @@ final readonly class BoundaryClassifier
             return Area::of(AreaType::Shared);
         }
 
-        if (self::isWithin($namespace, $this->nurseryNamespace)) {
-            return Area::of(AreaType::Nursery);
+        if (null !== $this->pendingNamespace && self::isWithin($namespace, $this->pendingNamespace)) {
+            $lastSeparator = strrpos($this->pendingNamespace, '\\');
+
+            return Area::pending(false === $lastSeparator ? $this->pendingNamespace : substr($this->pendingNamespace, $lastSeparator + 1));
         }
 
         if ($namespace === $this->appNamespace) {
@@ -89,7 +92,7 @@ final readonly class BoundaryClassifier
     {
         return match ($area->type) {
             AreaType::Shared => $this->sharedNamespace,
-            AreaType::Nursery => $this->nurseryNamespace,
+            AreaType::Pending => $this->pendingNamespace,
             AreaType::Domain => $this->appNamespace.'\\'.$area->domain,
             default => null,
         };

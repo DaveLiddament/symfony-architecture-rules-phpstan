@@ -8,7 +8,7 @@ use DaveLiddament\PhpstanArchitectureRules\Boundaries\BoundaryClassifier;
 
 /**
  * The #[Exported] fixtures are a small app: App\Walks and App\Stats are
- * domains, alongside App\Nursery.
+ * domains, alongside App\Pending.
  */
 final class ExportedFixtures
 {
@@ -16,7 +16,7 @@ final class ExportedFixtures
 
     public static function classifier(): BoundaryClassifier
     {
-        return new BoundaryClassifier(self::APP, null, self::APP.'\Shared', self::APP.'\Nursery', []);
+        return new BoundaryClassifier(self::APP, null, self::APP.'\Shared', self::APP.'\Pending', []);
     }
 
     public static function file(string $path): string
