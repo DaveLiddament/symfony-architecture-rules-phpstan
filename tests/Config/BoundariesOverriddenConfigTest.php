@@ -33,7 +33,7 @@ final class BoundariesOverriddenConfigTest extends PHPStanTestCase
         $classifier = self::getContainer()->getByType(BoundaryClassifier::class);
 
         self::assertEquals(Area::of(AreaType::Shared), $classifier->classifyClass('Common\User'));
-        self::assertEquals(Area::domain('Billing', true), $classifier->classifyClass('Acme\Billing\Invoice'));
+        self::assertEquals(Area::domain('Billing'), $classifier->classifyClass('Acme\Billing\Invoice'));
         self::assertEquals(Area::of(AreaType::Ignored), $classifier->classifyClass('Acme\Tests\SomeTest'));
     }
 
@@ -43,7 +43,7 @@ final class BoundariesOverriddenConfigTest extends PHPStanTestCase
         $classifier = self::getContainer()->getByType(BoundaryClassifier::class);
 
         self::assertEquals(Area::of(AreaType::External), $classifier->classifyClass('Lib\Clock'));
-        self::assertEquals(Area::domain('Nursery', true), $classifier->classifyClass('Acme\Nursery\NewThing'));
+        self::assertEquals(Area::domain('Nursery'), $classifier->classifyClass('Acme\Nursery\NewThing'));
     }
 
     #[Test]

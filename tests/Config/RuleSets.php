@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Tests\Config;
 
+use DaveLiddament\PhpstanArchitectureRules\Boundaries\DomainExportCollector;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\CrossDomainRepositoryWriteRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\DomainInternalRule;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\ExportedDeclarationRule;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\ExportedToUnknownDomainRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\LibIsolationRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\NurseryIsolationRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\RoleLocationRule;
@@ -39,11 +43,18 @@ use PHPStan\DependencyInjection\Container;
 final class RuleSets
 {
     public const array BOUNDARIES = [
+        CrossDomainRepositoryWriteRule::class,
         DomainInternalRule::class,
+        ExportedDeclarationRule::class,
+        ExportedToUnknownDomainRule::class,
         LibIsolationRule::class,
         NurseryIsolationRule::class,
         RoleLocationRule::class,
         SharedIsolationRule::class,
+    ];
+
+    public const array BOUNDARY_COLLECTORS = [
+        DomainExportCollector::class,
     ];
 
     public const array ROLE_REQUIRED = [
@@ -123,15 +134,16 @@ final class RuleSets
 
     /**
      * The rules from $ruleSet that PHPStan will run with the container's config.
+     * With $tag 'phpstan.collector', the collectors instead.
      *
      * @param list<string> $ruleSet
      *
      * @return list<string>
      */
-    public static function enabledIn(Container $container, array $ruleSet): array
+    public static function enabledIn(Container $container, array $ruleSet, string $tag = 'phpstan.rules.rule'): array
     {
         $enabled = [];
-        foreach ($container->getServicesByTag('phpstan.rules.rule') as $rule) {
+        foreach ($container->getServicesByTag($tag) as $rule) {
             if (is_object($rule) && in_array($rule::class, $ruleSet, true)) {
                 $enabled[] = $rule::class;
             }

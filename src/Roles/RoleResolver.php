@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Roles;
 
+use DaveLiddament\Architecture\Attribute\Exported;
 use DaveLiddament\Architecture\Attribute\Service;
 use DaveLiddament\PhpstanArchitectureRules\Frameworks\Framework;
 use PHPStan\Reflection\ClassReflection;
@@ -100,12 +101,12 @@ final readonly class RoleResolver
     /**
      * Whether the class plays any role. Any attribute from the role attribute
      * namespace counts, so a role added to the attributes package is
-     * recognised before these rules know about it.
+     * recognised before these rules know about it. #[Exported] is not a role.
      */
     public function hasAnyRole(ClassReflection $classReflection): bool
     {
         foreach ($this->attributeNames($classReflection) as $attribute) {
-            if (str_starts_with($attribute, $this->attributeNamespace.'\\')) {
+            if (Exported::class !== $attribute && str_starts_with($attribute, $this->attributeNamespace.'\\')) {
                 return true;
             }
         }

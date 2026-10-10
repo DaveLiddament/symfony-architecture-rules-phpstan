@@ -12,18 +12,17 @@ final readonly class Area
     private function __construct(
         public AreaType $type,
         public ?string $domain,
-        public bool $isDomainRoot,
     ) {
     }
 
     public static function of(AreaType $type): self
     {
-        return new self($type, null, false);
+        return new self($type, null);
     }
 
-    public static function domain(string $name, bool $isDomainRoot): self
+    public static function domain(string $name): self
     {
-        return new self(AreaType::Domain, $name, $isDomainRoot);
+        return new self(AreaType::Domain, $name);
     }
 
     public function is(AreaType $type): bool
@@ -34,10 +33,5 @@ final readonly class Area
     public function isAppCode(): bool
     {
         return in_array($this->type, [AreaType::AppRoot, AreaType::Domain, AreaType::Shared, AreaType::Nursery], true);
-    }
-
-    public function isDomainInternal(): bool
-    {
-        return $this->is(AreaType::Domain) && !$this->isDomainRoot;
     }
 }

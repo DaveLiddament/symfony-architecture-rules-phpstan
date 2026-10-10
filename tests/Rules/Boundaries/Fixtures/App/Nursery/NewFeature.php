@@ -6,7 +6,7 @@ namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures
 
 final class NewFeature
 {
-    public function usesDomainRoot(\DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures\App\Gym\GymApi $api): void
+    public function usesExported(\DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures\App\Gym\GymApi $api): void
     {
     }
 

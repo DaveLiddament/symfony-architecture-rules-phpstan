@@ -74,9 +74,7 @@ final readonly class BoundaryClassifier
         }
 
         if (self::isWithin($namespace, $this->appNamespace)) {
-            $parts = explode('\\', substr($namespace, strlen($this->appNamespace) + 1));
-
-            return Area::domain($parts[0], 1 === count($parts));
+            return Area::domain(explode('\\', substr($namespace, strlen($this->appNamespace) + 1))[0]);
         }
 
         return Area::of(AreaType::External);

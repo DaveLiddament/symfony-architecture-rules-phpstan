@@ -173,6 +173,18 @@ services:
         class: DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\DomainInternalRule
 
     -
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\ExportedDeclarationRule
+
+    -
+        class: DaveLiddament\PhpstanArchitectureRules\Boundaries\DomainExportCollector
+
+    -
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\ExportedToUnknownDomainRule
+
+    -
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\CrossDomainRepositoryWriteRule
+
+    -
         class: DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\NurseryIsolationRule
 
     -
@@ -263,6 +275,14 @@ conditionalTags:
     DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\SharedIsolationRule:
         phpstan.rules.rule: %architecture.boundaries.enabled%
     DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\DomainInternalRule:
+        phpstan.rules.rule: %architecture.boundaries.enabled%
+    DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\ExportedDeclarationRule:
+        phpstan.rules.rule: %architecture.boundaries.enabled%
+    DaveLiddament\PhpstanArchitectureRules\Boundaries\DomainExportCollector:
+        phpstan.collector: %architecture.boundaries.enabled%
+    DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\ExportedToUnknownDomainRule:
+        phpstan.rules.rule: %architecture.boundaries.enabled%
+    DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\CrossDomainRepositoryWriteRule:
         phpstan.rules.rule: %architecture.boundaries.enabled%
     DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\NurseryIsolationRule:
         phpstan.rules.rule: %architecture.boundaries.enabled%

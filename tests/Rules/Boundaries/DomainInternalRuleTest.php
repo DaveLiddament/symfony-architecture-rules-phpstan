@@ -17,7 +17,7 @@ final class DomainInternalRuleTest extends AbstractRuleTestCase
     #[\Override]
     protected function getRule(): Rule
     {
-        return new DomainInternalRule(BoundaryFixtures::classifier());
+        return new DomainInternalRule(BoundaryFixtures::classifier(), $this->createReflectionProvider());
     }
 
     #[Test]
@@ -27,13 +27,13 @@ final class DomainInternalRuleTest extends AbstractRuleTestCase
     }
 
     #[Test]
-    public function domainInternalsCannotBeUsedFromAnotherDomain(): void
+    public function classesNotExportedToADomainCannotBeUsedFromIt(): void
     {
         $this->assertIssuesReported(BoundaryFixtures::file('App/Gym/UsesHomeInternal.php'));
     }
 
     #[Test]
-    public function domainInternalsCannotBeUsedFromTheNursery(): void
+    public function theNurseryCanOnlyUseClassesExportedToEveryDomain(): void
     {
         $this->assertIssuesReported(BoundaryFixtures::file('App/Nursery/UsesDomainInternal.php'));
     }

@@ -18,7 +18,7 @@
   ],
   "require": {
     "php": "~8.3.0 || ~8.4.0 || ~8.5.0",
-    "dave-liddament/architecture-rules-attributes": "^0.1",
+    "dave-liddament/architecture-rules-attributes": "^0.2",
     "phpstan/phpstan": "^2.1"
   },
   "require-dev": {

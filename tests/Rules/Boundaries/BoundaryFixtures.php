@@ -7,7 +7,7 @@ namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries;
 use DaveLiddament\PhpstanArchitectureRules\Boundaries\BoundaryClassifier;
 
 /**
- * The fixtures are a small app: App\Gym and App\Home are domains, alongside
+ * The fixtures are a small app: App\Gym, App\Home and App\Stats are domains, alongside
  * App\Shared, App\Nursery, App\Tests (ignored) and Lib.
  */
 final class BoundaryFixtures
@@ -26,8 +26,12 @@ final class BoundaryFixtures
         'App/Kernel.php',
         'App/Gym/GymApi.php',
         'App/Gym/Repository/GymRepository.php',
+        'App/Home/ForGym.php',
+        'App/Home/ForStats.php',
         'App/Home/HomeApi.php',
+        'App/Home/HomeHelper.php',
         'App/Home/Internal/Secret.php',
+        'App/Stats/StatsApi.php',
         'App/Shared/User.php',
         'App/Shared/Money.php',
         'App/Nursery/Helper.php',

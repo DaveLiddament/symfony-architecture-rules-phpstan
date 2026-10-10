@@ -61,4 +61,19 @@ enum Role: string
             self::ViewModel => ViewModel::class,
         };
     }
+
+    /**
+     * Whether a class with this role may be #[Exported] to other domains.
+     * Entry points are invoked by the framework, so nothing should depend
+     * on them; view models, serializers and config providers are details of
+     * one domain.
+     */
+    public function isExportable(): bool
+    {
+        return match ($this) {
+            self::CliCommand, self::ConfigProvider, self::Controller, self::FormType,
+            self::QueueProcessor, self::Serializer, self::ViewModel => false,
+            self::Dto, self::Entity, self::QueueGateway, self::Repository, self::Service, self::ValueObject => true,
+        };
+    }
 }

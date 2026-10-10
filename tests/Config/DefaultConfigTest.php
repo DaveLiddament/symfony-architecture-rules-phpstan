@@ -25,6 +25,10 @@ final class DefaultConfigTest extends PHPStanTestCase
     public function allBoundaryRulesAreEnabled(): void
     {
         self::assertSame(RuleSets::BOUNDARIES, RuleSets::enabledIn(self::getContainer(), RuleSets::BOUNDARIES));
+        self::assertSame(
+            RuleSets::BOUNDARY_COLLECTORS,
+            RuleSets::enabledIn(self::getContainer(), RuleSets::BOUNDARY_COLLECTORS, 'phpstan.collector'),
+        );
     }
 
     #[Test]
@@ -49,6 +53,6 @@ final class DefaultConfigTest extends PHPStanTestCase
         self::assertEquals(Area::of(AreaType::Nursery), $classifier->classifyClass('App\Nursery\NewThing'));
         self::assertEquals(Area::of(AreaType::Ignored), $classifier->classifyClass('App\Tests\SomeTest'));
         self::assertEquals(Area::of(AreaType::AppRoot), $classifier->classifyClass('App\Kernel'));
-        self::assertEquals(Area::domain('Registration', true), $classifier->classifyClass('App\Registration\Service'));
+        self::assertEquals(Area::domain('Registration'), $classifier->classifyClass('App\Registration\Service'));
     }
 }

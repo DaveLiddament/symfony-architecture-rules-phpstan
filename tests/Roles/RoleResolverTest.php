@@ -13,6 +13,7 @@ use DaveLiddament\PhpstanArchitectureRules\Tests\Roles\Fixtures\BaseEntity;
 use DaveLiddament\PhpstanArchitectureRules\Tests\Roles\Fixtures\ChildEntity;
 use DaveLiddament\PhpstanArchitectureRules\Tests\Roles\Fixtures\DoctrineEntity;
 use DaveLiddament\PhpstanArchitectureRules\Tests\Roles\Fixtures\EntityInterface;
+use DaveLiddament\PhpstanArchitectureRules\Tests\Roles\Fixtures\ExportedOnly;
 use DaveLiddament\PhpstanArchitectureRules\Tests\Roles\Fixtures\GrandchildEntity;
 use DaveLiddament\PhpstanArchitectureRules\Tests\Roles\Fixtures\ImplementsEntityInterface;
 use DaveLiddament\PhpstanArchitectureRules\Tests\Roles\Fixtures\Plain;
@@ -102,6 +103,7 @@ final class RoleResolverTest extends PHPStanTestCase
         self::assertTrue($resolver->hasAnyRole($this->classReflection(AttributedService::class)));
         self::assertTrue($resolver->hasAnyRole($this->classReflection(AliasAttributed::class)));
         self::assertFalse($resolver->hasAnyRole($this->classReflection(Plain::class)));
+        self::assertFalse($resolver->hasAnyRole($this->classReflection(ExportedOnly::class)), '#[Exported] is not a role');
     }
 
     #[Test]

@@ -49,27 +49,47 @@ Code is split into four kinds of area:
 | **Nursery** | `App\Nursery\` | New code whose domain isn't clear yet. It moves into a domain once its home is obvious. |
 | **Domain** | `App\<Name>\` | Every other namespace directly under `App\`, e.g. `App\Registration\`. |
 
-A domain's root classes (`App\Registration\*`) are its public API. Everything in its subdirectories
-(`App\Registration\Entity\*`) is internal to it. Classes directly in `App\` (e.g. `App\Kernel`) are framework glue
-and are not checked.
+A domain's classes are internal to it, wherever they live in the domain. Another domain may use a class only if it is
+marked [`#[Exported]`](https://github.com/DaveLiddament/architecture-rules-attributes#exporting-to-other-domains), and, when the export
+lists domains, only if it is one of them. Classes directly in `App\` (e.g. `App\Kernel`) are framework glue and are
+not checked.
 
-| From ↓ / To → | Lib | Shared | Domain (public) | Domain (internal) | Nursery |
+```php
+use DaveLiddament\Architecture\Attribute\Exported;
+
+#[Entity]
+#[Exported]                             // any domain may use it
+final class Walk {}
+
+#[Service]
+#[Exported(to: ['Stats', 'Billing'])]   // only Stats and Billing may use it
+final readonly class WalkPlanner {}
+```
+
+| From ↓ / To → | Lib | Shared | Domain (exported) | Domain (not exported) | Nursery |
 |---|---|---|---|---|---|
 | **Lib** | ✅ | ❌ | ❌ | ❌ | ❌ |
 | **Shared** | ✅ | ✅ | ❌ | ❌ | ❌ |
-| **Domain** | ✅ | ✅ | ✅ | own domain only | ❌ |
-| **Nursery** | ✅ | ✅ | ✅ | ❌ | ✅ |
+| **Domain** | ✅ | ✅ | ✅ (if listed in `to`) | own domain only | ❌ |
+| **Nursery** | ✅ | ✅ | ✅ (unless it has `to`) | ❌ | ✅ |
 
 Dependencies flow one way: domains → Shared → Lib. Nothing may depend on the Nursery. When a domain needs a nursery
-class, that's the signal to move it.
+class, that's the signal to move it. Anything used throughout the app belongs in Shared rather than being exported.
 
 | Rule | Identifier | Reports |
 |---|---|---|
 | `LibIsolationRule` | `architecture.libIsolation` | Lib depending on application code |
 | `SharedIsolationRule` | `architecture.sharedIsolation` | Shared depending on a domain or the Nursery |
-| `DomainInternalRule` | `architecture.domainInternal` | A domain's internals used from another domain or the Nursery |
+| `DomainInternalRule` | `architecture.domainInternal` | A domain class used from another domain or the Nursery without being exported to it |
+| `ExportedDeclarationRule` | `architecture.notExportable` | `#[Exported]` on a trait, or on a role nothing outside its domain should use: CLI command, config provider, controller, form type, queue processor, serializer or view model |
+| | `architecture.exportedToNone` | `#[Exported(to: [])]`, which exports to no domain |
+| `ExportedToUnknownDomainRule` | `architecture.exportedToUnknownDomain` | A domain in `to` that doesn't exist, e.g. a typo or a renamed domain |
+| `CrossDomainRepositoryWriteRule` | `architecture.repositoryWrite` | Another domain or the Nursery calling a repository method that isn't a read (`find*`, `get*`, `has*`, `is*`). Writes go through a service the owning domain exports |
 | `NurseryIsolationRule` | `architecture.nurseryIsolation` | A domain depending on the Nursery |
 | <a id="role-location"></a>`RoleLocationRule` | `architecture.roleLocation` | A controller, CLI command or entity outside its role directory, e.g. `App\Registration\Controller`, or a repository outside `Repository\` or the area root |
+
+A domain exists when at least one analysed class lives in it, so `ExportedToUnknownDomainRule` needs the whole app
+analysed: analysing a single directory may report domains outside it as unknown.
 
 Role directories are relative to the area's root, so the same applies inside Shared (`App\Shared\Entity`) and the
 Nursery. Roles are recognised by their attribute or a [role alias](#role-aliases).
@@ -196,6 +216,8 @@ parameters:
 
   The prefix must end at a camelCase boundary, so `getaway()` is not a `get`. A nullable iterable is never allowed:
   return an empty list instead.
+- Other domains may only call its reads, `find*`, `get*`, `has*` and `is*` (`architecture.repositoryWrite`, a
+  [boundary rule](#architectural-boundaries)).
 - Turn off with `roles.repository: false`.
 
 ### Serializer

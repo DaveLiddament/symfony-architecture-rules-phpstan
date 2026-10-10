@@ -22,6 +22,7 @@ final class BoundariesDisabledConfigTest extends PHPStanTestCase
     public function noBoundaryRulesRunWhenDisabled(): void
     {
         self::assertSame([], RuleSets::enabledIn(self::getContainer(), RuleSets::BOUNDARIES));
+        self::assertSame([], RuleSets::enabledIn(self::getContainer(), RuleSets::BOUNDARY_COLLECTORS, 'phpstan.collector'));
     }
 
     #[Test]
