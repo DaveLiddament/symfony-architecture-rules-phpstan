@@ -14,8 +14,9 @@ use PHPStan\Rules\RuleErrorBuilder;
 
 /**
  * Internal to this package (not shipped in extension.neon): every concrete
- * rule in the package must be registered in extension.neon as a service
- * tagged "phpstan.rules.rule", either directly or via conditionalTags.
+ * rule in the package must be registered in one of the package's extension
+ * files (extension.neon, placement.neon) as a service tagged
+ * "phpstan.rules.rule", either directly or via conditionalTags.
  *
  * @implements Rule<InClassNode>
  */
@@ -26,15 +27,23 @@ final class CheckRuleIsInExtension implements Rule
     /** @var list<string> */
     private array $registeredRules;
 
+    private string $extensionFileNames;
+
     /**
+     * @param list<string> $extensionFiles
      * @param list<string> $excludedNamespaces
      */
     public function __construct(
-        string $extensionFile,
+        array $extensionFiles,
         private string $namespace,
         private array $excludedNamespaces,
     ) {
-        $this->registeredRules = self::readRegisteredRules($extensionFile);
+        $registeredRules = [];
+        foreach ($extensionFiles as $extensionFile) {
+            $registeredRules = [...$registeredRules, ...self::readRegisteredRules($extensionFile)];
+        }
+        $this->registeredRules = $registeredRules;
+        $this->extensionFileNames = implode(' or ', array_map(basename(...), $extensionFiles));
     }
 
     #[\Override]
@@ -60,7 +69,7 @@ final class CheckRuleIsInExtension implements Rule
         }
 
         return [
-            RuleErrorBuilder::message(sprintf('Rule [%s] not in extension.neon.', $className))
+            RuleErrorBuilder::message(sprintf('Rule [%s] not in %s.', $className, $this->extensionFileNames))
                 ->identifier('phpstanExtensionLibrary.misconfigured')
                 ->build(),
         ];

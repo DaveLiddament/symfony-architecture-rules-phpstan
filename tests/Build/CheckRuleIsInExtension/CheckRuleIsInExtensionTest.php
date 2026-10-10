@@ -20,7 +20,7 @@ final class CheckRuleIsInExtensionTest extends AbstractRuleTestCase
     protected function getRule(): Rule
     {
         return new CheckRuleIsInExtension(
-            __DIR__.'/Fixtures/extension.neon',
+            [__DIR__.'/Fixtures/extension.neon', __DIR__.'/Fixtures/other.neon'],
             self::FIXTURES_NAMESPACE,
             [self::FIXTURES_NAMESPACE.'\Excluded'],
         );
@@ -36,6 +36,12 @@ final class CheckRuleIsInExtensionTest extends AbstractRuleTestCase
     public function rulesTaggedViaConditionalTagsAreRegistered(): void
     {
         $this->assertIssuesReported(__DIR__.'/Fixtures/ConditionallyRegisteredRule.php');
+    }
+
+    #[Test]
+    public function rulesInAnyOfTheExtensionFilesAreRegistered(): void
+    {
+        $this->assertIssuesReported(__DIR__.'/Fixtures/RegisteredInOtherFileRule.php');
     }
 
     #[Test]

@@ -16,11 +16,13 @@ parameters:
     rememberPossiblyImpureFunctionValues: false
 
 services:
-    # Internal check: every rule in this package is registered in extension.neon.
+    # Internal check: every rule in this package is registered in extension.neon or placement.neon.
     -
         class: DaveLiddament\PhpstanArchitectureRules\Build\PHPStan\Rules\CheckRuleIsInExtension
         arguments:
-            extensionFile: %currentWorkingDirectory%/extension.neon
+            extensionFiles:
+                - %currentWorkingDirectory%/extension.neon
+                - %currentWorkingDirectory%/placement.neon
             namespace: 'DaveLiddament\PhpstanArchitectureRules'
             excludedNamespaces:
                 - 'DaveLiddament\PhpstanArchitectureRules\Build'

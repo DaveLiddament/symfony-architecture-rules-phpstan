@@ -10,7 +10,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 
 /** @implements Rule<Name> */
-final class UnregisteredRule implements Rule // ERROR Rule [DaveLiddament\PhpstanArchitectureRules\Tests\Build\CheckRuleIsInExtension\Fixtures\UnregisteredRule] not in extension.neon.
+final class UnregisteredRule implements Rule // ERROR Rule [DaveLiddament\PhpstanArchitectureRules\Tests\Build\CheckRuleIsInExtension\Fixtures\UnregisteredRule] not in extension.neon or other.neon.
 {
     public function getNodeType(): string
     {

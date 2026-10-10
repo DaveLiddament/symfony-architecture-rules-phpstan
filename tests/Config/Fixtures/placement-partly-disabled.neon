@@ -1,0 +1,4 @@
+parameters:
+    architecture:
+        placement:
+            sharedUsage: false

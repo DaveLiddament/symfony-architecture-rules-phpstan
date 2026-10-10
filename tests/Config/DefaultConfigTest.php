@@ -38,6 +38,13 @@ final class DefaultConfigTest extends PHPStanTestCase
     }
 
     #[Test]
+    public function thePlacementReportIsNotLoaded(): void
+    {
+        self::assertSame([], RuleSets::enabledIn(self::getContainer(), RuleSets::PLACEMENT));
+        self::assertSame([], RuleSets::enabledIn(self::getContainer(), RuleSets::PLACEMENT_COLLECTORS, 'phpstan.collector'));
+    }
+
+    #[Test]
     public function roleRequiredRuleIsEnabled(): void
     {
         self::assertSame(RuleSets::ROLE_REQUIRED, RuleSets::enabledIn(self::getContainer(), RuleSets::ROLE_REQUIRED));

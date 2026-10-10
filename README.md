@@ -18,6 +18,7 @@ It covers:
 
 - **[Architectural boundaries](#architectural-boundaries)**: which parts of the app may depend on which.
 - **[Role contracts](#role-contracts)**: every class declares its role, e.g. `#[Service]`, and each role has rules.
+- **[Placement report](#placement-report)**: an occasional, non-blocking check that classes still live in the right place.
 - **[Configuration](#configuration)**: the defaults, and how to change them or turn rules off.
 
 ## Installation
@@ -252,6 +253,40 @@ parameters:
   formatted values rather than carrying domain values (`viewModel.propertyType`).
 - Turn off with `roles.viewModel: false`.
 
+## Placement report
+
+Pending, Shared and `#[Exported]` drift over time: a Pending class finds its home, a Shared class ends up used by one
+domain, an export stops being used. Whether to act on that is a judgement call, so these checks aren't part of the
+normal run. Run them now and then, on the whole app, with a config that adds `placement.neon` to your usual one:
+
+```neon
+# phpstan-placement.neon
+includes:
+    - phpstan.neon
+    - vendor/dave-liddament/phpstan-architecture-rules/placement.neon
+```
+
+```shell
+vendor/bin/phpstan analyse -c phpstan-placement.neon
+```
+
+Your normal run already passes, so everything reported is placement advice.
+
+| Rule | Identifier | Reports |
+|---|---|---|
+| `PendingWayOutRule` | `placement.pendingUsedByOneDomain` | A Pending class only one domain uses, which uses no other domain: move it into that domain |
+| | `placement.pendingUsesOneDomain` | A Pending class no domain uses, which uses only one domain: move it into that domain |
+| `SharedUsageRule` | `placement.sharedUsedByOneDomain` | A Shared class only one domain uses (Pending counts as a domain) |
+| | `placement.sharedUnused` | A Shared class no domain uses |
+| `UnusedExportRule` | `placement.exportUnused` | An `#[Exported]` class no other domain uses |
+| | `placement.exportedToUnusedDomain` | A domain in `to` that doesn't use the class |
+
+A Shared class used by other Shared code is a building block, so `SharedUsageRule` leaves it alone. When a Pending
+class involves several domains, it stays in Pending until you choose between Shared and one domain exporting it.
+
+Turn off part of the report with `placement.pendingWayOut`, `placement.sharedUsage` or `placement.unusedExports` set
+to `false`.
+
 ## Configuration
 
 All the settings and their defaults. Override any of them in the `parameters` section of your `phpstan.neon`:
@@ -286,6 +321,10 @@ parameters:
             valueObject: true
             viewModel: true
         roleAliases: []                      # see Role aliases
+        placement:                           # see Placement report
+            pendingWayOut: true
+            sharedUsage: true
+            unusedExports: true
         roleRequired:
             enabled: true
             exemptClasses: []                # framework glue that may stay roleless

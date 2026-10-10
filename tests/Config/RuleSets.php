@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace DaveLiddament\PhpstanArchitectureRules\Tests\Config;
 
 use DaveLiddament\PhpstanArchitectureRules\Boundaries\DomainExportCollector;
+use DaveLiddament\PhpstanArchitectureRules\Placement\CrossAreaReferenceCollector;
+use DaveLiddament\PhpstanArchitectureRules\Placement\PlacedClassCollector;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\CrossDomainRepositoryWriteRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\DomainInternalRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\ExportedDeclarationRule;
@@ -12,6 +14,9 @@ use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\ExportedToUnknownDom
 use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\LibIsolationRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\RoleLocationRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\SharedIsolationRule;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Placement\PendingWayOutRule;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Placement\SharedUsageRule;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Placement\UnusedExportRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ArrayShapeReturnRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\CliCommandDeclarationRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ConfigProviderDeclarationRule;
@@ -53,6 +58,20 @@ final class RuleSets
 
     public const array BOUNDARY_COLLECTORS = [
         DomainExportCollector::class,
+    ];
+
+    /**
+     * The placement report's rules, only loaded from placement.neon.
+     */
+    public const array PLACEMENT = [
+        PendingWayOutRule::class,
+        SharedUsageRule::class,
+        UnusedExportRule::class,
+    ];
+
+    public const array PLACEMENT_COLLECTORS = [
+        CrossAreaReferenceCollector::class,
+        PlacedClassCollector::class,
     ];
 
     public const array ROLE_REQUIRED = [

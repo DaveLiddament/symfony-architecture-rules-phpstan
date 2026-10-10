@@ -42,6 +42,12 @@ parameters:
         #       extends: ['App\Shared\AbstractEntity']
         #       implements: ['App\Shared\EntityInterface']
         roleAliases: []
+        # The placement report (placement.neon), which is only loaded when you include it. Set any of these to false
+        # to turn off that part of the report.
+        placement:
+            pendingWayOut: true
+            sharedUsage: true
+            unusedExports: true
         roleRequired:
             # Set to false to stop requiring every application class to declare a role.
             enabled: true
@@ -144,6 +150,11 @@ parametersSchema:
                 ?extends: listOf(string())
                 ?implements: listOf(string())
             ])
+        ])
+        placement: structure([
+            pendingWayOut: bool()
+            sharedUsage: bool()
+            unusedExports: bool()
         ])
         roleRequired: structure([
             enabled: bool()

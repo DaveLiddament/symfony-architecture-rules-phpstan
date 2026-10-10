@@ -1,0 +1,5 @@
+services:
+    -
+        class: DaveLiddament\PhpstanArchitectureRules\Tests\Build\CheckRuleIsInExtension\Fixtures\RegisteredInOtherFileRule
+        tags:
+            - phpstan.rules.rule

@@ -1,0 +1,35 @@
+# The placement report: advice on where classes belong, e.g. a Pending class only one domain uses. It is not a gate,
+# so it is not loaded with extension.neon. Run it now and then on the whole app, with a config that includes your
+# usual one:
+#
+#   includes:
+#       - phpstan.neon
+#       - vendor/dave-liddament/phpstan-architecture-rules/placement.neon
+
+services:
+    -
+        class: DaveLiddament\PhpstanArchitectureRules\Placement\PlacedClassCollector
+        tags:
+            - phpstan.collector
+
+    -
+        class: DaveLiddament\PhpstanArchitectureRules\Placement\CrossAreaReferenceCollector
+        tags:
+            - phpstan.collector
+
+    -
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Placement\PendingWayOutRule
+
+    -
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Placement\SharedUsageRule
+
+    -
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Placement\UnusedExportRule
+
+conditionalTags:
+    DaveLiddament\PhpstanArchitectureRules\Rules\Placement\PendingWayOutRule:
+        phpstan.rules.rule: %architecture.placement.pendingWayOut%
+    DaveLiddament\PhpstanArchitectureRules\Rules\Placement\SharedUsageRule:
+        phpstan.rules.rule: %architecture.placement.sharedUsage%
+    DaveLiddament\PhpstanArchitectureRules\Rules\Placement\UnusedExportRule:
+        phpstan.rules.rule: %architecture.placement.unusedExports%
