@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\ArrayShapes;
 
-use DaveLiddament\SymfonyArchitecture\Attribute\Serializer;
+use DaveLiddament\Architecture\Attribute\Serializer;
 
 #[Serializer]
 final readonly class GoodSerializer

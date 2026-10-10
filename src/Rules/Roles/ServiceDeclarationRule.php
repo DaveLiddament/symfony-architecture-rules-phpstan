@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Rules\Roles;
 
-use DaveLiddament\SymfonyArchitecture\Attribute\Service;
+use DaveLiddament\Architecture\Attribute\Service;
 
 /**
  * A #[Service] class must be declared "final readonly".

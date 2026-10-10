@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\ViewModelProperties;
 
-use DaveLiddament\SymfonyArchitecture\Attribute\ViewModel;
+use DaveLiddament\Architecture\Attribute\ViewModel;
 
 #[ViewModel]
 final readonly class AllowedProperties

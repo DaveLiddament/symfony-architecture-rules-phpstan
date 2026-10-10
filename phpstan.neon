@@ -1,7 +1,6 @@
 parameters:
     level: max
     paths:
-        - attributes
         - src
         - tests
         - build

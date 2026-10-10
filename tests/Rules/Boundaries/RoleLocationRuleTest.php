@@ -43,7 +43,7 @@ final class RoleLocationRuleTest extends AbstractRuleTestCase
     {
         $this->assertIssuesReported(
             $this->fixture('App/Gym/Controller/GymController.php'),
-            $this->fixture('App/Gym/Command/GymCommand.php'),
+            $this->fixture('App/Gym/CliCommand/GymCommand.php'),
             $this->fixture('App/Gym/Entity/Member.php'),
             $this->fixture('App/Gym/Repository/MemberRepository.php'),
             $this->fixture('App/Shared/Entity/User.php'),

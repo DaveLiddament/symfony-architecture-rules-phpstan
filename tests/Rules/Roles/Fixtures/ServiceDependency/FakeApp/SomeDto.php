@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\ServiceDependency\FakeApp;
 
-use DaveLiddament\SymfonyArchitecture\Attribute\Dto;
+use DaveLiddament\Architecture\Attribute\Dto;
 
 #[Dto]
 final readonly class SomeDto

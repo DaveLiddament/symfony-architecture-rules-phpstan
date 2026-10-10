@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\ViewModelProperties;
 
-use DaveLiddament\SymfonyArchitecture\Attribute\ValueObject;
+use DaveLiddament\Architecture\Attribute\ValueObject;
 
 #[ValueObject]
 final readonly class SomeValue

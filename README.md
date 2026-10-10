@@ -22,7 +22,11 @@ It covers:
 
 ## Installation
 
+Install the role attributes as a normal dependency, because your production code uses them, and the rules as a dev
+dependency:
+
 ```shell
+composer require dave-liddament/architecture-rules-attributes
 composer require --dev dave-liddament/phpstan-architecture-rules
 ```
 
@@ -33,11 +37,6 @@ include the extension in your `phpstan.neon`:
 includes:
     - vendor/dave-liddament/phpstan-architecture-rules/extension.neon
 ```
-
-The role attributes ship in this package, which you install with `--dev`, but you use them in production code. That
-is safe: PHP doesn't load an attribute's class unless something instantiates it. Dependency checkers will notice,
-though: for `composer-require-checker`, add the attributes to `symbol-whitelist`. The attributes may move to their own
-package in future; their namespace won't change.
 
 ## Architectural boundaries
 
@@ -70,7 +69,7 @@ class, that's the signal to move it.
 | `SharedIsolationRule` | `architecture.sharedIsolation` | Shared depending on a domain or the Nursery |
 | `DomainInternalRule` | `architecture.domainInternal` | A domain's internals used from another domain or the Nursery |
 | `NurseryIsolationRule` | `architecture.nurseryIsolation` | A domain depending on the Nursery |
-| <a id="role-location"></a>`RoleLocationRule` | `architecture.roleLocation` | A controller, command or entity outside its role directory, e.g. `App\Registration\Controller`, or a repository outside `Repository\` or the area root |
+| <a id="role-location"></a>`RoleLocationRule` | `architecture.roleLocation` | A controller, CLI command or entity outside its role directory, e.g. `App\Registration\Controller`, or a repository outside `Repository\` or the area root |
 
 Role directories are relative to the area's root, so the same applies inside Shared (`App\Shared\Entity`) and the
 Nursery. Entities are recognised by Doctrine's `#[ORM\Entity]`.
@@ -83,12 +82,12 @@ To configure or turn off these rules, see [Configuration](#configuration).
 ## Role contracts
 
 Every class in a domain, Shared or the Nursery must declare the role it plays, using an attribute from
-`DaveLiddament\SymfonyArchitecture\Attribute` (`architecture.roleRequired`). Entities use Doctrine's `#[ORM\Entity]`
+`DaveLiddament\Architecture\Attribute` (`architecture.roleRequired`). Entities use Doctrine's `#[ORM\Entity]`
 instead. A class without a role is invisible to the role rules, so it is reported. Enums, interfaces, traits,
 framework glue directly in `App\` and ignored namespaces are exempt.
 
 ```php
-use DaveLiddament\SymfonyArchitecture\Attribute\Service;
+use DaveLiddament\Architecture\Attribute\Service;
 
 #[Service]
 final readonly class InvoiceSender
@@ -100,11 +99,10 @@ The roles:
 
 | Attribute | What it is |
 |---|---|
-| [`#[Command]`](#command) | A Symfony console command |
+| [`#[CliCommand]`](#clicommand) | A command line entry point |
 | [`#[ConfigProvider]`](#configprovider) | The one place primitive configuration lives |
 | [`#[Controller]`](#controller) | An HTTP entry point |
 | [`#[Dto]`](#dto) | A plain data carrier between layers |
-| [`#[FormType]`](#formtype) | A Symfony form type |
 | [`#[QueueGateway]`](#queuegateway) | Sends messages to a queue |
 | [`#[QueueProcessor]`](#queueprocessor) | A message handler |
 | [`#[Repository]`](#repository) | Wraps the ORM |
@@ -116,11 +114,11 @@ The roles:
 Each role's rules can be turned off with its switch under `architecture.roles` (see
 [Configuration](#configuration)).
 
-### Command
+### CliCommand
 
-- Must be `final` (`command.final`). It extends Symfony's `Command`, so it can't be `readonly`.
-- Must live in a `Command` directory, e.g. `App\Registration\Command` ([role location](#role-location)).
-- Turn off with `roles.command: false`.
+- Must be `final` (`cliCommand.final`), but needn't be `readonly`: a Symfony command extends `Command`, which isn't.
+- Must live in a `CliCommand` directory, e.g. `App\Registration\CliCommand` ([role location](#role-location)).
+- Turn off with `roles.cliCommand: false`.
 
 ### ConfigProvider
 
@@ -153,11 +151,6 @@ parameters:
 - Must be `final` (`dto.final`).
 - Deliberately not a value object: a DTO may carry things a value never would, such as entities.
 - Turn off with `roles.dto: false`.
-
-### FormType
-
-- Must be `final` (`formType.final`). It extends Symfony's `AbstractType`, so it can't be `readonly`.
-- Turn off with `roles.formType: false`.
 
 ### QueueGateway
 
@@ -236,11 +229,10 @@ parameters:
             sharedNamespace: 'App\Shared'
             nurseryNamespace: 'App\Nursery'
         roles:
-            command: true
+            cliCommand: true
             configProvider: true
             controller: true
             dto: true
-            formType: true
             queueProcessor: true
             repository: true
             serializer: true

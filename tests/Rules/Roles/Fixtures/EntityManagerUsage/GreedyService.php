@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\EntityManagerUsage;
 
 use DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\EntityManagerUsage\FakeDoctrine\EntityManagerInterface;
-use DaveLiddament\SymfonyArchitecture\Attribute\Service;
+use DaveLiddament\Architecture\Attribute\Service;
 
 #[Service]
 final readonly class GreedyService

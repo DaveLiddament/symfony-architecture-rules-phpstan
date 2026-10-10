@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Rules\Roles;
 
+use DaveLiddament\Architecture\Attribute\Service;
 use DaveLiddament\PhpstanArchitectureRules\Boundaries\AreaType;
 use DaveLiddament\PhpstanArchitectureRules\Boundaries\BoundaryClassifier;
-use DaveLiddament\SymfonyArchitecture\Attribute\Service;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassNode;

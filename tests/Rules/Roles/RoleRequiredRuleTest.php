@@ -36,7 +36,7 @@ final class RoleRequiredRuleTest extends AbstractRuleTestCase
     #[\Override]
     protected function getErrorFormatter(): string
     {
-        return 'Class {0} declares no role: give it a role attribute from DaveLiddament\SymfonyArchitecture\Attribute (#[Service], #[Dto], #[ValueObject], ...).';
+        return 'Class {0} declares no role: give it a role attribute from DaveLiddament\Architecture\Attribute (#[Service], #[Dto], #[ValueObject], ...).';
     }
 
     #[Test]

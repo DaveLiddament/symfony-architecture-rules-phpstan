@@ -18,6 +18,7 @@
   ],
   "require": {
     "php": "~8.3.0 || ~8.4.0 || ~8.5.0",
+    "dave-liddament/architecture-rules-attributes": "^0.1",
     "phpstan/phpstan": "^2.1"
   },
   "require-dev": {
@@ -32,7 +33,6 @@
   },
   "autoload": {
     "psr-4": {
-      "DaveLiddament\\SymfonyArchitecture\\Attribute\\": "attributes/",
       "DaveLiddament\\PhpstanArchitectureRules\\": "src/"
     }
   },
@@ -72,7 +72,7 @@
       "@test"
     ],
     "composer-validate": "@composer validate --no-check-all --strict",
-    "lint": "parallel-lint attributes src tests build",
+    "lint": "parallel-lint src tests build",
     "composer-unused": "composer-unused",
     "composer-require-checker": "composer-require-checker check --config-file=composer-require-checker.json",
     "cs": "php-cs-fixer fix -v --dry-run",

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries;
 
+use DaveLiddament\Architecture\Attribute\CliCommand;
+use DaveLiddament\Architecture\Attribute\Controller;
+use DaveLiddament\Architecture\Attribute\Repository;
 use DaveLiddament\PhpstanArchitectureRules\Boundaries\AreaType;
 use DaveLiddament\PhpstanArchitectureRules\Boundaries\BoundaryClassifier;
-use DaveLiddament\SymfonyArchitecture\Attribute\Command;
-use DaveLiddament\SymfonyArchitecture\Attribute\Controller;
-use DaveLiddament\SymfonyArchitecture\Attribute\Repository;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassNode;
@@ -21,7 +21,7 @@ use PHPStan\Rules\RuleErrorBuilder;
  * relative to the root of the class's area (a domain, Shared or the
  * Nursery):
  *
- * - #[Controller] and #[Command] (framework-invoked entry points) and
+ * - #[Controller] and #[CliCommand] (framework-invoked entry points) and
  *   entities (Doctrine mappings scan a known directory) must always live
  *   in their role directory, e.g. App\Registration\Controller.
  * - A #[Repository] lives in its role directory or at the area root.
@@ -43,7 +43,7 @@ final class RoleLocationRule implements Rule
     ) {
         $this->roleLocations = [
             Controller::class => ['directory' => 'Controller', 'allowedAtAreaRoot' => false],
-            Command::class => ['directory' => 'Command', 'allowedAtAreaRoot' => false],
+            CliCommand::class => ['directory' => 'CliCommand', 'allowedAtAreaRoot' => false],
             $entityAttribute => ['directory' => 'Entity', 'allowedAtAreaRoot' => false],
             Repository::class => ['directory' => 'Repository', 'allowedAtAreaRoot' => true],
         ];

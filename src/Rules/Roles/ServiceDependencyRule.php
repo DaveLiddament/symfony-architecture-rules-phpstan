@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Rules\Roles;
 
-use DaveLiddament\SymfonyArchitecture\Attribute\ConfigProvider;
-use DaveLiddament\SymfonyArchitecture\Attribute\QueueGateway;
-use DaveLiddament\SymfonyArchitecture\Attribute\Repository;
-use DaveLiddament\SymfonyArchitecture\Attribute\Serializer;
-use DaveLiddament\SymfonyArchitecture\Attribute\Service;
+use DaveLiddament\Architecture\Attribute\ConfigProvider;
+use DaveLiddament\Architecture\Attribute\QueueGateway;
+use DaveLiddament\Architecture\Attribute\Repository;
+use DaveLiddament\Architecture\Attribute\Serializer;
+use DaveLiddament\Architecture\Attribute\Service;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\ClassPropertyNode;

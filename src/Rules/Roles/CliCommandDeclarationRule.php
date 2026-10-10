@@ -4,23 +4,23 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Rules\Roles;
 
-use DaveLiddament\SymfonyArchitecture\Attribute\FormType;
+use DaveLiddament\Architecture\Attribute\CliCommand;
 
 /**
- * A #[FormType] class must be declared "final".
+ * A #[CliCommand] class must be declared "final".
  */
-final class FormTypeDeclarationRule extends AbstractDeclarationRule
+final class CliCommandDeclarationRule extends AbstractDeclarationRule
 {
     #[\Override]
     protected function getAttributeClass(): string
     {
-        return FormType::class;
+        return CliCommand::class;
     }
 
     #[\Override]
     protected function getRoleName(): string
     {
-        return 'Form type';
+        return 'CLI command';
     }
 
     #[\Override]
@@ -32,6 +32,6 @@ final class FormTypeDeclarationRule extends AbstractDeclarationRule
     #[\Override]
     protected function getIdentifier(): string
     {
-        return 'formType.final';
+        return 'cliCommand.final';
     }
 }

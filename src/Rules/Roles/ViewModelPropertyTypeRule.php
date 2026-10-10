@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Rules\Roles;
 
-use DaveLiddament\SymfonyArchitecture\Attribute\ViewModel;
+use DaveLiddament\Architecture\Attribute\ViewModel;
 
 /**
  * Properties of a #[ViewModel] must be render-ready values: primitives,

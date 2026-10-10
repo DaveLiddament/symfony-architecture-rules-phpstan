@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Rules\Roles;
 
-use DaveLiddament\SymfonyArchitecture\Attribute\Serializer;
+use DaveLiddament\Architecture\Attribute\Serializer;
 
 /**
  * A #[Serializer] class must be declared "final".

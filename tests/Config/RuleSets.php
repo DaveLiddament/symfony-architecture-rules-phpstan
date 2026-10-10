@@ -10,14 +10,13 @@ use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\NurseryIsolationRule
 use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\RoleLocationRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\SharedIsolationRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ArrayShapeReturnRule;
-use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\CommandDeclarationRule;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\CliCommandDeclarationRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ConfigProviderDeclarationRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ConfigProviderPropertyTypeRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ConfigProviderUsageRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ControllerMethodReturnTypeRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\DtoDeclarationRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\EntityManagerUsageRule;
-use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\FormTypeDeclarationRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\QueueProcessorDeclarationRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\RepositoryDeclarationRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\RepositoryDependencyRule;
@@ -53,8 +52,8 @@ final class RuleSets
      * The rules turned off by each role's switch.
      */
     public const array ROLES = [
-        'command' => [
-            CommandDeclarationRule::class,
+        'cliCommand' => [
+            CliCommandDeclarationRule::class,
         ],
         'configProvider' => [
             ConfigProviderDeclarationRule::class,
@@ -66,9 +65,6 @@ final class RuleSets
         ],
         'dto' => [
             DtoDeclarationRule::class,
-        ],
-        'formType' => [
-            FormTypeDeclarationRule::class,
         ],
         'queueProcessor' => [
             QueueProcessorDeclarationRule::class,

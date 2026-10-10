@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\RepositoryDependency;
 
-use DaveLiddament\SymfonyArchitecture\Attribute\Repository;
+use DaveLiddament\Architecture\Attribute\Repository;
 use DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\RepositoryDependency\FakeDoctrine\EntityManager;
 
 #[Repository]

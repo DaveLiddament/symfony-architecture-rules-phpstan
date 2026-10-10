@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Rules\Roles;
 
-use DaveLiddament\SymfonyArchitecture\Attribute\Dto;
+use DaveLiddament\Architecture\Attribute\Dto;
 
 /**
  * A #[Dto] class must be declared "final".

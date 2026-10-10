@@ -17,11 +17,10 @@ parameters:
             nurseryNamespace: 'App\Nursery'
         roles:
             # Set any of these to false to turn off all the rules for that role.
-            command: true
+            cliCommand: true
             configProvider: true
             controller: true
             dto: true
-            formType: true
             queueProcessor: true
             repository: true
             serializer: true
@@ -46,11 +45,10 @@ parametersSchema:
             nurseryNamespace: schema(string(), nullable())
         ])
         roles: structure([
-            command: bool()
+            cliCommand: bool()
             configProvider: bool()
             controller: bool()
             dto: bool()
-            formType: bool()
             queueProcessor: bool()
             repository: bool()
             serializer: bool()
@@ -92,16 +90,13 @@ services:
             entityAttribute: 'Doctrine\ORM\Mapping\Entity'
 
     -
-        class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\CommandDeclarationRule
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\CliCommandDeclarationRule
 
     -
         class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ConfigProviderDeclarationRule
 
     -
         class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\DtoDeclarationRule
-
-    -
-        class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\FormTypeDeclarationRule
 
     -
         class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\QueueProcessorDeclarationRule
@@ -178,14 +173,12 @@ conditionalTags:
         phpstan.rules.rule: %architecture.boundaries.enabled%
     DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\RoleLocationRule:
         phpstan.rules.rule: %architecture.boundaries.enabled%
-    DaveLiddament\PhpstanArchitectureRules\Rules\Roles\CommandDeclarationRule:
-        phpstan.rules.rule: %architecture.roles.command%
+    DaveLiddament\PhpstanArchitectureRules\Rules\Roles\CliCommandDeclarationRule:
+        phpstan.rules.rule: %architecture.roles.cliCommand%
     DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ConfigProviderDeclarationRule:
         phpstan.rules.rule: %architecture.roles.configProvider%
     DaveLiddament\PhpstanArchitectureRules\Rules\Roles\DtoDeclarationRule:
         phpstan.rules.rule: %architecture.roles.dto%
-    DaveLiddament\PhpstanArchitectureRules\Rules\Roles\FormTypeDeclarationRule:
-        phpstan.rules.rule: %architecture.roles.formType%
     DaveLiddament\PhpstanArchitectureRules\Rules\Roles\QueueProcessorDeclarationRule:
         phpstan.rules.rule: %architecture.roles.queueProcessor%
     DaveLiddament\PhpstanArchitectureRules\Rules\Roles\RepositoryDeclarationRule:

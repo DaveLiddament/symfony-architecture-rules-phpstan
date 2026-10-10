@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Rules\Roles;
 
-use DaveLiddament\SymfonyArchitecture\Attribute\ConfigProvider;
-use DaveLiddament\SymfonyArchitecture\Attribute\Service;
+use DaveLiddament\Architecture\Attribute\ConfigProvider;
+use DaveLiddament\Architecture\Attribute\Service;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\ClassPropertyNode;

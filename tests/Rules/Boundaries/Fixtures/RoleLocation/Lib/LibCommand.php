@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures\RoleLocation\Lib;
 
-use DaveLiddament\SymfonyArchitecture\Attribute\Command;
+use DaveLiddament\Architecture\Attribute\CliCommand;
 
-#[Command]
+#[CliCommand]
 final class LibCommand
 {
 }
