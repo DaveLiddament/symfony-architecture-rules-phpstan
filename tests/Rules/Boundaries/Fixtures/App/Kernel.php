@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Rules\Boundaries\Fixtures\App;
+namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures\App;
 
 final class Kernel
 {
@@ -10,7 +10,7 @@ final class Kernel
         Gym\Repository\GymRepository $repository,
         Nursery\NewFeature $feature,
         Shared\User $user,
-        \DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Rules\Boundaries\Fixtures\Lib\Clock $clock,
+        \DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures\Lib\Clock $clock,
     ): void {
     }
 }

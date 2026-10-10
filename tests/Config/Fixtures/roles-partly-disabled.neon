@@ -1,5 +1,5 @@
 parameters:
-    symfonyArchitecture:
+    architecture:
         roles:
             dto: false
             service: false

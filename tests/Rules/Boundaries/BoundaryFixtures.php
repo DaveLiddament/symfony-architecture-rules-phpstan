@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Rules\Boundaries;
+namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries;
 
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Boundaries\BoundaryClassifier;
+use DaveLiddament\PhpstanArchitectureRules\Boundaries\BoundaryClassifier;
 
 /**
  * The fixtures are a small app: App\Gym and App\Home are domains, alongside
@@ -12,7 +12,7 @@ use DaveLiddament\SymfonyArchitectureRulesPhpstan\Boundaries\BoundaryClassifier;
  */
 final class BoundaryFixtures
 {
-    private const string NAMESPACE = 'DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Rules\Boundaries\Fixtures';
+    private const string NAMESPACE = 'DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures';
     private const string LIB = self::NAMESPACE.'\Lib';
     private const string SHARED = self::NAMESPACE.'\App\Shared';
     private const string NURSERY = self::NAMESPACE.'\App\Nursery';

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DaveLiddament\SymfonyArchitectureRulesPhpstan\Build\PHPStan\Rules;
+namespace DaveLiddament\PhpstanArchitectureRules\Build\PHPStan\Rules;
 
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles;
+namespace DaveLiddament\PhpstanArchitectureRules\Rules\Roles;
 
+use DaveLiddament\PhpstanArchitectureRules\Boundaries\AreaType;
+use DaveLiddament\PhpstanArchitectureRules\Boundaries\BoundaryClassifier;
 use DaveLiddament\SymfonyArchitecture\Attribute\Service;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Boundaries\AreaType;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Boundaries\BoundaryClassifier;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassNode;

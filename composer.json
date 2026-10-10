@@ -1,10 +1,11 @@
 {
-  "name": "dave-liddament/symfony-architecture-rules-phpstan",
-  "description": "PHPStan rules for enforcing architecture in Symfony applications",
+  "name": "dave-liddament/phpstan-architecture-rules",
+  "description": "PHPStan rules for enforcing architecture in PHP applications, with Symfony and Doctrine support",
   "keywords": [
     "static analysis",
     "phpstan",
     "symfony",
+    "doctrine",
     "architecture"
   ],
   "type": "phpstan-extension",
@@ -32,13 +33,13 @@
   "autoload": {
     "psr-4": {
       "DaveLiddament\\SymfonyArchitecture\\Attribute\\": "attributes/",
-      "DaveLiddament\\SymfonyArchitectureRulesPhpstan\\": "src/"
+      "DaveLiddament\\PhpstanArchitectureRules\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "DaveLiddament\\SymfonyArchitectureRulesPhpstan\\Tests\\": "tests/",
-      "DaveLiddament\\SymfonyArchitectureRulesPhpstan\\Build\\": "build/"
+      "DaveLiddament\\PhpstanArchitectureRules\\Tests\\": "tests/",
+      "DaveLiddament\\PhpstanArchitectureRules\\Build\\": "build/"
     }
   },
   "config": {

@@ -2,34 +2,34 @@
 
 declare(strict_types=1);
 
-namespace DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Config;
+namespace DaveLiddament\PhpstanArchitectureRules\Tests\Config;
 
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\DomainInternalRule;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\LibIsolationRule;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\NurseryIsolationRule;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\RoleLocationRule;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\SharedIsolationRule;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ArrayShapeReturnRule;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\CommandDeclarationRule;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ConfigProviderDeclarationRule;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ConfigProviderPropertyTypeRule;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ConfigProviderUsageRule;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ControllerMethodReturnTypeRule;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\DtoDeclarationRule;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\EntityManagerUsageRule;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\FormTypeDeclarationRule;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\QueueProcessorDeclarationRule;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\RepositoryDeclarationRule;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\RepositoryDependencyRule;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\RepositoryMethodRule;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\RoleRequiredRule;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\SerializerDeclarationRule;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ServiceDeclarationRule;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ServiceDependencyRule;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ValueObjectDeclarationRule;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ValueObjectPropertyTypeRule;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ViewModelDeclarationRule;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ViewModelPropertyTypeRule;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\DomainInternalRule;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\LibIsolationRule;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\NurseryIsolationRule;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\RoleLocationRule;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\SharedIsolationRule;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ArrayShapeReturnRule;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\CommandDeclarationRule;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ConfigProviderDeclarationRule;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ConfigProviderPropertyTypeRule;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ConfigProviderUsageRule;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ControllerMethodReturnTypeRule;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\DtoDeclarationRule;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\EntityManagerUsageRule;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\FormTypeDeclarationRule;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\QueueProcessorDeclarationRule;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\RepositoryDeclarationRule;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\RepositoryDependencyRule;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\RepositoryMethodRule;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\RoleRequiredRule;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\SerializerDeclarationRule;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ServiceDeclarationRule;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ServiceDependencyRule;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ValueObjectDeclarationRule;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ValueObjectPropertyTypeRule;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ViewModelDeclarationRule;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ViewModelPropertyTypeRule;
 use PHPStan\DependencyInjection\Container;
 
 /**

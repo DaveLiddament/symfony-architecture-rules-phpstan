@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Rules\Roles\Fixtures\RepositoryDependency;
+namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\RepositoryDependency;
 
 use DaveLiddament\SymfonyArchitecture\Attribute\Repository;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Rules\Roles\Fixtures\RepositoryDependency\FakeDoctrine\EntityManager;
+use DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\RepositoryDependency\FakeDoctrine\EntityManager;
 
 #[Repository]
 final readonly class GoodRepository

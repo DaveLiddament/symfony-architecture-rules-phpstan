@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DaveLiddament\SymfonyArchitectureRulesPhpstan\Boundaries;
+namespace DaveLiddament\PhpstanArchitectureRules\Boundaries;
 
 /**
  * Works out which architectural area a namespace or class belongs to.

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Rules\Roles\Fixtures\QueueProcessor;
+namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\QueueProcessor;
 
 use DaveLiddament\SymfonyArchitecture\Attribute\QueueProcessor;
 
-#[QueueProcessor] // ERROR Queue processor DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Rules\Roles\Fixtures\QueueProcessor\NotReadonlyQueueProcessor must be final and readonly.
+#[QueueProcessor] // ERROR Queue processor DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\QueueProcessor\NotReadonlyQueueProcessor must be final and readonly.
 final class NotReadonlyQueueProcessor
 {
 }

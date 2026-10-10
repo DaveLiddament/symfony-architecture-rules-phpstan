@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Build\CheckRuleIsInExtension;
+namespace DaveLiddament\PhpstanArchitectureRules\Tests\Build\CheckRuleIsInExtension;
 
+use DaveLiddament\PhpstanArchitectureRules\Build\PHPStan\Rules\CheckRuleIsInExtension;
 use DaveLiddament\PhpstanRuleTestHelper\AbstractRuleTestCase;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Build\PHPStan\Rules\CheckRuleIsInExtension;
 use PHPStan\Rules\Rule;
 use PHPUnit\Framework\Attributes\Test;
 
@@ -14,7 +14,7 @@ use PHPUnit\Framework\Attributes\Test;
  */
 final class CheckRuleIsInExtensionTest extends AbstractRuleTestCase
 {
-    private const string FIXTURES_NAMESPACE = 'DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Build\CheckRuleIsInExtension\Fixtures';
+    private const string FIXTURES_NAMESPACE = 'DaveLiddament\PhpstanArchitectureRules\Tests\Build\CheckRuleIsInExtension\Fixtures';
 
     #[\Override]
     protected function getRule(): Rule

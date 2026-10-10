@@ -1,5 +1,5 @@
 parameters:
-    symfonyArchitecture:
+    architecture:
         # The namespace your application code lives in.
         appNamespace: 'App'
         # Code in these namespaces is ignored by the architecture rules.
@@ -35,7 +35,7 @@ parameters:
             exemptClasses: []
 
 parametersSchema:
-    symfonyArchitecture: structure([
+    architecture: structure([
         appNamespace: string()
         ignoredNamespaces: listOf(string())
         controllerReturnTypes: listOf(string())
@@ -66,157 +66,157 @@ parametersSchema:
 
 services:
     -
-        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Boundaries\BoundaryClassifier
+        class: DaveLiddament\PhpstanArchitectureRules\Boundaries\BoundaryClassifier
         arguments:
-            appNamespace: %symfonyArchitecture.appNamespace%
-            libNamespace: %symfonyArchitecture.boundaries.libNamespace%
-            sharedNamespace: %symfonyArchitecture.boundaries.sharedNamespace%
-            nurseryNamespace: %symfonyArchitecture.boundaries.nurseryNamespace%
-            ignoredNamespaces: %symfonyArchitecture.ignoredNamespaces%
+            appNamespace: %architecture.appNamespace%
+            libNamespace: %architecture.boundaries.libNamespace%
+            sharedNamespace: %architecture.boundaries.sharedNamespace%
+            nurseryNamespace: %architecture.boundaries.nurseryNamespace%
+            ignoredNamespaces: %architecture.ignoredNamespaces%
 
     -
-        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\LibIsolationRule
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\LibIsolationRule
 
     -
-        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\SharedIsolationRule
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\SharedIsolationRule
 
     -
-        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\DomainInternalRule
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\DomainInternalRule
 
     -
-        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\NurseryIsolationRule
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\NurseryIsolationRule
 
     -
-        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\RoleLocationRule
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\RoleLocationRule
         arguments:
             entityAttribute: 'Doctrine\ORM\Mapping\Entity'
 
     -
-        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\CommandDeclarationRule
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\CommandDeclarationRule
 
     -
-        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ConfigProviderDeclarationRule
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ConfigProviderDeclarationRule
 
     -
-        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\DtoDeclarationRule
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\DtoDeclarationRule
 
     -
-        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\FormTypeDeclarationRule
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\FormTypeDeclarationRule
 
     -
-        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\QueueProcessorDeclarationRule
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\QueueProcessorDeclarationRule
 
     -
-        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\RepositoryDeclarationRule
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\RepositoryDeclarationRule
 
     -
-        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\SerializerDeclarationRule
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\SerializerDeclarationRule
 
     -
-        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ServiceDeclarationRule
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ServiceDeclarationRule
 
     -
-        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ValueObjectDeclarationRule
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ValueObjectDeclarationRule
 
     -
-        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ViewModelDeclarationRule
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ViewModelDeclarationRule
 
     -
-        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ValueObjectPropertyTypeRule
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ValueObjectPropertyTypeRule
 
     -
-        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ViewModelPropertyTypeRule
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ViewModelPropertyTypeRule
 
     -
-        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ConfigProviderPropertyTypeRule
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ConfigProviderPropertyTypeRule
 
     -
-        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ConfigProviderUsageRule
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ConfigProviderUsageRule
 
     -
-        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ServiceDependencyRule
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ServiceDependencyRule
         arguments:
-            appNamespace: %symfonyArchitecture.appNamespace%
+            appNamespace: %architecture.appNamespace%
 
     -
-        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\RepositoryDependencyRule
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\RepositoryDependencyRule
         arguments:
             doctrineNamespace: 'Doctrine'
 
     -
-        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\RepositoryMethodRule
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\RepositoryMethodRule
 
     -
-        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\EntityManagerUsageRule
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\EntityManagerUsageRule
         arguments:
             entityManagerInterface: 'Doctrine\ORM\EntityManagerInterface'
 
     -
-        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ArrayShapeReturnRule
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ArrayShapeReturnRule
         arguments:
-            ignoredNamespaces: %symfonyArchitecture.ignoredNamespaces%
+            ignoredNamespaces: %architecture.ignoredNamespaces%
 
     -
-        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ControllerMethodReturnTypeRule
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ControllerMethodReturnTypeRule
         arguments:
-            allowedReturnTypes: %symfonyArchitecture.controllerReturnTypes%
+            allowedReturnTypes: %architecture.controllerReturnTypes%
 
     -
-        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\RoleRequiredRule
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\RoleRequiredRule
         arguments:
             entityAttribute: 'Doctrine\ORM\Mapping\Entity'
-            exemptClasses: %symfonyArchitecture.roleRequired.exemptClasses%
+            exemptClasses: %architecture.roleRequired.exemptClasses%
 
 conditionalTags:
-    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\LibIsolationRule:
-        phpstan.rules.rule: %symfonyArchitecture.boundaries.enabled%
-    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\SharedIsolationRule:
-        phpstan.rules.rule: %symfonyArchitecture.boundaries.enabled%
-    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\DomainInternalRule:
-        phpstan.rules.rule: %symfonyArchitecture.boundaries.enabled%
-    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\NurseryIsolationRule:
-        phpstan.rules.rule: %symfonyArchitecture.boundaries.enabled%
-    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\RoleLocationRule:
-        phpstan.rules.rule: %symfonyArchitecture.boundaries.enabled%
-    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\CommandDeclarationRule:
-        phpstan.rules.rule: %symfonyArchitecture.roles.command%
-    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ConfigProviderDeclarationRule:
-        phpstan.rules.rule: %symfonyArchitecture.roles.configProvider%
-    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\DtoDeclarationRule:
-        phpstan.rules.rule: %symfonyArchitecture.roles.dto%
-    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\FormTypeDeclarationRule:
-        phpstan.rules.rule: %symfonyArchitecture.roles.formType%
-    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\QueueProcessorDeclarationRule:
-        phpstan.rules.rule: %symfonyArchitecture.roles.queueProcessor%
-    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\RepositoryDeclarationRule:
-        phpstan.rules.rule: %symfonyArchitecture.roles.repository%
-    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\SerializerDeclarationRule:
-        phpstan.rules.rule: %symfonyArchitecture.roles.serializer%
-    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ServiceDeclarationRule:
-        phpstan.rules.rule: %symfonyArchitecture.roles.service%
-    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ValueObjectDeclarationRule:
-        phpstan.rules.rule: %symfonyArchitecture.roles.valueObject%
-    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ViewModelDeclarationRule:
-        phpstan.rules.rule: %symfonyArchitecture.roles.viewModel%
-    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ValueObjectPropertyTypeRule:
-        phpstan.rules.rule: %symfonyArchitecture.roles.valueObject%
-    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ViewModelPropertyTypeRule:
-        phpstan.rules.rule: %symfonyArchitecture.roles.viewModel%
-    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ConfigProviderPropertyTypeRule:
-        phpstan.rules.rule: %symfonyArchitecture.roles.configProvider%
-    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ConfigProviderUsageRule:
-        phpstan.rules.rule: %symfonyArchitecture.roles.configProvider%
-    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ServiceDependencyRule:
-        phpstan.rules.rule: %symfonyArchitecture.roles.service%
-    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\RepositoryDependencyRule:
-        phpstan.rules.rule: %symfonyArchitecture.roles.repository%
-    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\RepositoryMethodRule:
-        phpstan.rules.rule: %symfonyArchitecture.roles.repository%
-    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\EntityManagerUsageRule:
-        phpstan.rules.rule: %symfonyArchitecture.roles.repository%
-    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ArrayShapeReturnRule:
-        phpstan.rules.rule: %symfonyArchitecture.roles.serializer%
-    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ControllerMethodReturnTypeRule:
-        phpstan.rules.rule: %symfonyArchitecture.roles.controller%
-    DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\RoleRequiredRule:
-        phpstan.rules.rule: %symfonyArchitecture.roleRequired.enabled%
+    DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\LibIsolationRule:
+        phpstan.rules.rule: %architecture.boundaries.enabled%
+    DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\SharedIsolationRule:
+        phpstan.rules.rule: %architecture.boundaries.enabled%
+    DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\DomainInternalRule:
+        phpstan.rules.rule: %architecture.boundaries.enabled%
+    DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\NurseryIsolationRule:
+        phpstan.rules.rule: %architecture.boundaries.enabled%
+    DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\RoleLocationRule:
+        phpstan.rules.rule: %architecture.boundaries.enabled%
+    DaveLiddament\PhpstanArchitectureRules\Rules\Roles\CommandDeclarationRule:
+        phpstan.rules.rule: %architecture.roles.command%
+    DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ConfigProviderDeclarationRule:
+        phpstan.rules.rule: %architecture.roles.configProvider%
+    DaveLiddament\PhpstanArchitectureRules\Rules\Roles\DtoDeclarationRule:
+        phpstan.rules.rule: %architecture.roles.dto%
+    DaveLiddament\PhpstanArchitectureRules\Rules\Roles\FormTypeDeclarationRule:
+        phpstan.rules.rule: %architecture.roles.formType%
+    DaveLiddament\PhpstanArchitectureRules\Rules\Roles\QueueProcessorDeclarationRule:
+        phpstan.rules.rule: %architecture.roles.queueProcessor%
+    DaveLiddament\PhpstanArchitectureRules\Rules\Roles\RepositoryDeclarationRule:
+        phpstan.rules.rule: %architecture.roles.repository%
+    DaveLiddament\PhpstanArchitectureRules\Rules\Roles\SerializerDeclarationRule:
+        phpstan.rules.rule: %architecture.roles.serializer%
+    DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ServiceDeclarationRule:
+        phpstan.rules.rule: %architecture.roles.service%
+    DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ValueObjectDeclarationRule:
+        phpstan.rules.rule: %architecture.roles.valueObject%
+    DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ViewModelDeclarationRule:
+        phpstan.rules.rule: %architecture.roles.viewModel%
+    DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ValueObjectPropertyTypeRule:
+        phpstan.rules.rule: %architecture.roles.valueObject%
+    DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ViewModelPropertyTypeRule:
+        phpstan.rules.rule: %architecture.roles.viewModel%
+    DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ConfigProviderPropertyTypeRule:
+        phpstan.rules.rule: %architecture.roles.configProvider%
+    DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ConfigProviderUsageRule:
+        phpstan.rules.rule: %architecture.roles.configProvider%
+    DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ServiceDependencyRule:
+        phpstan.rules.rule: %architecture.roles.service%
+    DaveLiddament\PhpstanArchitectureRules\Rules\Roles\RepositoryDependencyRule:
+        phpstan.rules.rule: %architecture.roles.repository%
+    DaveLiddament\PhpstanArchitectureRules\Rules\Roles\RepositoryMethodRule:
+        phpstan.rules.rule: %architecture.roles.repository%
+    DaveLiddament\PhpstanArchitectureRules\Rules\Roles\EntityManagerUsageRule:
+        phpstan.rules.rule: %architecture.roles.repository%
+    DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ArrayShapeReturnRule:
+        phpstan.rules.rule: %architecture.roles.serializer%
+    DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ControllerMethodReturnTypeRule:
+        phpstan.rules.rule: %architecture.roles.controller%
+    DaveLiddament\PhpstanArchitectureRules\Rules\Roles\RoleRequiredRule:
+        phpstan.rules.rule: %architecture.roleRequired.enabled%

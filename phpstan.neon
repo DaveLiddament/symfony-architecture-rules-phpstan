@@ -19,19 +19,19 @@ parameters:
 services:
     # Internal check: every rule in this package is registered in extension.neon.
     -
-        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Build\PHPStan\Rules\CheckRuleIsInExtension
+        class: DaveLiddament\PhpstanArchitectureRules\Build\PHPStan\Rules\CheckRuleIsInExtension
         arguments:
             extensionFile: %currentWorkingDirectory%/extension.neon
-            namespace: 'DaveLiddament\SymfonyArchitectureRulesPhpstan'
+            namespace: 'DaveLiddament\PhpstanArchitectureRules'
             excludedNamespaces:
-                - 'DaveLiddament\SymfonyArchitectureRulesPhpstan\Build'
-                - 'DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests'
+                - 'DaveLiddament\PhpstanArchitectureRules\Build'
+                - 'DaveLiddament\PhpstanArchitectureRules\Tests'
         tags:
             - phpstan.rules.rule
 
     # Internal check: every rule in this package has a test with fixtures.
     -
-        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Build\PHPStan\Rules\CheckRuleHasTest
+        class: DaveLiddament\PhpstanArchitectureRules\Build\PHPStan\Rules\CheckRuleHasTest
         arguments:
             ruleDirectories:
                 - %currentWorkingDirectory%/src

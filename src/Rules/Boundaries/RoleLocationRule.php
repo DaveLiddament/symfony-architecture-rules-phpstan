@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries;
+namespace DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries;
 
+use DaveLiddament\PhpstanArchitectureRules\Boundaries\AreaType;
+use DaveLiddament\PhpstanArchitectureRules\Boundaries\BoundaryClassifier;
 use DaveLiddament\SymfonyArchitecture\Attribute\Command;
 use DaveLiddament\SymfonyArchitecture\Attribute\Controller;
 use DaveLiddament\SymfonyArchitecture\Attribute\Repository;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Boundaries\AreaType;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Boundaries\BoundaryClassifier;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassNode;

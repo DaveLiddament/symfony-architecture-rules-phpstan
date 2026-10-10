@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Build\CheckRuleIsInExtension\Fixtures\Excluded;
+namespace DaveLiddament\PhpstanArchitectureRules\Tests\Build\CheckRuleIsInExtension\Fixtures\Excluded;
 
 use PhpParser\Node;
 use PhpParser\Node\Name;

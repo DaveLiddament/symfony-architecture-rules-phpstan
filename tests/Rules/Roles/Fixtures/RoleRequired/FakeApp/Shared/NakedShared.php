@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-namespace DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Rules\Roles\Fixtures\RoleRequired\FakeApp\Shared;
+namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\RoleRequired\FakeApp\Shared;
 
-final class NakedShared // ERROR DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Rules\Roles\Fixtures\RoleRequired\FakeApp\Shared\NakedShared
+final class NakedShared // ERROR DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\RoleRequired\FakeApp\Shared\NakedShared
 {
 }

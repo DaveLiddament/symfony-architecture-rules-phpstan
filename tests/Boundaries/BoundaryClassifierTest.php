@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Boundaries;
+namespace DaveLiddament\PhpstanArchitectureRules\Tests\Boundaries;
 
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Boundaries\Area;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Boundaries\AreaType;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Boundaries\BoundaryClassifier;
+use DaveLiddament\PhpstanArchitectureRules\Boundaries\Area;
+use DaveLiddament\PhpstanArchitectureRules\Boundaries\AreaType;
+use DaveLiddament\PhpstanArchitectureRules\Boundaries\BoundaryClassifier;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;

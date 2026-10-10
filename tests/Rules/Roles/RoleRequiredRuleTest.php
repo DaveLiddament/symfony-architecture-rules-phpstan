@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Rules\Roles;
+namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles;
 
+use DaveLiddament\PhpstanArchitectureRules\Boundaries\BoundaryClassifier;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\RoleRequiredRule;
+use DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\RoleRequired\FakeApp\Gym\ExemptGlue;
+use DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\RoleRequired\FakeOrm\Entity;
 use DaveLiddament\PhpstanRuleTestHelper\AbstractRuleTestCase;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Boundaries\BoundaryClassifier;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\RoleRequiredRule;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Rules\Roles\Fixtures\RoleRequired\FakeApp\Gym\ExemptGlue;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Rules\Roles\Fixtures\RoleRequired\FakeOrm\Entity;
 use PHPStan\Rules\Rule;
 use PHPUnit\Framework\Attributes\Test;
 
@@ -17,7 +17,7 @@ use PHPUnit\Framework\Attributes\Test;
  */
 final class RoleRequiredRuleTest extends AbstractRuleTestCase
 {
-    private const string FAKE_APP = 'DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Rules\Roles\Fixtures\RoleRequired\FakeApp';
+    private const string FAKE_APP = 'DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\RoleRequired\FakeApp';
 
     #[\Override]
     protected function getRule(): Rule

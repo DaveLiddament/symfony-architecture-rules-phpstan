@@ -1,5 +1,5 @@
 parameters:
-    symfonyArchitecture:
+    architecture:
         appNamespace: 'Acme'
         ignoredNamespaces!:
             - 'Acme\Tests'

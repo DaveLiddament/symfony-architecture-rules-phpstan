@@ -1,13 +1,13 @@
 services:
     -
-        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Build\CheckRuleIsInExtension\Fixtures\RegisteredRule
+        class: DaveLiddament\PhpstanArchitectureRules\Tests\Build\CheckRuleIsInExtension\Fixtures\RegisteredRule
         tags:
             - phpstan.rules.rule
     -
-        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Build\CheckRuleIsInExtension\Fixtures\ConditionallyRegisteredRule
+        class: DaveLiddament\PhpstanArchitectureRules\Tests\Build\CheckRuleIsInExtension\Fixtures\ConditionallyRegisteredRule
     -
-        class: DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Build\CheckRuleIsInExtension\Fixtures\UntaggedRule
+        class: DaveLiddament\PhpstanArchitectureRules\Tests\Build\CheckRuleIsInExtension\Fixtures\UntaggedRule
 
 conditionalTags:
-    DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Build\CheckRuleIsInExtension\Fixtures\ConditionallyRegisteredRule:
+    DaveLiddament\PhpstanArchitectureRules\Tests\Build\CheckRuleIsInExtension\Fixtures\ConditionallyRegisteredRule:
         phpstan.rules.rule: %someParameter%

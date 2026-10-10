@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Rules\Roles\Fixtures\ConfigProviderUsage;
+namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\ConfigProviderUsage;
 
 use DaveLiddament\SymfonyArchitecture\Attribute\Repository;
 
@@ -10,7 +10,7 @@ use DaveLiddament\SymfonyArchitecture\Attribute\Repository;
 final class HoardingRepository
 {
     public function __construct(
-        public TheConfig $config, // ERROR DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Rules\Roles\Fixtures\ConfigProviderUsage\HoardingRepository::$config
+        public TheConfig $config, // ERROR DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\ConfigProviderUsage\HoardingRepository::$config
     ) {
     }
 }

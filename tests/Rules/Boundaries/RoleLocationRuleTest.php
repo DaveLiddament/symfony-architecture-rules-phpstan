@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Rules\Boundaries;
+namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries;
 
+use DaveLiddament\PhpstanArchitectureRules\Boundaries\BoundaryClassifier;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\RoleLocationRule;
+use DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures\RoleLocation\FakeOrm\Entity;
 use DaveLiddament\PhpstanRuleTestHelper\AbstractRuleTestCase;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Boundaries\BoundaryClassifier;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\RoleLocationRule;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Rules\Boundaries\Fixtures\RoleLocation\FakeOrm\Entity;
 use PHPStan\Rules\Rule;
 use PHPUnit\Framework\Attributes\Test;
 
@@ -16,7 +16,7 @@ use PHPUnit\Framework\Attributes\Test;
  */
 final class RoleLocationRuleTest extends AbstractRuleTestCase
 {
-    private const string FIXTURES = 'DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Rules\Boundaries\Fixtures\RoleLocation';
+    private const string FIXTURES = 'DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures\RoleLocation';
 
     #[\Override]
     protected function getRule(): Rule

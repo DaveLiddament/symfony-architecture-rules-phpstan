@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Rules\Boundaries;
+namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries;
 
+use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\DomainInternalRule;
 use DaveLiddament\PhpstanRuleTestHelper\AbstractRuleTestCase;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries\DomainInternalRule;
 use PHPStan\Rules\Rule;
 use PHPUnit\Framework\Attributes\Test;
 

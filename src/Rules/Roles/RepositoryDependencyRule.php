@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles;
+namespace DaveLiddament\PhpstanArchitectureRules\Rules\Roles;
 
 use DaveLiddament\SymfonyArchitecture\Attribute\Repository;
 use PhpParser\Node;

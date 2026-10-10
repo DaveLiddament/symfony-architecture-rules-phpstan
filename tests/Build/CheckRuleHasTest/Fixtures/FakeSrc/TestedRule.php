@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Build\CheckRuleHasTest\Fixtures\FakeSrc;
+namespace DaveLiddament\PhpstanArchitectureRules\Tests\Build\CheckRuleHasTest\Fixtures\FakeSrc;
 
 use PhpParser\Node;
 use PhpParser\Node\Name;

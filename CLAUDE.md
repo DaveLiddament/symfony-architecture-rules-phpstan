@@ -1,12 +1,12 @@
-# Symfony Architecture Rules for PHPStan
+# Architecture Rules for PHPStan
 
-A PHPStan extension (PHPStan v2, PHP 8.3–8.5) providing architecture rules for Symfony apps.
+A PHPStan extension (PHPStan v2, PHP 8.3–8.5) providing architecture rules for PHP apps, with Symfony and Doctrine support.
 Modelled on [phpstan-php-language-extensions](https://github.com/DaveLiddament/phpstan-php-language-extensions).
 
 - Layout: `attributes/` holds the role attributes (namespace `DaveLiddament\SymfonyArchitecture\Attribute`, kept
   separate so they can move to their own package without a namespace change); `src/Rules/Boundaries/` and
   `src/Rules/Roles/` hold the rules; `build/` holds internal-only PHPStan rules for this repo.
-- Each rule group has config in `extension.neon` (`symfonyArchitecture.<group>`), wired via `conditionalTags`.
+- Each rule group has config in `extension.neon` (`architecture.<group>`), wired via `conditionalTags`.
   Keep README concise and starting with the problem the package solves.
 - Rules live in `src/Rules/` and MUST be registered in `extension.neon`, either tagged
   `phpstan.rules.rule` or via `conditionalTags` (for rules behind an `enabled` switch). This is enforced

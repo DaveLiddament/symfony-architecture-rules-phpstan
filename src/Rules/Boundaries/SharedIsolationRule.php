@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries;
+namespace DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries;
 
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Boundaries\Area;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Boundaries\AreaType;
+use DaveLiddament\PhpstanArchitectureRules\Boundaries\Area;
+use DaveLiddament\PhpstanArchitectureRules\Boundaries\AreaType;
 use PHPStan\Rules\IdentifierRuleError;
 
 /**

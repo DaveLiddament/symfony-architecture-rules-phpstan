@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Boundaries;
+namespace DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries;
 
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Boundaries\Area;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Boundaries\BoundaryClassifier;
+use DaveLiddament\PhpstanArchitectureRules\Boundaries\Area;
+use DaveLiddament\PhpstanArchitectureRules\Boundaries\BoundaryClassifier;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;

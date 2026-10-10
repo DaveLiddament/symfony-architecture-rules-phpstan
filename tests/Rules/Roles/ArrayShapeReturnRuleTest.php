@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Rules\Roles;
+namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles;
 
+use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ArrayShapeReturnRule;
 use DaveLiddament\PhpstanRuleTestHelper\AbstractRuleTestCase;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\ArrayShapeReturnRule;
 use PHPStan\Rules\Rule;
 use PHPUnit\Framework\Attributes\Test;
 
@@ -17,7 +17,7 @@ final class ArrayShapeReturnRuleTest extends AbstractRuleTestCase
     #[\Override]
     protected function getRule(): Rule
     {
-        return new ArrayShapeReturnRule(['DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Rules\Roles\Fixtures\ArrayShapes\Ignored']);
+        return new ArrayShapeReturnRule(['DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\ArrayShapes\Ignored']);
     }
 
     #[\Override]

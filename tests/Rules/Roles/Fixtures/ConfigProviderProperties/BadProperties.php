@@ -2,25 +2,25 @@
 
 declare(strict_types=1);
 
-namespace DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Rules\Roles\Fixtures\ConfigProviderProperties;
+namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\ConfigProviderProperties;
 
 use DaveLiddament\SymfonyArchitecture\Attribute\ConfigProvider;
 
 #[ConfigProvider]
 final class BadProperties
 {
-    public $untyped; // ERROR DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Rules\Roles\Fixtures\ConfigProviderProperties\BadProperties::$untyped
+    public $untyped; // ERROR DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\ConfigProviderProperties\BadProperties::$untyped
 
-    public array $bare; // ERROR DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Rules\Roles\Fixtures\ConfigProviderProperties\BadProperties::$bare
+    public array $bare; // ERROR DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\ConfigProviderProperties\BadProperties::$bare
 
     /** @var array<string, string> */
-    public array $map; // ERROR DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Rules\Roles\Fixtures\ConfigProviderProperties\BadProperties::$map
+    public array $map; // ERROR DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\ConfigProviderProperties\BadProperties::$map
 
-    public \DateTimeImmutable $when; // ERROR DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Rules\Roles\Fixtures\ConfigProviderProperties\BadProperties::$when
+    public \DateTimeImmutable $when; // ERROR DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\ConfigProviderProperties\BadProperties::$when
 
-    public Level $level; // ERROR DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Rules\Roles\Fixtures\ConfigProviderProperties\BadProperties::$level
+    public Level $level; // ERROR DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\ConfigProviderProperties\BadProperties::$level
 
-    public \stdClass $anyObject; // ERROR DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Rules\Roles\Fixtures\ConfigProviderProperties\BadProperties::$anyObject
+    public \stdClass $anyObject; // ERROR DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\ConfigProviderProperties\BadProperties::$anyObject
 
     public string $fine;
 }

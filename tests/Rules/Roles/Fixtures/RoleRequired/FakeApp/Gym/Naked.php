@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-namespace DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Rules\Roles\Fixtures\RoleRequired\FakeApp\Gym;
+namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\RoleRequired\FakeApp\Gym;
 
-final class Naked // ERROR DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Rules\Roles\Fixtures\RoleRequired\FakeApp\Gym\Naked
+final class Naked // ERROR DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\RoleRequired\FakeApp\Gym\Naked
 {
 }

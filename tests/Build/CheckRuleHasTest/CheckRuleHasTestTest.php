@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Build\CheckRuleHasTest;
+namespace DaveLiddament\PhpstanArchitectureRules\Tests\Build\CheckRuleHasTest;
 
+use DaveLiddament\PhpstanArchitectureRules\Build\PHPStan\Rules\CheckRuleHasTest;
 use DaveLiddament\PhpstanRuleTestHelper\AbstractRuleTestCase;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Build\PHPStan\Rules\CheckRuleHasTest;
 use PHPStan\Rules\Rule;
 use PHPUnit\Framework\Attributes\Test;
 

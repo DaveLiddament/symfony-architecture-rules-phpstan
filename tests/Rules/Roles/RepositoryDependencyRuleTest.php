@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Rules\Roles;
+namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles;
 
+use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\RepositoryDependencyRule;
 use DaveLiddament\PhpstanRuleTestHelper\AbstractRuleTestCase;
-use DaveLiddament\SymfonyArchitectureRulesPhpstan\Rules\Roles\RepositoryDependencyRule;
 use PHPStan\Rules\Rule;
 use PHPUnit\Framework\Attributes\Test;
 
@@ -14,7 +14,7 @@ use PHPUnit\Framework\Attributes\Test;
  */
 final class RepositoryDependencyRuleTest extends AbstractRuleTestCase
 {
-    private const string FAKE_DOCTRINE = 'DaveLiddament\SymfonyArchitectureRulesPhpstan\Tests\Rules\Roles\Fixtures\RepositoryDependency\FakeDoctrine';
+    private const string FAKE_DOCTRINE = 'DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\RepositoryDependency\FakeDoctrine';
 
     #[\Override]
     protected function getRule(): Rule
