@@ -6,11 +6,13 @@ Modelled on [phpstan-php-language-extensions](https://github.com/DaveLiddament/p
 - The role attributes live in their own package, `dave-liddament/architecture-rules-attributes`
   (namespace `DaveLiddament\Architecture\Attribute`). Its README explains what each role means; this
   README only covers what each rule checks and how to configure it.
-- Layout: `src/Rules/Boundaries/` and `src/Rules/Roles/` hold the rules; `build/` holds internal-only
-  PHPStan rules for this repo.
+- Layout: `src/Rules/Boundaries/`, `src/Rules/Roles/` and `src/Rules/Placement/` hold the rules; `build/` holds
+  internal-only PHPStan rules for this repo.
+- The placement rules are advice, not a gate: they live in `placement.neon`, which users include only when they want
+  the placement report. Everything else is in `extension.neon`.
 - Each rule group has config in `extension.neon` (`architecture.<group>`), wired via `conditionalTags`.
   Keep README concise and starting with the problem the package solves.
-- Rules live in `src/Rules/` and MUST be registered in `extension.neon`, either tagged
+- Rules live in `src/Rules/` and MUST be registered in `extension.neon` (or `placement.neon`), either tagged
   `phpstan.rules.rule` or via `conditionalTags` (for rules behind an `enabled` switch). This is enforced
   by the internal `build/PHPStan/Rules/CheckRuleIsInExtension.php` rule, which is only loaded by this
   project's `phpstan.neon` and never shipped.

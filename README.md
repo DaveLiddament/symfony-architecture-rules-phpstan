@@ -6,20 +6,25 @@
 
 ## The problem
 
-Symfony doesn't tell you how to structure your application, so every team invents its own rules: "features don't
+Frameworks don't tell you how to structure your application, so every team invents its own rules: "features don't
 reach into each other's internals", "shared code doesn't depend on features", "services are stateless". Those rules
 live in people's heads, in a wiki page, or in code review comments. As the app grows, they erode one shortcut at a
 time, until nobody can say where anything belongs.
 
-This [PHPStan](https://phpstan.org) extension turns those rules into errors. You get a sensible architecture out of
-the box, every rule is configurable, and any part can be switched off.
+This [PHPStan](https://phpstan.org) extension turns those rules into errors. Classes state their role, and which
+other domains may use them, with [attributes](https://github.com/DaveLiddament/architecture-rules-attributes), and this extension checks them. You get a sensible architecture
+out of the box, with Symfony and Doctrine support. Every rule is configurable, and any part can be switched off.
 
 It covers:
 
 - **[Architectural boundaries](#architectural-boundaries)**: which parts of the app may depend on which.
 - **[Role contracts](#role-contracts)**: every class declares its role, e.g. `#[Service]`, and each role has rules.
-- **[Placement report](#placement-report)**: an occasional, non-blocking check that classes still live in the right place.
+- **[Placement report](#placement-report)**: an occasional, non-blocking check that classes still live in the right
+  place.
 - **[Configuration](#configuration)**: the defaults, and how to change them or turn rules off.
+
+This README covers what each rule checks and how to configure it. What each role and `#[Exported]` mean is in the
+[attributes README](https://github.com/DaveLiddament/architecture-rules-attributes#the-roles).
 
 ## Installation
 
@@ -51,9 +56,8 @@ Code is split into four kinds of area:
 | **Domain** | `App\<Name>\` | Every other namespace directly under `App\`, e.g. `App\Registration\`. |
 
 A domain's classes are internal to it, wherever they live in the domain. Another domain may use a class only if it is
-marked [`#[Exported]`](https://github.com/DaveLiddament/architecture-rules-attributes#exporting-to-other-domains), and, when the export
-lists domains, only if it is one of them. Classes directly in `App\` (e.g. `App\Kernel`) are framework glue and are
-not checked.
+marked [`#[Exported]`](https://github.com/DaveLiddament/architecture-rules-attributes#exporting-to-other-domains), and, when the export lists domains, only
+if it is one of them. Classes directly in `App\` (e.g. `App\Kernel`) are framework glue and are not checked.
 
 ```php
 use DaveLiddament\Architecture\Attribute\Exported;
@@ -75,7 +79,8 @@ final readonly class WalkPlanner {}
 
 Dependencies flow one way: domains → Shared → Lib. Pending is treated like any other domain: another domain may use a
 Pending class only if it is exported, and `to` can name it, e.g. `#[Exported(to: ['Pending'])]`. Anything used
-throughout the app belongs in Shared rather than being exported.
+throughout the app belongs in Shared rather than being exported (see
+[Exported or Shared?](https://github.com/DaveLiddament/architecture-rules-attributes#exported-or-shared)).
 
 | Rule | Identifier | Reports |
 |---|---|---|
@@ -103,8 +108,8 @@ To configure or turn off these rules, see [Configuration](#configuration).
 
 Every class in a domain, Shared or Pending must declare the role it plays, using an attribute from
 `DaveLiddament\Architecture\Attribute`, or one of your own mapped onto a role with a [role alias](#role-aliases)
-(`architecture.roleRequired`). A class without a role is invisible to the role rules, so it is reported. Enums, interfaces, traits,
-framework glue directly in `App\` and ignored namespaces are exempt.
+(`architecture.roleRequired`). A class without a role is invisible to the role rules, so it is reported. Enums,
+interfaces, traits, framework glue directly in `App\` and ignored namespaces are exempt.
 
 ```php
 use DaveLiddament\Architecture\Attribute\Service;
@@ -115,26 +120,12 @@ final readonly class InvoiceSender
 }
 ```
 
-The roles:
+What each role means, and how to choose one, is in the [attributes README](https://github.com/DaveLiddament/architecture-rules-attributes#the-roles).
+The rules for each role are below. Each role's rules can be turned off with its switch under `architecture.roles`
+(see [Configuration](#configuration)).
 
-| Attribute | What it is |
-|---|---|
-| [`#[CliCommand]`](#clicommand) | A command line entry point |
-| [`#[ConfigProvider]`](#configprovider) | The one place primitive configuration lives |
-| [`#[Controller]`](#controller) | An HTTP entry point |
-| [`#[Dto]`](#dto) | A plain data carrier between layers |
-| [`#[Entity]`](#entity) | An object with identity |
-| [Form type](#formtype) | A Symfony form type (no attribute: recognised by the [Symfony preset](#framework-presets)) |
-| [`#[QueueGateway]`](#queuegateway) | Sends messages to a queue |
-| [`#[QueueProcessor]`](#queueprocessor) | A message handler |
-| [`#[Repository]`](#repository) | Wraps the ORM |
-| [`#[Serializer]`](#serializer) | Converts to and from wire formats |
-| [`#[Service]`](#service) | A stateless collaborator |
-| [`#[ValueObject]`](#valueobject) | A value with no identity |
-| [`#[ViewModel]`](#viewmodel) | A snapshot handed to a template |
-
-Each role's rules can be turned off with its switch under `architecture.roles` (see
-[Configuration](#configuration)).
+A form type is a role with no attribute: it only exists in Symfony, so the [Symfony preset](#framework-presets)
+recognises it.
 
 ### CliCommand
 
@@ -171,8 +162,7 @@ parameters:
 
 ### Dto
 
-- Must be `final` (`dto.final`).
-- Deliberately not a value object: a DTO may carry things a value never would, such as entities.
+- Must be `final` (`dto.final`), but needn't be `readonly`, and may hold anything, including entities.
 - Turn off with `roles.dto: false`.
 
 ### Entity
@@ -192,7 +182,7 @@ parameters:
 
 ### QueueGateway
 
-- No rules of its own. It marks a collaborator that a [`#[Service]`](#service) may depend on.
+- No rules of its own. A [`#[Service]`](#service) may depend on it.
 
 ### QueueProcessor
 
@@ -207,14 +197,15 @@ parameters:
   clocks belong in the caller.
 - Only a repository may hold a persistence class. This is checked on every class (`persistence.onlyInRepository`).
 - Must live in a `Repository` directory or at the root of its area ([role location](#role-location)).
-- Public methods use a fixed vocabulary (`repository.methodName`, `repository.methodReturn`):
+- Public methods use the [fixed vocabulary](https://github.com/DaveLiddament/architecture-rules-attributes#repository) (`repository.methodName`), and each prefix has a
+  return contract (`repository.methodReturn`):
 
-  | Prefix | Meaning | Must return |
-  |---|---|---|
-  | `find*` | Look up a single entity | A nullable, non-iterable value |
-  | `get*` | Query (collections, counts, ...) | Anything except `null` |
-  | `persist*` / `update*` / `delete*` | Writes, which flush internally | `void` |
-  | `has*` / `is*` | Boolean queries | Anything |
+  | Prefix | Must return |
+  |---|---|
+  | `find*` | A nullable, non-iterable value |
+  | `get*` | Anything except `null` |
+  | `persist*` / `update*` / `delete*` | `void` |
+  | `has*` / `is*` | Anything |
 
   The prefix must end at a camelCase boundary, so `getaway()` is not a `get`. A nullable iterable is never allowed:
   return an empty list instead.
@@ -249,8 +240,8 @@ parameters:
 ### ViewModel
 
 - Must be `final readonly` (`viewModel.finalReadonly`).
-- Properties follow the value object rule, but hold other view models instead of value objects: a view model renders
-  formatted values rather than carrying domain values (`viewModel.propertyType`).
+- Properties follow the value object rule, but hold other view models instead of value objects
+  (`viewModel.propertyType`).
 - Turn off with `roles.viewModel: false`.
 
 ## Placement report
@@ -387,9 +378,11 @@ aliases are added to those of the [framework presets](#framework-presets).
 | All the architectural boundary rules | `boundaries.enabled: false` |
 | `LibIsolationRule` | `boundaries.libNamespace: null` |
 | `SharedIsolationRule` | `boundaries.sharedNamespace: null` (`App\Shared` then becomes an ordinary domain) |
+| The Pending area | `boundaries.pendingNamespace: null` (`App\Pending` then becomes an ordinary domain, and the placement report stops treating it as Pending) |
 | All the rules for one role | `roles.<role>: false`, e.g. `roles.service: false` |
 | Requiring every class to declare a role | `roleRequired.enabled: false` |
 | The role requirement for a single class | Add it to `roleRequired.exemptClasses` |
+| Part of the placement report | `placement.<part>: false`, e.g. `placement.sharedUsage: false` |
 
 Shared and Pending can also be moved to any namespace, not just under `App\`. Pending is named after the last part
 of its namespace, e.g. `Incubating` for `App\Incubating`.
