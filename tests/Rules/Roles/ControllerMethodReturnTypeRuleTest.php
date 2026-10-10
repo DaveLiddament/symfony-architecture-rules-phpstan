@@ -24,10 +24,13 @@ final class ControllerMethodReturnTypeRuleTest extends AbstractRuleTestCase
     /** @var list<string> */
     private array $allowedReturnTypes = self::PAGE_JSON_OR_REDIRECT;
 
+    /** @var array<string, bool> */
+    private array $frameworks = [];
+
     #[\Override]
     protected function getRule(): Rule
     {
-        return new ControllerMethodReturnTypeRule(new RoleResolver([]), self::createReflectionProvider(), $this->allowedReturnTypes);
+        return new ControllerMethodReturnTypeRule(new RoleResolver([]), self::createReflectionProvider(), $this->allowedReturnTypes, $this->frameworks);
     }
 
     #[\Override]
@@ -58,6 +61,24 @@ final class ControllerMethodReturnTypeRuleTest extends AbstractRuleTestCase
         $this->allowedReturnTypes = [Response::class];
 
         $this->assertIssuesReported(__DIR__.'/Fixtures/ControllerReturnTypes/ResponseController.php');
+    }
+
+    #[Test]
+    public function theFrameworkPresetsSupplyTheDefaultWhenNoneAreConfigured(): void
+    {
+        $this->allowedReturnTypes = [];
+        $this->frameworks = ['symfony' => true];
+
+        $this->assertIssuesReported(__DIR__.'/Fixtures/ControllerReturnTypes/SymfonyResponseController.php');
+    }
+
+    #[Test]
+    public function nothingIsCheckedWithoutAnyAllowedReturnTypes(): void
+    {
+        $this->allowedReturnTypes = [];
+        $this->frameworks = ['symfony' => false];
+
+        $this->assertIssuesReported(__DIR__.'/Fixtures/ControllerReturnTypes/UncheckedController.php');
     }
 
     #[Test]

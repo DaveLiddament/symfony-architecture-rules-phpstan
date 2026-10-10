@@ -20,6 +20,9 @@ use DaveLiddament\Architecture\Attribute\ViewModel;
 /**
  * The roles a class can play. Each value is the role's key in the
  * architecture.roles and architecture.roleAliases config.
+ *
+ * Most roles have an attribute. A form type has none: it only exists in
+ * Symfony, so it is recognised through the Symfony preset's alias.
  */
 enum Role: string
 {
@@ -28,6 +31,7 @@ enum Role: string
     case Controller = 'controller';
     case Dto = 'dto';
     case Entity = 'entity';
+    case FormType = 'formType';
     case QueueGateway = 'queueGateway';
     case QueueProcessor = 'queueProcessor';
     case Repository = 'repository';
@@ -37,9 +41,9 @@ enum Role: string
     case ViewModel = 'viewModel';
 
     /**
-     * @return class-string
+     * @return class-string|null
      */
-    public function attributeClass(): string
+    public function attributeClass(): ?string
     {
         return match ($this) {
             self::CliCommand => CliCommand::class,
@@ -47,6 +51,7 @@ enum Role: string
             self::Controller => Controller::class,
             self::Dto => Dto::class,
             self::Entity => Entity::class,
+            self::FormType => null,
             self::QueueGateway => QueueGateway::class,
             self::QueueProcessor => QueueProcessor::class,
             self::Repository => Repository::class,

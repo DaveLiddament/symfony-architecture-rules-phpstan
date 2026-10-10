@@ -1,0 +1,5 @@
+parameters:
+    architecture:
+        frameworks:
+            doctrine: false
+            symfony: false

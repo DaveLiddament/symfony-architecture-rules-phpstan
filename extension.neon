@@ -5,9 +5,13 @@ parameters:
         # Code in these namespaces is ignored by the architecture rules.
         ignoredNamespaces:
             - 'App\Tests'
+        # Framework presets. Each one only recognises classes that use its framework, so it is safe to leave on.
+        frameworks:
+            doctrine: true
+            symfony: true
         # Public #[Controller] methods must return one of these (or a subclass), or a union of them.
-        controllerReturnTypes:
-            - 'Symfony\Component\HttpFoundation\Response'
+        # Empty means the framework presets' defaults (Symfony: Response).
+        controllerReturnTypes: []
         boundaries:
             # Set to false to turn off all the architectural boundary rules.
             enabled: true
@@ -22,6 +26,7 @@ parameters:
             controller: true
             dto: true
             entity: true
+            formType: true
             queueProcessor: true
             repository: true
             serializer: true
@@ -33,10 +38,7 @@ parameters:
         #       attributes: ['App\Shared\Attribute\AggregateRoot']
         #       extends: ['App\Shared\AbstractEntity']
         #       implements: ['App\Shared\EntityInterface']
-        roleAliases:
-            entity:
-                attributes:
-                    - 'Doctrine\ORM\Mapping\Entity'
+        roleAliases: []
         roleRequired:
             # Set to false to stop requiring every application class to declare a role.
             enabled: true
@@ -47,6 +49,10 @@ parametersSchema:
     architecture: structure([
         appNamespace: string()
         ignoredNamespaces: listOf(string())
+        frameworks: structure([
+            doctrine: bool()
+            symfony: bool()
+        ])
         controllerReturnTypes: listOf(string())
         boundaries: structure([
             enabled: bool()
@@ -60,6 +66,7 @@ parametersSchema:
             controller: bool()
             dto: bool()
             entity: bool()
+            formType: bool()
             queueProcessor: bool()
             repository: bool()
             serializer: bool()
@@ -89,6 +96,11 @@ parametersSchema:
                 ?implements: listOf(string())
             ])
             ?entity: structure([
+                ?attributes: listOf(string())
+                ?extends: listOf(string())
+                ?implements: listOf(string())
+            ])
+            ?formType: structure([
                 ?attributes: listOf(string())
                 ?extends: listOf(string())
                 ?implements: listOf(string())
@@ -140,6 +152,7 @@ services:
         class: DaveLiddament\PhpstanArchitectureRules\Roles\RoleResolver
         arguments:
             roleAliases: %architecture.roleAliases%
+            frameworks: %architecture.frameworks%
 
     -
         class: DaveLiddament\PhpstanArchitectureRules\Boundaries\BoundaryClassifier
@@ -176,6 +189,9 @@ services:
 
     -
         class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\EntityDeclarationRule
+
+    -
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\FormTypeDeclarationRule
 
     -
         class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\QueueProcessorDeclarationRule
@@ -234,6 +250,7 @@ services:
         class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ControllerMethodReturnTypeRule
         arguments:
             allowedReturnTypes: %architecture.controllerReturnTypes%
+            frameworks: %architecture.frameworks%
 
     -
         class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\RoleRequiredRule
@@ -259,6 +276,8 @@ conditionalTags:
         phpstan.rules.rule: %architecture.roles.dto%
     DaveLiddament\PhpstanArchitectureRules\Rules\Roles\EntityDeclarationRule:
         phpstan.rules.rule: %architecture.roles.entity%
+    DaveLiddament\PhpstanArchitectureRules\Rules\Roles\FormTypeDeclarationRule:
+        phpstan.rules.rule: %architecture.roles.formType%
     DaveLiddament\PhpstanArchitectureRules\Rules\Roles\QueueProcessorDeclarationRule:
         phpstan.rules.rule: %architecture.roles.queueProcessor%
     DaveLiddament\PhpstanArchitectureRules\Rules\Roles\RepositoryDeclarationRule:

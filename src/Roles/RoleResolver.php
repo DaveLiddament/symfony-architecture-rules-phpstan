@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Roles;
 
+use DaveLiddament\Architecture\Attribute\Service;
+use DaveLiddament\PhpstanArchitectureRules\Frameworks\Framework;
 use PHPStan\Reflection\ClassReflection;
 
 /**
@@ -11,9 +13,12 @@ use PHPStan\Reflection\ClassReflection;
  *
  * A class plays a role when it carries the role's attribute, or matches one
  * of the role's aliases: it carries an alias attribute, extends an alias
- * class or implements an alias interface. Attributes count only on the
- * class that declares them, not on its subclasses. Aliases naming classes
- * that don't exist (e.g. a framework that isn't installed) never match.
+ * class or implements an alias interface. The aliases are the project's
+ * own plus those of each enabled framework preset.
+ *
+ * Attributes count only on the class that declares them, not on its
+ * subclasses. Aliases naming classes that don't exist (e.g. a framework
+ * that isn't installed) never match.
  */
 final readonly class RoleResolver
 {
@@ -24,27 +29,36 @@ final readonly class RoleResolver
 
     /**
      * @param array<string, array{attributes?: list<string>, extends?: list<string>, implements?: list<string>}> $roleAliases role => aliases
+     * @param array<string, bool> $frameworks framework => enabled
      */
-    public function __construct(array $roleAliases)
+    public function __construct(array $roleAliases, array $frameworks = [])
     {
-        $normalised = [];
-        foreach ($roleAliases as $role => $aliases) {
-            $normalised[Role::from($role)->value] = [
-                'attributes' => array_map(self::normalise(...), $aliases['attributes'] ?? []),
-                'extends' => array_map(self::normalise(...), $aliases['extends'] ?? []),
-                'implements' => array_map(self::normalise(...), $aliases['implements'] ?? []),
-            ];
+        $merged = [];
+        $sources = [$roleAliases, ...array_map(
+            static fn (Framework $framework): array => $framework->roleAliases(),
+            Framework::enabledIn($frameworks),
+        )];
+        foreach ($sources as $source) {
+            foreach ($source as $role => $aliases) {
+                $role = Role::from($role)->value;
+                $existing = $merged[$role] ?? ['attributes' => [], 'extends' => [], 'implements' => []];
+                $merged[$role] = [
+                    'attributes' => [...$existing['attributes'], ...array_map(self::normalise(...), $aliases['attributes'] ?? [])],
+                    'extends' => [...$existing['extends'], ...array_map(self::normalise(...), $aliases['extends'] ?? [])],
+                    'implements' => [...$existing['implements'], ...array_map(self::normalise(...), $aliases['implements'] ?? [])],
+                ];
+            }
         }
-        $this->roleAliases = $normalised;
+        $this->roleAliases = $merged;
 
-        $serviceAttribute = Role::Service->attributeClass();
-        $this->attributeNamespace = substr($serviceAttribute, 0, (int) strrpos($serviceAttribute, '\\'));
+        $this->attributeNamespace = substr(Service::class, 0, (int) strrpos(Service::class, '\\'));
     }
 
     public function plays(ClassReflection $classReflection, Role $role): bool
     {
         $attributes = $this->attributeNames($classReflection);
-        if (in_array($role->attributeClass(), $attributes, true)) {
+        $attributeClass = $role->attributeClass();
+        if (null !== $attributeClass && in_array($attributeClass, $attributes, true)) {
             return true;
         }
 

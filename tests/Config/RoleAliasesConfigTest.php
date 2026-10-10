@@ -29,7 +29,7 @@ final class RoleAliasesConfigTest extends PHPStanTestCase
     }
 
     #[Test]
-    public function theDefaultAliasesAreKept(): void
+    public function frameworkPresetsApplyAlongsideConfiguredAliases(): void
     {
         self::assertTrue($this->plays(DoctrineMapped::class, Role::Entity));
     }

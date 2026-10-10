@@ -37,6 +37,9 @@
     }
   },
   "autoload-dev": {
+    "classmap": [
+      "tests/Stubs/"
+    ],
     "psr-4": {
       "DaveLiddament\\PhpstanArchitectureRules\\Tests\\": "tests/",
       "DaveLiddament\\PhpstanArchitectureRules\\Build\\": "build/"

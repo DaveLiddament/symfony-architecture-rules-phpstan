@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Rules\Roles;
 
+use DaveLiddament\PhpstanArchitectureRules\Frameworks\Framework;
 use DaveLiddament\PhpstanArchitectureRules\Roles\Role;
 use DaveLiddament\PhpstanArchitectureRules\Roles\RoleResolver;
 use PhpParser\Node;
@@ -23,6 +24,10 @@ use PHPStan\Rules\RuleErrorBuilder;
  * one of the allowed return types (or a subclass), or a union made only of
  * these. Never nullable.
  *
+ * The allowed return types are the configured ones or, when none are
+ * configured, the enabled framework presets' defaults. With neither, there
+ * is nothing to check against.
+ *
  * @implements Rule<InClassMethodNode>
  */
 final class ControllerMethodReturnTypeRule implements Rule
@@ -32,12 +37,20 @@ final class ControllerMethodReturnTypeRule implements Rule
 
     /**
      * @param list<string> $allowedReturnTypes
+     * @param array<string, bool> $frameworks framework => enabled
      */
     public function __construct(
         private RoleResolver $roleResolver,
         private ReflectionProvider $reflectionProvider,
         array $allowedReturnTypes,
+        array $frameworks = [],
     ) {
+        if ([] === $allowedReturnTypes) {
+            foreach (Framework::enabledIn($frameworks) as $framework) {
+                $allowedReturnTypes = [...$allowedReturnTypes, ...$framework->controllerReturnTypes()];
+            }
+        }
+
         $this->allowedReturnTypes = array_map(static fn (string $type): string => trim($type, '\\'), $allowedReturnTypes);
     }
 
@@ -54,7 +67,7 @@ final class ControllerMethodReturnTypeRule implements Rule
     public function processNode(Node $node, Scope $scope): array
     {
         $classReflection = $node->getClassReflection();
-        if (!$this->roleResolver->plays($classReflection, Role::Controller)) {
+        if ([] === $this->allowedReturnTypes || !$this->roleResolver->plays($classReflection, Role::Controller)) {
             return [];
         }
 

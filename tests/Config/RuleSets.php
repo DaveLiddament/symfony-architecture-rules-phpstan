@@ -18,6 +18,7 @@ use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ControllerMethodReturnTyp
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\DtoDeclarationRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\EntityDeclarationRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\EntityManagerUsageRule;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\FormTypeDeclarationRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\QueueProcessorDeclarationRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\RepositoryDeclarationRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\RepositoryDependencyRule;
@@ -69,6 +70,9 @@ final class RuleSets
         ],
         'entity' => [
             EntityDeclarationRule::class,
+        ],
+        'formType' => [
+            FormTypeDeclarationRule::class,
         ],
         'queueProcessor' => [
             QueueProcessorDeclarationRule::class,

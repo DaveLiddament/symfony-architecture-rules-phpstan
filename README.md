@@ -104,6 +104,7 @@ The roles:
 | [`#[Controller]`](#controller) | An HTTP entry point |
 | [`#[Dto]`](#dto) | A plain data carrier between layers |
 | [`#[Entity]`](#entity) | An object with identity |
+| [Form type](#formtype) | A Symfony form type (no attribute: recognised by the [Symfony preset](#framework-presets)) |
 | [`#[QueueGateway]`](#queuegateway) | Sends messages to a queue |
 | [`#[QueueProcessor]`](#queueprocessor) | A message handler |
 | [`#[Repository]`](#repository) | Wraps the ORM |
@@ -131,17 +132,18 @@ Each role's rules can be turned off with its switch under `architecture.roles` (
 ### Controller
 
 - Every public method declares an allowed return type (or a subclass of one), or a union of these, and is never
-  nullable (`architecture.controllerReturnType`). By default the only allowed type is
-  `Symfony\Component\HttpFoundation\Response`, so any response is fine.
+  nullable (`architecture.controllerReturnType`). With the [Symfony preset](#framework-presets) the only allowed type
+  is `Symfony\Component\HttpFoundation\Response`, so any response is fine. Without a preset or a configured list,
+  return types aren't checked.
 - Must live in a `Controller` directory, e.g. `App\Registration\Controller` ([role location](#role-location)).
 - Turn off with `roles.controller: false`.
 
-To allow only specific return types, replace the list:
+To allow only specific return types, list them. They replace the preset's default:
 
 ```neon
 parameters:
     architecture:
-        controllerReturnTypes!:
+        controllerReturnTypes:
             - 'App\Shared\Page'
             - 'Symfony\Component\HttpFoundation\JsonResponse'
             - 'Symfony\Component\HttpFoundation\RedirectResponse'
@@ -158,8 +160,15 @@ parameters:
 - Must be `final` (`entity.final`). A `@final` PHPDoc tag also counts, so an ORM can still extend it at runtime for
   lazy-loading proxies.
 - Must live in an `Entity` directory, e.g. `App\Registration\Entity` ([role location](#role-location)).
-- Doctrine's `#[ORM\Entity]` counts as `#[Entity]` by default.
+- Doctrine's `#[ORM\Entity]` counts as `#[Entity]` through the [Doctrine preset](#framework-presets).
 - Turn off with `roles.entity: false`.
+
+### FormType
+
+- Must be `final` (`formType.final`). It extends Symfony's `AbstractType`, so it can't be `readonly`.
+- There is no attribute: a class extending `AbstractType` is a form type through the
+  [Symfony preset](#framework-presets).
+- Turn off with `roles.formType: false`.
 
 ### QueueGateway
 
@@ -230,8 +239,10 @@ parameters:
         appNamespace: 'App'                  # where your application code lives
         ignoredNamespaces:                   # code the rules ignore
             - 'App\Tests'
-        controllerReturnTypes:               # see Controller
-            - 'Symfony\Component\HttpFoundation\Response'
+        frameworks:                          # see Framework presets
+            doctrine: true
+            symfony: true
+        controllerReturnTypes: []            # see Controller
         boundaries:
             enabled: true
             libNamespace: 'Lib'
@@ -243,22 +254,31 @@ parameters:
             controller: true
             dto: true
             entity: true
+            formType: true
             queueProcessor: true
             repository: true
             serializer: true
             service: true
             valueObject: true
             viewModel: true
-        roleAliases:                         # see Role aliases
-            entity:
-                attributes:
-                    - 'Doctrine\ORM\Mapping\Entity'
+        roleAliases: []                      # see Role aliases
         roleRequired:
             enabled: true
             exemptClasses: []                # framework glue that may stay roleless
 ```
 
 PHPStan adds list values to the defaults. To replace a list instead, add `!` to its key, e.g. `ignoredNamespaces!:`.
+
+### Framework presets
+
+The Symfony and Doctrine presets are on by default. Each one only recognises classes that use its framework, so it
+does nothing in a project that doesn't use it. Turn one off with `frameworks.symfony: false` or
+`frameworks.doctrine: false`.
+
+| Preset | Recognises | Also |
+|---|---|---|
+| Doctrine | `#[ORM\Entity]` as an entity | |
+| Symfony | `#[AsController]` or extending `AbstractController` as a controller; `#[AsCommand]` or extending `Command` as a CLI command; `#[AsMessageHandler]` as a queue processor; extending `AbstractType` as a form type | Controllers may return any `Response` |
 
 ### Role aliases
 
@@ -282,7 +302,8 @@ parameters:
 ```
 
 Each role takes `attributes`, `extends` and `implements` lists. The role names are the keys under `roles`. An alias
-attribute only counts on the class that declares it, while `extends` and `implements` match any descendant.
+attribute only counts on the class that declares it, while `extends` and `implements` match any descendant. Your
+aliases are added to those of the [framework presets](#framework-presets).
 
 ### Turning rules off
 
