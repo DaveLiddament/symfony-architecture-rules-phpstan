@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Tests\Config;
 
+use DaveLiddament\PhpstanArchitectureRules\Roles\PersistenceClasses;
 use DaveLiddament\PhpstanArchitectureRules\Roles\Role;
 use DaveLiddament\PhpstanArchitectureRules\Roles\RoleResolver;
 use DaveLiddament\PhpstanArchitectureRules\Tests\Config\Fixtures\RoleAliases\DoctrineMapped;
+use DaveLiddament\PhpstanArchitectureRules\Tests\Roles\Fixtures\AppEntityManager;
 use PHPStan\Testing\PHPStanTestCase;
 use PHPUnit\Framework\Attributes\Test;
 
@@ -29,6 +31,16 @@ final class FrameworksDisabledConfigTest extends PHPStanTestCase
         self::assertFalse($roleResolver->plays(
             self::createReflectionProvider()->getClass(DoctrineMapped::class),
             Role::Entity,
+        ));
+    }
+
+    #[Test]
+    public function aDisabledPresetAddsNoPersistenceClasses(): void
+    {
+        $persistenceClasses = self::getContainer()->getByType(PersistenceClasses::class);
+
+        self::assertNull($persistenceClasses->matching(
+            self::createReflectionProvider()->getClass(AppEntityManager::class),
         ));
     }
 

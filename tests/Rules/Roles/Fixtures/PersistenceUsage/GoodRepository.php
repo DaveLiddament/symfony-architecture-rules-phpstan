@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\EntityManagerUsage;
+namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\PersistenceUsage;
 
-use DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\EntityManagerUsage\FakeDoctrine\EntityManagerInterface;
+use DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\PersistenceUsage\FakeDoctrine\EntityManagerInterface;
 use DaveLiddament\Architecture\Attribute\Repository;
 
 #[Repository]

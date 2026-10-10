@@ -1,0 +1,4 @@
+parameters:
+    architecture:
+        persistenceClasses:
+            - 'DaveLiddament\PhpstanArchitectureRules\Tests\Roles\Fixtures\Plain'

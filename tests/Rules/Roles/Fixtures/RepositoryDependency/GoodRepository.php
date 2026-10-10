@@ -10,9 +10,16 @@ use DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\Repository
 #[Repository]
 final readonly class GoodRepository
 {
+    /**
+     * @param list<Walk> $walks
+     * @param list<Distance|Walk>|null $mixed
+     */
     public function __construct(
         private EntityManager $entityManager,
         private ?EntityManager $maybeManager,
+        private OtherRepository $otherRepository,
+        private array $walks,
+        private ?array $mixed,
     ) {
     }
 }

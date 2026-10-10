@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\EntityManagerUsage;
+namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\PersistenceUsage;
 
 final class Unrelated
 {

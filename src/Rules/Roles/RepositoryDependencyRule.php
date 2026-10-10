@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Rules\Roles;
 
+use DaveLiddament\PhpstanArchitectureRules\Roles\PersistenceClasses;
 use DaveLiddament\PhpstanArchitectureRules\Roles\Role;
 use DaveLiddament\PhpstanArchitectureRules\Roles\RoleResolver;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\ClassPropertyNode;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
@@ -16,21 +18,20 @@ use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 
 /**
- * A #[Repository] wraps the ORM and nothing else: every property must come
- * from the Doctrine namespace (entity manager, connection, ...). Anything
- * further, such as services, config or clocks, belongs in the caller.
+ * A #[Repository] wraps storage and nothing else. Every property is a
+ * persistence class (entity manager, connection, ...), another repository,
+ * or a list of entities or value objects, which covers in-memory and
+ * generated-data repositories. Anything further, such as services, config
+ * or clocks, belongs in the caller.
  *
  * @implements Rule<ClassPropertyNode>
  */
 final class RepositoryDependencyRule implements Rule
 {
-    private string $doctrineNamespace;
-
     public function __construct(
         private RoleResolver $roleResolver,
-        string $doctrineNamespace,
+        private PersistenceClasses $persistenceClasses,
     ) {
-        $this->doctrineNamespace = trim($doctrineNamespace, '\\');
     }
 
     #[\Override]
@@ -57,10 +58,9 @@ final class RepositoryDependencyRule implements Rule
 
         return [
             RuleErrorBuilder::message(sprintf(
-                'Repository dependency %s::$%s must come from %s.',
+                'Repository dependency %s::$%s must be a persistence class, another repository, or a list of entities or value objects.',
                 $reflection->getName(),
                 $node->getName(),
-                $this->doctrineNamespace,
             ))
                 ->identifier('repository.dependencyType')
                 ->build(),
@@ -69,27 +69,68 @@ final class RepositoryDependencyRule implements Rule
 
     private function isAllowed(Type $type): bool
     {
-        if ($type instanceof UnionType) {
-            foreach ($type->getTypes() as $inner) {
-                if (!$this->isAllowed($inner)) {
-                    return false;
-                }
-            }
-
+        if ($this->isNullOrUnionOf($type, $this->isAllowed(...))) {
             return true;
         }
 
+        if ($type->isList()->yes()) {
+            return $this->isEntityOrValueObject($type->getIterableValueType());
+        }
+
+        return $this->allClassesMatch(
+            $type,
+            fn (ClassReflection $classReflection): bool => null !== $this->persistenceClasses->matching($classReflection)
+                || $this->roleResolver->plays($classReflection, Role::Repository),
+        );
+    }
+
+    private function isEntityOrValueObject(Type $type): bool
+    {
+        if ($this->isNullOrUnionOf($type, $this->isEntityOrValueObject(...))) {
+            return true;
+        }
+
+        return $this->allClassesMatch(
+            $type,
+            fn (ClassReflection $classReflection): bool => $this->roleResolver->plays($classReflection, Role::Entity)
+                || $this->roleResolver->plays($classReflection, Role::ValueObject),
+        );
+    }
+
+    /**
+     * @param \Closure(Type): bool $isAllowed
+     */
+    private function isNullOrUnionOf(Type $type, \Closure $isAllowed): bool
+    {
         if ($type->isNull()->yes()) {
             return true;
         }
 
+        if (!$type instanceof UnionType) {
+            return false;
+        }
+
+        foreach ($type->getTypes() as $inner) {
+            if (!$isAllowed($inner)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @param \Closure(ClassReflection): bool $matches
+     */
+    private function allClassesMatch(Type $type, \Closure $matches): bool
+    {
         $classReflections = $type->getObjectClassReflections();
         if ([] === $classReflections) {
             return false;
         }
 
         foreach ($classReflections as $classReflection) {
-            if (!str_starts_with($classReflection->getName(), $this->doctrineNamespace.'\\')) {
+            if (!$matches($classReflection)) {
                 return false;
             }
         }

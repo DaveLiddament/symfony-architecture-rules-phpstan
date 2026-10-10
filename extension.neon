@@ -12,6 +12,9 @@ parameters:
         # Public #[Controller] methods must return one of these (or a subclass), or a union of them.
         # Empty means the framework presets' defaults (Symfony: Response).
         controllerReturnTypes: []
+        # Classes that talk to storage, which only a repository may hold. Added to the framework presets' own
+        # (Doctrine: EntityManagerInterface, ObjectManager, ManagerRegistry, DBAL Connection), e.g. 'PDO'.
+        persistenceClasses: []
         boundaries:
             # Set to false to turn off all the architectural boundary rules.
             enabled: true
@@ -54,6 +57,7 @@ parametersSchema:
             symfony: bool()
         ])
         controllerReturnTypes: listOf(string())
+        persistenceClasses: listOf(string())
         boundaries: structure([
             enabled: bool()
             libNamespace: schema(string(), nullable())
@@ -155,6 +159,12 @@ services:
             frameworks: %architecture.frameworks%
 
     -
+        class: DaveLiddament\PhpstanArchitectureRules\Roles\PersistenceClasses
+        arguments:
+            persistenceClasses: %architecture.persistenceClasses%
+            frameworks: %architecture.frameworks%
+
+    -
         class: DaveLiddament\PhpstanArchitectureRules\Boundaries\BoundaryClassifier
         arguments:
             appNamespace: %architecture.appNamespace%
@@ -242,16 +252,12 @@ services:
 
     -
         class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\RepositoryDependencyRule
-        arguments:
-            doctrineNamespace: 'Doctrine'
 
     -
         class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\RepositoryMethodRule
 
     -
-        class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\EntityManagerUsageRule
-        arguments:
-            entityManagerInterface: 'Doctrine\ORM\EntityManagerInterface'
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\PersistenceUsageRule
 
     -
         class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ArrayShapeReturnRule
@@ -324,7 +330,7 @@ conditionalTags:
         phpstan.rules.rule: %architecture.roles.repository%
     DaveLiddament\PhpstanArchitectureRules\Rules\Roles\RepositoryMethodRule:
         phpstan.rules.rule: %architecture.roles.repository%
-    DaveLiddament\PhpstanArchitectureRules\Rules\Roles\EntityManagerUsageRule:
+    DaveLiddament\PhpstanArchitectureRules\Rules\Roles\PersistenceUsageRule:
         phpstan.rules.rule: %architecture.roles.repository%
     DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ArrayShapeReturnRule:
         phpstan.rules.rule: %architecture.roles.serializer%

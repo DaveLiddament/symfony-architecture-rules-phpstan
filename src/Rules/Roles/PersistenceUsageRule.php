@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Rules\Roles;
 
+use DaveLiddament\PhpstanArchitectureRules\Roles\PersistenceClasses;
 use DaveLiddament\PhpstanArchitectureRules\Roles\Role;
 use DaveLiddament\PhpstanArchitectureRules\Roles\RoleResolver;
 use PhpParser\Node;
@@ -16,17 +17,17 @@ use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 
 /**
- * Only a #[Repository] may hold the entity manager (or anything
- * implementing it). Everything else talks to the database through a
+ * Only a #[Repository] may hold a persistence class (an entity manager, a
+ * database connection, ...). Everything else talks to storage through a
  * repository. Checked on every class property in the codebase.
  *
  * @implements Rule<ClassPropertyNode>
  */
-final class EntityManagerUsageRule implements Rule
+final class PersistenceUsageRule implements Rule
 {
     public function __construct(
         private RoleResolver $roleResolver,
-        private string $entityManagerInterface,
+        private PersistenceClasses $persistenceClasses,
     ) {
     }
 
@@ -48,35 +49,38 @@ final class EntityManagerUsageRule implements Rule
         }
 
         $type = $reflection->getNativeProperty($node->getName())->getReadableType();
-        if (!$this->mentionsEntityManager($type)) {
+        $persistenceClass = $this->persistenceClassIn($type);
+        if (null === $persistenceClass) {
             return [];
         }
 
         return [
             RuleErrorBuilder::message(sprintf(
-                'The entity manager may only be held by a #[Repository], but %s::$%s holds it.',
+                'Only a #[Repository] may hold a persistence class, but %s::$%s holds %s.',
                 $reflection->getName(),
                 $node->getName(),
+                $persistenceClass,
             ))
-                ->identifier('entityManager.onlyInRepository')
+                ->identifier('persistence.onlyInRepository')
                 ->build(),
         ];
     }
 
-    private function mentionsEntityManager(Type $type): bool
+    private function persistenceClassIn(Type $type): ?string
     {
         if ($type instanceof UnionType) {
             foreach ($type->getTypes() as $inner) {
-                if ($this->mentionsEntityManager($inner)) {
-                    return true;
+                $persistenceClass = $this->persistenceClassIn($inner);
+                if (null !== $persistenceClass) {
+                    return $persistenceClass;
                 }
             }
 
-            return false;
+            return null;
         }
 
         if ($type->isArray()->yes()) {
-            return $this->mentionsEntityManager($type->getIterableValueType());
+            return $this->persistenceClassIn($type->getIterableValueType());
         }
 
         // An object is judged by its class, never by what it iterates over
@@ -84,21 +88,19 @@ final class EntityManagerUsageRule implements Rule
         $classReflections = $type->getObjectClassReflections();
         if ([] !== $classReflections) {
             foreach ($classReflections as $classReflection) {
-                if (
-                    $this->entityManagerInterface === $classReflection->getName()
-                    || $classReflection->implementsInterface($this->entityManagerInterface)
-                ) {
-                    return true;
+                $persistenceClass = $this->persistenceClasses->matching($classReflection);
+                if (null !== $persistenceClass) {
+                    return $persistenceClass;
                 }
             }
 
-            return false;
+            return null;
         }
 
         if ($type->isIterable()->yes()) {
-            return $this->mentionsEntityManager($type->getIterableValueType());
+            return $this->persistenceClassIn($type->getIterableValueType());
         }
 
-        return false;
+        return null;
     }
 }

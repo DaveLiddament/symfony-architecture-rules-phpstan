@@ -202,8 +202,10 @@ parameters:
 ### Repository
 
 - Must be `final readonly` (`repository.finalReadonly`).
-- Every property comes from `Doctrine\` (`repository.dependencyType`).
-- Only a repository may hold the entity manager. This is checked on every class (`entityManager.onlyInRepository`).
+- Every property is a [persistence class](#persistence-classes), another repository, or a `list<>` of entities or value
+  objects, which covers in-memory and generated-data repositories (`repository.dependencyType`). Services, config and
+  clocks belong in the caller.
+- Only a repository may hold a persistence class. This is checked on every class (`persistence.onlyInRepository`).
 - Must live in a `Repository` directory or at the root of its area ([role location](#role-location)).
 - Public methods use a fixed vocabulary (`repository.methodName`, `repository.methodReturn`):
 
@@ -265,6 +267,7 @@ parameters:
             doctrine: true
             symfony: true
         controllerReturnTypes: []            # see Controller
+        persistenceClasses: []               # see Persistence classes
         boundaries:
             enabled: true
             libNamespace: 'Lib'
@@ -299,8 +302,20 @@ does nothing in a project that doesn't use it. Turn one off with `frameworks.sym
 
 | Preset | Recognises | Also |
 |---|---|---|
-| Doctrine | `#[ORM\Entity]` as an entity | |
+| Doctrine | `#[ORM\Entity]` as an entity | `EntityManagerInterface`, `ObjectManager`, `ManagerRegistry` and DBAL's `Connection` are [persistence classes](#persistence-classes) |
 | Symfony | `#[AsController]` or extending `AbstractController` as a controller; `#[AsCommand]` or extending `Command` as a CLI command; `#[AsMessageHandler]` as a queue processor; extending `AbstractType` as a form type | Controllers may return any `Response` |
+
+### Persistence classes
+
+Persistence classes talk to storage, so only a [repository](#repository) may hold one. A class counts if it is, extends
+or implements a listed class. Your list is added to the [Doctrine preset's](#framework-presets):
+
+```neon
+parameters:
+    architecture:
+        persistenceClasses:
+            - 'PDO'
+```
 
 ### Role aliases
 

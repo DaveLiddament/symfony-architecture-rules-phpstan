@@ -21,8 +21,8 @@ use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ConfigProviderUsageRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ControllerMethodReturnTypeRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\DtoDeclarationRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\EntityDeclarationRule;
-use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\EntityManagerUsageRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\FormTypeDeclarationRule;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\PersistenceUsageRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\QueueProcessorDeclarationRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\RepositoryDeclarationRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\RepositoryDependencyRule;
@@ -89,7 +89,7 @@ final class RuleSets
             QueueProcessorDeclarationRule::class,
         ],
         'repository' => [
-            EntityManagerUsageRule::class,
+            PersistenceUsageRule::class,
             RepositoryDeclarationRule::class,
             RepositoryDependencyRule::class,
             RepositoryMethodRule::class,

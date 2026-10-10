@@ -64,6 +64,24 @@ enum Framework: string
     }
 
     /**
+     * The classes that talk to storage, which only a repository may hold.
+     *
+     * @return list<string>
+     */
+    public function persistenceClasses(): array
+    {
+        return match ($this) {
+            self::Doctrine => [
+                'Doctrine\DBAL\Connection',
+                'Doctrine\ORM\EntityManagerInterface',
+                'Doctrine\Persistence\ManagerRegistry',
+                'Doctrine\Persistence\ObjectManager',
+            ],
+            self::Symfony => [],
+        };
+    }
+
+    /**
      * The types public controller methods may return when the project
      * doesn't configure its own.
      *
