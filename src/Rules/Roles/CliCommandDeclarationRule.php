@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Rules\Roles;
 
-use DaveLiddament\Architecture\Attribute\CliCommand;
+use DaveLiddament\PhpstanArchitectureRules\Roles\Role;
 
 /**
  * A #[CliCommand] class must be declared "final".
@@ -12,9 +12,9 @@ use DaveLiddament\Architecture\Attribute\CliCommand;
 final class CliCommandDeclarationRule extends AbstractDeclarationRule
 {
     #[\Override]
-    protected function getAttributeClass(): string
+    protected function getRole(): Role
     {
-        return CliCommand::class;
+        return Role::CliCommand;
     }
 
     #[\Override]

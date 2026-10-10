@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Rules\Roles;
 
-use DaveLiddament\Architecture\Attribute\Dto;
+use DaveLiddament\PhpstanArchitectureRules\Roles\Role;
 
 /**
  * A #[Dto] class must be declared "final".
@@ -12,9 +12,9 @@ use DaveLiddament\Architecture\Attribute\Dto;
 final class DtoDeclarationRule extends AbstractDeclarationRule
 {
     #[\Override]
-    protected function getAttributeClass(): string
+    protected function getRole(): Role
     {
-        return Dto::class;
+        return Role::Dto;
     }
 
     #[\Override]

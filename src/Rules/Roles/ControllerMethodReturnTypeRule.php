@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Rules\Roles;
 
-use DaveLiddament\Architecture\Attribute\Controller;
+use DaveLiddament\PhpstanArchitectureRules\Roles\Role;
+use DaveLiddament\PhpstanArchitectureRules\Roles\RoleResolver;
 use PhpParser\Node;
 use PhpParser\Node\ComplexType;
 use PhpParser\Node\Identifier;
@@ -33,6 +34,7 @@ final class ControllerMethodReturnTypeRule implements Rule
      * @param list<string> $allowedReturnTypes
      */
     public function __construct(
+        private RoleResolver $roleResolver,
         private ReflectionProvider $reflectionProvider,
         array $allowedReturnTypes,
     ) {
@@ -52,7 +54,7 @@ final class ControllerMethodReturnTypeRule implements Rule
     public function processNode(Node $node, Scope $scope): array
     {
         $classReflection = $node->getClassReflection();
-        if (!RoleAttribute::isOn($classReflection, Controller::class)) {
+        if (!$this->roleResolver->plays($classReflection, Role::Controller)) {
             return [];
         }
 

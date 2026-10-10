@@ -16,6 +16,7 @@ use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ConfigProviderPropertyTyp
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ConfigProviderUsageRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ControllerMethodReturnTypeRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\DtoDeclarationRule;
+use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\EntityDeclarationRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\EntityManagerUsageRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\QueueProcessorDeclarationRule;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\RepositoryDeclarationRule;
@@ -65,6 +66,9 @@ final class RuleSets
         ],
         'dto' => [
             DtoDeclarationRule::class,
+        ],
+        'entity' => [
+            EntityDeclarationRule::class,
         ],
         'queueProcessor' => [
             QueueProcessorDeclarationRule::class,

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles;
 
+use DaveLiddament\PhpstanArchitectureRules\Roles\RoleResolver;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ConfigProviderDeclarationRule;
 use DaveLiddament\PhpstanRuleTestHelper\AbstractRuleTestCase;
 use PHPStan\Rules\Rule;
@@ -17,7 +18,7 @@ final class ConfigProviderDeclarationRuleTest extends AbstractRuleTestCase
     #[\Override]
     protected function getRule(): Rule
     {
-        return new ConfigProviderDeclarationRule();
+        return new ConfigProviderDeclarationRule(new RoleResolver([]));
     }
 
     #[Test]

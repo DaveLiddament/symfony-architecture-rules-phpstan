@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Rules\Roles;
 
-use DaveLiddament\Architecture\Attribute\Serializer;
+use DaveLiddament\PhpstanArchitectureRules\Roles\Role;
 
 /**
  * A #[Serializer] class must be declared "final".
@@ -12,9 +12,9 @@ use DaveLiddament\Architecture\Attribute\Serializer;
 final class SerializerDeclarationRule extends AbstractDeclarationRule
 {
     #[\Override]
-    protected function getAttributeClass(): string
+    protected function getRole(): Role
     {
-        return Serializer::class;
+        return Role::Serializer;
     }
 
     #[\Override]

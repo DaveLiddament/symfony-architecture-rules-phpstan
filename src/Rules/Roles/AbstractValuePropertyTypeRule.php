@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Rules\Roles;
 
+use DaveLiddament\PhpstanArchitectureRules\Roles\Role;
+use DaveLiddament\PhpstanArchitectureRules\Roles\RoleResolver;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\ClassPropertyNode;
@@ -15,20 +17,22 @@ use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 
 /**
- * Every property of a class carrying the role attribute must be a value:
+ * Every property of a class playing the role must be a value:
  * a primitive (int, float, string, bool), an allowed class, or a list of
  * any of these. Nullable variants are allowed. By default the allowed
  * classes are \DateTimeImmutable (and subclasses), enums and other classes
- * carrying the same role attribute.
+ * playing the same role.
  *
  * @implements Rule<ClassPropertyNode>
  */
 abstract class AbstractValuePropertyTypeRule implements Rule
 {
-    /**
-     * @return class-string
-     */
-    abstract protected function getAttributeClass(): string;
+    final public function __construct(
+        private RoleResolver $roleResolver,
+    ) {
+    }
+
+    abstract protected function getRole(): Role;
 
     /**
      * The error message, with %s standing for the property, e.g. "Foo::$bar".
@@ -50,7 +54,7 @@ abstract class AbstractValuePropertyTypeRule implements Rule
     final public function processNode(Node $node, Scope $scope): array
     {
         $reflection = $node->getClassReflection();
-        if (!RoleAttribute::isOn($reflection, $this->getAttributeClass()) || !$reflection->hasNativeProperty($node->getName())) {
+        if (!$this->roleResolver->plays($reflection, $this->getRole()) || !$reflection->hasNativeProperty($node->getName())) {
             return [];
         }
 
@@ -111,6 +115,6 @@ abstract class AbstractValuePropertyTypeRule implements Rule
         return $classReflection->isEnum()
             || \DateTimeImmutable::class === $classReflection->getName()
             || $classReflection->isSubclassOf(\DateTimeImmutable::class)
-            || RoleAttribute::isOn($classReflection, $this->getAttributeClass());
+            || $this->roleResolver->plays($classReflection, $this->getRole());
     }
 }

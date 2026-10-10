@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries;
 
 use DaveLiddament\PhpstanArchitectureRules\Boundaries\BoundaryClassifier;
+use DaveLiddament\PhpstanArchitectureRules\Roles\RoleResolver;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\RoleLocationRule;
 use DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures\RoleLocation\FakeOrm\Entity;
 use DaveLiddament\PhpstanRuleTestHelper\AbstractRuleTestCase;
@@ -29,13 +30,13 @@ final class RoleLocationRuleTest extends AbstractRuleTestCase
             [self::FIXTURES.'\App\Tests'],
         );
 
-        return new RoleLocationRule($classifier, Entity::class);
+        return new RoleLocationRule($classifier, new RoleResolver(['entity' => ['attributes' => [Entity::class]]]));
     }
 
     #[\Override]
     protected function getErrorFormatter(): string
     {
-        return '{0} has #[{1}] so it must live in {2}.';
+        return '{0} has the {1} role, so it must live in {2}.';
     }
 
     #[Test]

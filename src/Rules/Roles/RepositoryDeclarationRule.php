@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Rules\Roles;
 
-use DaveLiddament\Architecture\Attribute\Repository;
+use DaveLiddament\PhpstanArchitectureRules\Roles\Role;
 
 /**
  * A #[Repository] class must be declared "final readonly".
@@ -12,9 +12,9 @@ use DaveLiddament\Architecture\Attribute\Repository;
 final class RepositoryDeclarationRule extends AbstractDeclarationRule
 {
     #[\Override]
-    protected function getAttributeClass(): string
+    protected function getRole(): Role
     {
-        return Repository::class;
+        return Role::Repository;
     }
 
     #[\Override]

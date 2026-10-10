@@ -21,12 +21,22 @@ parameters:
             configProvider: true
             controller: true
             dto: true
+            entity: true
             queueProcessor: true
             repository: true
             serializer: true
             service: true
             valueObject: true
             viewModel: true
+        # Your own attributes, parent classes and interfaces that also give a class a role, e.g.
+        #   entity:
+        #       attributes: ['App\Shared\Attribute\AggregateRoot']
+        #       extends: ['App\Shared\AbstractEntity']
+        #       implements: ['App\Shared\EntityInterface']
+        roleAliases:
+            entity:
+                attributes:
+                    - 'Doctrine\ORM\Mapping\Entity'
         roleRequired:
             # Set to false to stop requiring every application class to declare a role.
             enabled: true
@@ -49,12 +59,75 @@ parametersSchema:
             configProvider: bool()
             controller: bool()
             dto: bool()
+            entity: bool()
             queueProcessor: bool()
             repository: bool()
             serializer: bool()
             service: bool()
             valueObject: bool()
             viewModel: bool()
+        ])
+        roleAliases: structure([
+            ?cliCommand: structure([
+                ?attributes: listOf(string())
+                ?extends: listOf(string())
+                ?implements: listOf(string())
+            ])
+            ?configProvider: structure([
+                ?attributes: listOf(string())
+                ?extends: listOf(string())
+                ?implements: listOf(string())
+            ])
+            ?controller: structure([
+                ?attributes: listOf(string())
+                ?extends: listOf(string())
+                ?implements: listOf(string())
+            ])
+            ?dto: structure([
+                ?attributes: listOf(string())
+                ?extends: listOf(string())
+                ?implements: listOf(string())
+            ])
+            ?entity: structure([
+                ?attributes: listOf(string())
+                ?extends: listOf(string())
+                ?implements: listOf(string())
+            ])
+            ?queueGateway: structure([
+                ?attributes: listOf(string())
+                ?extends: listOf(string())
+                ?implements: listOf(string())
+            ])
+            ?queueProcessor: structure([
+                ?attributes: listOf(string())
+                ?extends: listOf(string())
+                ?implements: listOf(string())
+            ])
+            ?repository: structure([
+                ?attributes: listOf(string())
+                ?extends: listOf(string())
+                ?implements: listOf(string())
+            ])
+            ?serializer: structure([
+                ?attributes: listOf(string())
+                ?extends: listOf(string())
+                ?implements: listOf(string())
+            ])
+            ?service: structure([
+                ?attributes: listOf(string())
+                ?extends: listOf(string())
+                ?implements: listOf(string())
+            ])
+            ?valueObject: structure([
+                ?attributes: listOf(string())
+                ?extends: listOf(string())
+                ?implements: listOf(string())
+            ])
+            ?viewModel: structure([
+                ?attributes: listOf(string())
+                ?extends: listOf(string())
+                ?implements: listOf(string())
+            ])
         ])
         roleRequired: structure([
             enabled: bool()
@@ -63,6 +136,11 @@ parametersSchema:
     ])
 
 services:
+    -
+        class: DaveLiddament\PhpstanArchitectureRules\Roles\RoleResolver
+        arguments:
+            roleAliases: %architecture.roleAliases%
+
     -
         class: DaveLiddament\PhpstanArchitectureRules\Boundaries\BoundaryClassifier
         arguments:
@@ -86,8 +164,6 @@ services:
 
     -
         class: DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries\RoleLocationRule
-        arguments:
-            entityAttribute: 'Doctrine\ORM\Mapping\Entity'
 
     -
         class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\CliCommandDeclarationRule
@@ -97,6 +173,9 @@ services:
 
     -
         class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\DtoDeclarationRule
+
+    -
+        class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\EntityDeclarationRule
 
     -
         class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\QueueProcessorDeclarationRule
@@ -159,7 +238,6 @@ services:
     -
         class: DaveLiddament\PhpstanArchitectureRules\Rules\Roles\RoleRequiredRule
         arguments:
-            entityAttribute: 'Doctrine\ORM\Mapping\Entity'
             exemptClasses: %architecture.roleRequired.exemptClasses%
 
 conditionalTags:
@@ -179,6 +257,8 @@ conditionalTags:
         phpstan.rules.rule: %architecture.roles.configProvider%
     DaveLiddament\PhpstanArchitectureRules\Rules\Roles\DtoDeclarationRule:
         phpstan.rules.rule: %architecture.roles.dto%
+    DaveLiddament\PhpstanArchitectureRules\Rules\Roles\EntityDeclarationRule:
+        phpstan.rules.rule: %architecture.roles.entity%
     DaveLiddament\PhpstanArchitectureRules\Rules\Roles\QueueProcessorDeclarationRule:
         phpstan.rules.rule: %architecture.roles.queueProcessor%
     DaveLiddament\PhpstanArchitectureRules\Rules\Roles\RepositoryDeclarationRule:

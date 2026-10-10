@@ -6,7 +6,7 @@ namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures
 
 use DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures\RoleLocation\FakeOrm\Entity;
 
-#[Entity] // ERROR DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures\RoleLocation\App\Gym\RootEntity|Entity|DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures\RoleLocation\App\Gym\Entity
+#[Entity] // ERROR DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures\RoleLocation\App\Gym\RootEntity|entity|DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures\RoleLocation\App\Gym\Entity
 final class RootEntity
 {
 }

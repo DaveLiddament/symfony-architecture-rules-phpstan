@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Rules\Roles;
 
-use DaveLiddament\Architecture\Attribute\ValueObject;
+use DaveLiddament\PhpstanArchitectureRules\Roles\Role;
 
 /**
  * A #[ValueObject] class must be declared "final readonly".
@@ -12,9 +12,9 @@ use DaveLiddament\Architecture\Attribute\ValueObject;
 final class ValueObjectDeclarationRule extends AbstractDeclarationRule
 {
     #[\Override]
-    protected function getAttributeClass(): string
+    protected function getRole(): Role
     {
-        return ValueObject::class;
+        return Role::ValueObject;
     }
 
     #[\Override]

@@ -6,7 +6,7 @@ namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures
 
 use DaveLiddament\Architecture\Attribute\CliCommand;
 
-#[CliCommand] // ERROR DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures\RoleLocation\App\Gym\Service\MisplacedCommand|CliCommand|DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures\RoleLocation\App\Gym\CliCommand
+#[CliCommand] // ERROR DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures\RoleLocation\App\Gym\Service\MisplacedCommand|cliCommand|DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures\RoleLocation\App\Gym\CliCommand
 final class MisplacedCommand
 {
 }

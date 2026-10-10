@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Rules\Roles;
 
-use DaveLiddament\Architecture\Attribute\Repository;
+use DaveLiddament\PhpstanArchitectureRules\Roles\Role;
+use DaveLiddament\PhpstanArchitectureRules\Roles\RoleResolver;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\ClassPropertyNode;
@@ -24,6 +25,7 @@ use PHPStan\Type\UnionType;
 final class EntityManagerUsageRule implements Rule
 {
     public function __construct(
+        private RoleResolver $roleResolver,
         private string $entityManagerInterface,
     ) {
     }
@@ -41,7 +43,7 @@ final class EntityManagerUsageRule implements Rule
     public function processNode(Node $node, Scope $scope): array
     {
         $reflection = $node->getClassReflection();
-        if (RoleAttribute::isOn($reflection, Repository::class) || !$reflection->hasNativeProperty($node->getName())) {
+        if ($this->roleResolver->plays($reflection, Role::Repository) || !$reflection->hasNativeProperty($node->getName())) {
             return [];
         }
 

@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Rules\Roles;
 
-use DaveLiddament\Architecture\Attribute\Serializer;
+use DaveLiddament\PhpstanArchitectureRules\Roles\Role;
+use DaveLiddament\PhpstanArchitectureRules\Roles\RoleResolver;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassMethodNode;
@@ -31,8 +32,10 @@ final class ArrayShapeReturnRule implements Rule
     /**
      * @param list<string> $ignoredNamespaces
      */
-    public function __construct(array $ignoredNamespaces)
-    {
+    public function __construct(
+        private RoleResolver $roleResolver,
+        array $ignoredNamespaces,
+    ) {
         $this->ignoredNamespaces = array_map(static fn (string $namespace): string => trim($namespace, '\\'), $ignoredNamespaces);
     }
 
@@ -52,7 +55,7 @@ final class ArrayShapeReturnRule implements Rule
         if (
             null === $classReflection
             || $this->isIgnored($classReflection)
-            || RoleAttribute::isOn($classReflection, Serializer::class)
+            || $this->roleResolver->plays($classReflection, Role::Serializer)
         ) {
             return [];
         }

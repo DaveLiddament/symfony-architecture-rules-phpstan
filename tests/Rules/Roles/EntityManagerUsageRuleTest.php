@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles;
 
+use DaveLiddament\PhpstanArchitectureRules\Roles\RoleResolver;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\EntityManagerUsageRule;
 use DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\EntityManagerUsage\FakeDoctrine\EntityManagerInterface;
 use DaveLiddament\PhpstanRuleTestHelper\AbstractRuleTestCase;
@@ -18,7 +19,7 @@ final class EntityManagerUsageRuleTest extends AbstractRuleTestCase
     #[\Override]
     protected function getRule(): Rule
     {
-        return new EntityManagerUsageRule(EntityManagerInterface::class);
+        return new EntityManagerUsageRule(new RoleResolver([]), EntityManagerInterface::class);
     }
 
     #[\Override]

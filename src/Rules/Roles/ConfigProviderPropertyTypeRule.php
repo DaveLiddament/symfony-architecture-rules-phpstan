@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Rules\Roles;
 
-use DaveLiddament\Architecture\Attribute\ConfigProvider;
+use DaveLiddament\PhpstanArchitectureRules\Roles\Role;
 use PHPStan\Reflection\ClassReflection;
 
 /**
@@ -14,9 +14,9 @@ use PHPStan\Reflection\ClassReflection;
 final class ConfigProviderPropertyTypeRule extends AbstractValuePropertyTypeRule
 {
     #[\Override]
-    protected function getAttributeClass(): string
+    protected function getRole(): Role
     {
-        return ConfigProvider::class;
+        return Role::ConfigProvider;
     }
 
     #[\Override]

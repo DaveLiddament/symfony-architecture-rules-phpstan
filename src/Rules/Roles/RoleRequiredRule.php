@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Rules\Roles;
 
-use DaveLiddament\Architecture\Attribute\Service;
 use DaveLiddament\PhpstanArchitectureRules\Boundaries\AreaType;
 use DaveLiddament\PhpstanArchitectureRules\Boundaries\BoundaryClassifier;
+use DaveLiddament\PhpstanArchitectureRules\Roles\RoleResolver;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassNode;
@@ -15,12 +15,12 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 
 /**
- * Every application class (in a domain, Shared or the Nursery) declares its
- * role with a role attribute, or Doctrine's #[ORM\Entity], so the role
- * contracts can see it: an unattributed class is invisible to every other
- * role rule. Enums, interfaces and traits are exempt, as are framework-glue
- * classes directly in the app namespace (e.g. App\Kernel), ignored
- * namespaces and the configured exempt classes.
+ * Every application class (in a domain, Shared or the Nursery) plays a role,
+ * through a role attribute or a role alias, so the role contracts can see
+ * it: a class without a role is invisible to every other role rule. Enums,
+ * interfaces and traits are exempt, as are framework-glue classes directly
+ * in the app namespace (e.g. App\Kernel), ignored namespaces and the
+ * configured exempt classes.
  *
  * @implements Rule<InClassNode>
  */
@@ -28,17 +28,14 @@ final class RoleRequiredRule implements Rule
 {
     private const array CHECKED_AREAS = [AreaType::Domain, AreaType::Shared, AreaType::Nursery];
 
-    private string $roleAttributeNamespace;
-
     /**
      * @param list<string> $exemptClasses
      */
     public function __construct(
         private BoundaryClassifier $classifier,
-        private string $entityAttribute,
+        private RoleResolver $roleResolver,
         private array $exemptClasses,
     ) {
-        $this->roleAttributeNamespace = substr(Service::class, 0, (int) strrpos(Service::class, '\\'));
     }
 
     #[\Override]
@@ -62,24 +59,16 @@ final class RoleRequiredRule implements Rule
         if (
             !in_array($this->classifier->classifyClass($name)->type, self::CHECKED_AREAS, true)
             || in_array($name, $this->exemptClasses, true)
+            || $this->roleResolver->hasAnyRole($reflection)
         ) {
             return [];
-        }
-
-        foreach ($reflection->getNativeReflection()->getAttributes() as $attribute) {
-            if (
-                str_starts_with($attribute->getName(), $this->roleAttributeNamespace.'\\')
-                || $this->entityAttribute === $attribute->getName()
-            ) {
-                return [];
-            }
         }
 
         return [
             RuleErrorBuilder::message(sprintf(
                 'Class %s declares no role: give it a role attribute from %s (#[Service], #[Dto], #[ValueObject], ...).',
                 $name,
-                $this->roleAttributeNamespace,
+                $this->roleResolver->getAttributeNamespace(),
             ))
                 ->identifier('architecture.roleRequired')
                 ->build(),

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Rules\Roles;
 
-use DaveLiddament\Architecture\Attribute\ViewModel;
+use DaveLiddament\PhpstanArchitectureRules\Roles\Role;
 
 /**
  * A #[ViewModel] class must be declared "final readonly".
@@ -12,9 +12,9 @@ use DaveLiddament\Architecture\Attribute\ViewModel;
 final class ViewModelDeclarationRule extends AbstractDeclarationRule
 {
     #[\Override]
-    protected function getAttributeClass(): string
+    protected function getRole(): Role
     {
-        return ViewModel::class;
+        return Role::ViewModel;
     }
 
     #[\Override]

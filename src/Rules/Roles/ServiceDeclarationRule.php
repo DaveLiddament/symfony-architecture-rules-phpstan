@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Rules\Roles;
 
-use DaveLiddament\Architecture\Attribute\Service;
+use DaveLiddament\PhpstanArchitectureRules\Roles\Role;
 
 /**
  * A #[Service] class must be declared "final readonly".
@@ -12,9 +12,9 @@ use DaveLiddament\Architecture\Attribute\Service;
 final class ServiceDeclarationRule extends AbstractDeclarationRule
 {
     #[\Override]
-    protected function getAttributeClass(): string
+    protected function getRole(): Role
     {
-        return Service::class;
+        return Role::Service;
     }
 
     #[\Override]

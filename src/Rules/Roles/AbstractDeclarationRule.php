@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Rules\Roles;
 
+use DaveLiddament\PhpstanArchitectureRules\Roles\Role;
+use DaveLiddament\PhpstanArchitectureRules\Roles\RoleResolver;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassNode;
@@ -12,17 +14,19 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 
 /**
- * A class carrying a role attribute must be declared final, and for some
- * roles also readonly.
+ * A class playing the role must be declared final, and for some roles also
+ * readonly.
  *
  * @implements Rule<InClassNode>
  */
 abstract class AbstractDeclarationRule implements Rule
 {
-    /**
-     * @return class-string
-     */
-    abstract protected function getAttributeClass(): string;
+    final public function __construct(
+        private RoleResolver $roleResolver,
+    ) {
+    }
+
+    abstract protected function getRole(): Role;
 
     /**
      * The role's name as it appears in error messages, e.g. "Value object".
@@ -32,6 +36,15 @@ abstract class AbstractDeclarationRule implements Rule
     abstract protected function mustBeReadonly(): bool;
 
     abstract protected function getIdentifier(): string;
+
+    /**
+     * Whether a @final PHPDoc tag is enough, for roles that libraries such as
+     * ORMs need to extend at runtime (e.g. lazy-loading proxies).
+     */
+    protected function acceptsPhpDocFinal(): bool
+    {
+        return false;
+    }
 
     #[\Override]
     final public function getNodeType(): string
@@ -46,21 +59,27 @@ abstract class AbstractDeclarationRule implements Rule
     final public function processNode(Node $node, Scope $scope): array
     {
         $reflection = $node->getClassReflection();
-        if ($reflection->isAnonymous() || !RoleAttribute::isOn($reflection, $this->getAttributeClass())) {
+        if ($reflection->isAnonymous() || !$this->roleResolver->plays($reflection, $this->getRole())) {
             return [];
         }
 
-        $native = $reflection->getNativeReflection();
-        if ($native->isFinal() && (!$this->mustBeReadonly() || $native->isReadOnly())) {
+        $isFinal = $this->acceptsPhpDocFinal() ? $reflection->isFinal() : $reflection->isFinalByKeyword();
+        if ($isFinal && (!$this->mustBeReadonly() || $reflection->getNativeReflection()->isReadOnly())) {
             return [];
         }
+
+        $requirement = match (true) {
+            $this->mustBeReadonly() => 'final and readonly',
+            $this->acceptsPhpDocFinal() => 'final (or @final)',
+            default => 'final',
+        };
 
         return [
             RuleErrorBuilder::message(sprintf(
                 '%s %s must be %s.',
                 $this->getRoleName(),
                 $reflection->getName(),
-                $this->mustBeReadonly() ? 'final and readonly' : 'final',
+                $requirement,
             ))
                 ->identifier($this->getIdentifier())
                 ->build(),

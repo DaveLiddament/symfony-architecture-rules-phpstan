@@ -6,7 +6,7 @@ namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures
 
 use DaveLiddament\Architecture\Attribute\Controller;
 
-#[Controller] // ERROR DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures\RoleLocation\App\Gym\BadController|Controller|DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures\RoleLocation\App\Gym\Controller
+#[Controller] // ERROR DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures\RoleLocation\App\Gym\BadController|controller|DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Boundaries\Fixtures\RoleLocation\App\Gym\Controller
 final class BadController
 {
 }

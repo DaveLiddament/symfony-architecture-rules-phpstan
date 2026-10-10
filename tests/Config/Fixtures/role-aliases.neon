@@ -1,0 +1,6 @@
+parameters:
+    architecture:
+        roleAliases:
+            entity:
+                attributes:
+                    - 'DaveLiddament\PhpstanArchitectureRules\Tests\Config\Fixtures\RoleAliases\AggregateRoot'

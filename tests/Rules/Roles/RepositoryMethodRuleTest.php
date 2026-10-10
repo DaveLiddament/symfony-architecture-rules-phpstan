@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles;
 
+use DaveLiddament\PhpstanArchitectureRules\Roles\RoleResolver;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\RepositoryMethodRule;
 use DaveLiddament\PhpstanRuleTestHelper\AbstractRuleTestCase;
 use PHPStan\Rules\Rule;
@@ -17,7 +18,7 @@ final class RepositoryMethodRuleTest extends AbstractRuleTestCase
     #[\Override]
     protected function getRule(): Rule
     {
-        return new RepositoryMethodRule();
+        return new RepositoryMethodRule(new RoleResolver([]));
     }
 
     #[Test]

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Rules\Roles;
 
-use DaveLiddament\Architecture\Attribute\ConfigProvider;
-use DaveLiddament\Architecture\Attribute\Service;
+use DaveLiddament\PhpstanArchitectureRules\Roles\Role;
+use DaveLiddament\PhpstanArchitectureRules\Roles\RoleResolver;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\ClassPropertyNode;
@@ -23,6 +23,11 @@ use PHPStan\Type\UnionType;
  */
 final class ConfigProviderUsageRule implements Rule
 {
+    public function __construct(
+        private RoleResolver $roleResolver,
+    ) {
+    }
+
     #[\Override]
     public function getNodeType(): string
     {
@@ -36,7 +41,7 @@ final class ConfigProviderUsageRule implements Rule
     public function processNode(Node $node, Scope $scope): array
     {
         $reflection = $node->getClassReflection();
-        if (RoleAttribute::isOn($reflection, Service::class) || !$reflection->hasNativeProperty($node->getName())) {
+        if ($this->roleResolver->plays($reflection, Role::Service) || !$reflection->hasNativeProperty($node->getName())) {
             return [];
         }
 
@@ -78,7 +83,7 @@ final class ConfigProviderUsageRule implements Rule
         $classReflections = $type->getObjectClassReflections();
         if ([] !== $classReflections) {
             foreach ($classReflections as $classReflection) {
-                if (RoleAttribute::isOn($classReflection, ConfigProvider::class)) {
+                if ($this->roleResolver->plays($classReflection, Role::ConfigProvider)) {
                     return true;
                 }
             }

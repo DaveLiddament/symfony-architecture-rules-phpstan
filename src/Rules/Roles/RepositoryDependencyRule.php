@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Rules\Roles;
 
-use DaveLiddament\Architecture\Attribute\Repository;
+use DaveLiddament\PhpstanArchitectureRules\Roles\Role;
+use DaveLiddament\PhpstanArchitectureRules\Roles\RoleResolver;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\ClassPropertyNode;
@@ -25,8 +26,10 @@ final class RepositoryDependencyRule implements Rule
 {
     private string $doctrineNamespace;
 
-    public function __construct(string $doctrineNamespace)
-    {
+    public function __construct(
+        private RoleResolver $roleResolver,
+        string $doctrineNamespace,
+    ) {
         $this->doctrineNamespace = trim($doctrineNamespace, '\\');
     }
 
@@ -43,7 +46,7 @@ final class RepositoryDependencyRule implements Rule
     public function processNode(Node $node, Scope $scope): array
     {
         $reflection = $node->getClassReflection();
-        if (!RoleAttribute::isOn($reflection, Repository::class) || !$reflection->hasNativeProperty($node->getName())) {
+        if (!$this->roleResolver->plays($reflection, Role::Repository) || !$reflection->hasNativeProperty($node->getName())) {
             return [];
         }
 

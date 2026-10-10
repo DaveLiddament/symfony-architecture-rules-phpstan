@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles;
 
+use DaveLiddament\PhpstanArchitectureRules\Roles\RoleResolver;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\RepositoryDependencyRule;
 use DaveLiddament\PhpstanRuleTestHelper\AbstractRuleTestCase;
 use PHPStan\Rules\Rule;
@@ -19,7 +20,7 @@ final class RepositoryDependencyRuleTest extends AbstractRuleTestCase
     #[\Override]
     protected function getRule(): Rule
     {
-        return new RepositoryDependencyRule(self::FAKE_DOCTRINE);
+        return new RepositoryDependencyRule(new RoleResolver([]), self::FAKE_DOCTRINE);
     }
 
     #[\Override]

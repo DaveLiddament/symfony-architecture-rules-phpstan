@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Rules\Roles;
 
-use DaveLiddament\Architecture\Attribute\Repository;
+use DaveLiddament\PhpstanArchitectureRules\Roles\Role;
+use DaveLiddament\PhpstanArchitectureRules\Roles\RoleResolver;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassMethodNode;
@@ -28,6 +29,11 @@ final class RepositoryMethodRule implements Rule
 
     private const array WRITE_PREFIXES = ['persist', 'update', 'delete'];
 
+    public function __construct(
+        private RoleResolver $roleResolver,
+    ) {
+    }
+
     #[\Override]
     public function getNodeType(): string
     {
@@ -41,7 +47,7 @@ final class RepositoryMethodRule implements Rule
     public function processNode(Node $node, Scope $scope): array
     {
         $classReflection = $scope->getClassReflection();
-        if (null === $classReflection || !RoleAttribute::isOn($classReflection, Repository::class)) {
+        if (null === $classReflection || !$this->roleResolver->plays($classReflection, Role::Repository)) {
             return [];
         }
 

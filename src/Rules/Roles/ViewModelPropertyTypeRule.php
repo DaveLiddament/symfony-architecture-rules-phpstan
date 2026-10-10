@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Rules\Roles;
 
-use DaveLiddament\Architecture\Attribute\ViewModel;
+use DaveLiddament\PhpstanArchitectureRules\Roles\Role;
 
 /**
  * Properties of a #[ViewModel] must be render-ready values: primitives,
@@ -15,9 +15,9 @@ use DaveLiddament\Architecture\Attribute\ViewModel;
 final class ViewModelPropertyTypeRule extends AbstractValuePropertyTypeRule
 {
     #[\Override]
-    protected function getAttributeClass(): string
+    protected function getRole(): Role
     {
-        return ViewModel::class;
+        return Role::ViewModel;
     }
 
     #[\Override]

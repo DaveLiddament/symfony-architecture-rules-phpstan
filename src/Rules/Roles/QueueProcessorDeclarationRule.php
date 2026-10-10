@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Rules\Roles;
 
-use DaveLiddament\Architecture\Attribute\QueueProcessor;
+use DaveLiddament\PhpstanArchitectureRules\Roles\Role;
 
 /**
  * A #[QueueProcessor] class must be declared "final readonly".
@@ -12,9 +12,9 @@ use DaveLiddament\Architecture\Attribute\QueueProcessor;
 final class QueueProcessorDeclarationRule extends AbstractDeclarationRule
 {
     #[\Override]
-    protected function getAttributeClass(): string
+    protected function getRole(): Role
     {
-        return QueueProcessor::class;
+        return Role::QueueProcessor;
     }
 
     #[\Override]

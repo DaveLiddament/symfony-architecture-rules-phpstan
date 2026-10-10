@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Rules\Boundaries;
 
-use DaveLiddament\Architecture\Attribute\CliCommand;
-use DaveLiddament\Architecture\Attribute\Controller;
-use DaveLiddament\Architecture\Attribute\Repository;
 use DaveLiddament\PhpstanArchitectureRules\Boundaries\AreaType;
 use DaveLiddament\PhpstanArchitectureRules\Boundaries\BoundaryClassifier;
+use DaveLiddament\PhpstanArchitectureRules\Roles\Role;
+use DaveLiddament\PhpstanArchitectureRules\Roles\RoleResolver;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassNode;
@@ -21,10 +20,10 @@ use PHPStan\Rules\RuleErrorBuilder;
  * relative to the root of the class's area (a domain, Shared or the
  * Nursery):
  *
- * - #[Controller] and #[CliCommand] (framework-invoked entry points) and
- *   entities (Doctrine mappings scan a known directory) must always live
- *   in their role directory, e.g. App\Registration\Controller.
- * - A #[Repository] lives in its role directory or at the area root.
+ * - Controllers and CLI commands (framework-invoked entry points) and
+ *   entities (ORM mappings scan a known directory) must always live in
+ *   their role directory, e.g. App\Registration\Controller.
+ * - A repository lives in its role directory or at the area root.
  *
  * Every other role carries no location demand.
  *
@@ -34,19 +33,18 @@ final class RoleLocationRule implements Rule
 {
     private const array CHECKED_AREAS = [AreaType::Domain, AreaType::Shared, AreaType::Nursery];
 
-    /** @var array<string, array{directory: string, allowedAtAreaRoot: bool}> attribute => location */
-    private array $roleLocations;
+    /** @var array<string, array{directory: string, allowedAtAreaRoot: bool}> role => location */
+    private const array ROLE_LOCATIONS = [
+        Role::Controller->value => ['directory' => 'Controller', 'allowedAtAreaRoot' => false],
+        Role::CliCommand->value => ['directory' => 'CliCommand', 'allowedAtAreaRoot' => false],
+        Role::Entity->value => ['directory' => 'Entity', 'allowedAtAreaRoot' => false],
+        Role::Repository->value => ['directory' => 'Repository', 'allowedAtAreaRoot' => true],
+    ];
 
     public function __construct(
         private BoundaryClassifier $classifier,
-        string $entityAttribute,
+        private RoleResolver $roleResolver,
     ) {
-        $this->roleLocations = [
-            Controller::class => ['directory' => 'Controller', 'allowedAtAreaRoot' => false],
-            CliCommand::class => ['directory' => 'CliCommand', 'allowedAtAreaRoot' => false],
-            $entityAttribute => ['directory' => 'Entity', 'allowedAtAreaRoot' => false],
-            Repository::class => ['directory' => 'Repository', 'allowedAtAreaRoot' => true],
-        ];
     }
 
     #[\Override]
@@ -75,8 +73,8 @@ final class RoleLocationRule implements Rule
         $directory = $isAtAreaRoot ? null : explode('\\', $pathInArea)[0];
 
         $errors = [];
-        foreach ($classReflection->getNativeReflection()->getAttributes() as $attribute) {
-            $location = $this->roleLocations[$attribute->getName()] ?? null;
+        foreach ($this->roleResolver->rolesOf($classReflection) as $role) {
+            $location = self::ROLE_LOCATIONS[$role->value] ?? null;
             if (
                 null === $location
                 || $directory === $location['directory']
@@ -91,9 +89,9 @@ final class RoleLocationRule implements Rule
             }
 
             $errors[] = RuleErrorBuilder::message(sprintf(
-                '%s has #[%s] so it must live in %s.',
+                '%s has the %s role, so it must live in %s.',
                 $className,
-                substr($attribute->getName(), (int) strrpos('\\'.$attribute->getName(), '\\')),
+                $role->value,
                 $expected,
             ))
                 ->identifier('architecture.roleLocation')

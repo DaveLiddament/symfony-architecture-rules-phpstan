@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Rules\Roles;
 
-use DaveLiddament\Architecture\Attribute\ValueObject;
+use DaveLiddament\PhpstanArchitectureRules\Roles\Role;
 
 /**
  * Properties of a #[ValueObject] must themselves be values: primitives,
@@ -15,9 +15,9 @@ use DaveLiddament\Architecture\Attribute\ValueObject;
 final class ValueObjectPropertyTypeRule extends AbstractValuePropertyTypeRule
 {
     #[\Override]
-    protected function getAttributeClass(): string
+    protected function getRole(): Role
     {
-        return ValueObject::class;
+        return Role::ValueObject;
     }
 
     #[\Override]

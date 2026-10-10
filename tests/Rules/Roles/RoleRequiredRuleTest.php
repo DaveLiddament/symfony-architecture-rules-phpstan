@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles;
 
 use DaveLiddament\PhpstanArchitectureRules\Boundaries\BoundaryClassifier;
+use DaveLiddament\PhpstanArchitectureRules\Roles\RoleResolver;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\RoleRequiredRule;
 use DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\RoleRequired\FakeApp\Gym\ExemptGlue;
 use DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\RoleRequired\FakeOrm\Entity;
@@ -30,7 +31,11 @@ final class RoleRequiredRuleTest extends AbstractRuleTestCase
             [self::FAKE_APP.'\Tests'],
         );
 
-        return new RoleRequiredRule($classifier, Entity::class, [ExemptGlue::class]);
+        return new RoleRequiredRule(
+            $classifier,
+            new RoleResolver(['entity' => ['attributes' => [Entity::class]]]),
+            [ExemptGlue::class],
+        );
     }
 
     #[\Override]

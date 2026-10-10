@@ -72,7 +72,7 @@ class, that's the signal to move it.
 | <a id="role-location"></a>`RoleLocationRule` | `architecture.roleLocation` | A controller, CLI command or entity outside its role directory, e.g. `App\Registration\Controller`, or a repository outside `Repository\` or the area root |
 
 Role directories are relative to the area's root, so the same applies inside Shared (`App\Shared\Entity`) and the
-Nursery. Entities are recognised by Doctrine's `#[ORM\Entity]`.
+Nursery. Roles are recognised by their attribute or a [role alias](#role-aliases).
 
 Every class name used in code is checked (type declarations, `new`, static calls, `instanceof`, `extends`,
 attributes, ...). Class names that appear only in PHPDoc are not.
@@ -82,8 +82,8 @@ To configure or turn off these rules, see [Configuration](#configuration).
 ## Role contracts
 
 Every class in a domain, Shared or the Nursery must declare the role it plays, using an attribute from
-`DaveLiddament\Architecture\Attribute` (`architecture.roleRequired`). Entities use Doctrine's `#[ORM\Entity]`
-instead. A class without a role is invisible to the role rules, so it is reported. Enums, interfaces, traits,
+`DaveLiddament\Architecture\Attribute`, or one of your own mapped onto a role with a [role alias](#role-aliases)
+(`architecture.roleRequired`). A class without a role is invisible to the role rules, so it is reported. Enums, interfaces, traits,
 framework glue directly in `App\` and ignored namespaces are exempt.
 
 ```php
@@ -103,6 +103,7 @@ The roles:
 | [`#[ConfigProvider]`](#configprovider) | The one place primitive configuration lives |
 | [`#[Controller]`](#controller) | An HTTP entry point |
 | [`#[Dto]`](#dto) | A plain data carrier between layers |
+| [`#[Entity]`](#entity) | An object with identity |
 | [`#[QueueGateway]`](#queuegateway) | Sends messages to a queue |
 | [`#[QueueProcessor]`](#queueprocessor) | A message handler |
 | [`#[Repository]`](#repository) | Wraps the ORM |
@@ -151,6 +152,14 @@ parameters:
 - Must be `final` (`dto.final`).
 - Deliberately not a value object: a DTO may carry things a value never would, such as entities.
 - Turn off with `roles.dto: false`.
+
+### Entity
+
+- Must be `final` (`entity.final`). A `@final` PHPDoc tag also counts, so an ORM can still extend it at runtime for
+  lazy-loading proxies.
+- Must live in an `Entity` directory, e.g. `App\Registration\Entity` ([role location](#role-location)).
+- Doctrine's `#[ORM\Entity]` counts as `#[Entity]` by default.
+- Turn off with `roles.entity: false`.
 
 ### QueueGateway
 
@@ -233,18 +242,47 @@ parameters:
             configProvider: true
             controller: true
             dto: true
+            entity: true
             queueProcessor: true
             repository: true
             serializer: true
             service: true
             valueObject: true
             viewModel: true
+        roleAliases:                         # see Role aliases
+            entity:
+                attributes:
+                    - 'Doctrine\ORM\Mapping\Entity'
         roleRequired:
             enabled: true
             exemptClasses: []                # framework glue that may stay roleless
 ```
 
 PHPStan adds list values to the defaults. To replace a list instead, add `!` to its key, e.g. `ignoredNamespaces!:`.
+
+### Role aliases
+
+If your project already has its own attributes, parent classes or interfaces for a role, map them onto the role
+rather than adding a second attribute. A class matching any alias plays that role, and every rule for the role applies
+to it:
+
+```neon
+parameters:
+    architecture:
+        roleAliases:
+            entity:
+                attributes:
+                    - 'App\Shared\Attribute\AggregateRoot'
+            controller:
+                extends:
+                    - 'App\Shared\Controller\BaseController'
+            queueProcessor:
+                implements:
+                    - 'App\Shared\Queue\MessageHandler'
+```
+
+Each role takes `attributes`, `extends` and `implements` lists. The role names are the keys under `roles`. An alias
+attribute only counts on the class that declares it, while `extends` and `implements` match any descendant.
 
 ### Turning rules off
 

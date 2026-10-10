@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles;
 
+use DaveLiddament\PhpstanArchitectureRules\Roles\RoleResolver;
 use DaveLiddament\PhpstanArchitectureRules\Rules\Roles\ControllerMethodReturnTypeRule;
 use DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\ControllerReturnTypes\FakeHttp\JsonResponse;
 use DaveLiddament\PhpstanArchitectureRules\Tests\Rules\Roles\Fixtures\ControllerReturnTypes\FakeHttp\Page;
@@ -26,7 +27,7 @@ final class ControllerMethodReturnTypeRuleTest extends AbstractRuleTestCase
     #[\Override]
     protected function getRule(): Rule
     {
-        return new ControllerMethodReturnTypeRule(self::createReflectionProvider(), $this->allowedReturnTypes);
+        return new ControllerMethodReturnTypeRule(new RoleResolver([]), self::createReflectionProvider(), $this->allowedReturnTypes);
     }
 
     #[\Override]
