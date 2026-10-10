@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DaveLiddament\PhpstanArchitectureRules\Rules\Roles;
 
+use DaveLiddament\PhpstanArchitectureRules\Roles\RepositoryMethodKind;
 use DaveLiddament\PhpstanArchitectureRules\Roles\Role;
 use DaveLiddament\PhpstanArchitectureRules\Roles\RoleResolver;
 use PhpParser\Node;
@@ -25,10 +26,6 @@ use PHPStan\Type\TypeCombinator;
  */
 final class RepositoryMethodRule implements Rule
 {
-    private const array PREFIXES = ['find', 'get', 'persist', 'update', 'delete', 'has', 'is'];
-
-    private const array WRITE_PREFIXES = ['persist', 'update', 'delete'];
-
     public function __construct(
         private RoleResolver $roleResolver,
     ) {
@@ -57,8 +54,8 @@ final class RepositoryMethodRule implements Rule
             return [];
         }
 
-        $prefix = $this->matchedPrefix($name);
-        if (null === $prefix) {
+        $kind = RepositoryMethodKind::fromMethodName($name);
+        if (null === $kind) {
             return [$this->error(sprintf(
                 'Repository method %s::%s() must start with find, get, persist, update, delete, has or is.',
                 $classReflection->getName(),
@@ -68,7 +65,7 @@ final class RepositoryMethodRule implements Rule
 
         $returnType = $node->getMethodReflection()->getOnlyVariant()->getReturnType();
 
-        if (in_array($prefix, self::WRITE_PREFIXES, true) && !$returnType->isVoid()->yes()) {
+        if (!$kind->isRead() && !$returnType->isVoid()->yes()) {
             return [$this->error(sprintf(
                 'Repository method %s::%s() is a write, so it must return void.',
                 $classReflection->getName(),
@@ -76,7 +73,7 @@ final class RepositoryMethodRule implements Rule
             ), 'repository.methodReturn')];
         }
 
-        if ('get' === $prefix && TypeCombinator::containsNull($returnType)) {
+        if (RepositoryMethodKind::Get === $kind && TypeCombinator::containsNull($returnType)) {
             return [$this->error(sprintf(
                 'Repository method %s::%s() is a get, so its return type must not be nullable.',
                 $classReflection->getName(),
@@ -84,7 +81,7 @@ final class RepositoryMethodRule implements Rule
             ), 'repository.methodReturn')];
         }
 
-        if ('find' === $prefix
+        if (RepositoryMethodKind::Find === $kind
             && (!TypeCombinator::containsNull($returnType) || TypeCombinator::removeNull($returnType)->isIterable()->yes())
         ) {
             return [$this->error(sprintf(
@@ -108,25 +105,5 @@ final class RepositoryMethodRule implements Rule
     private function error(string $message, string $identifier): IdentifierRuleError
     {
         return RuleErrorBuilder::message($message)->identifier($identifier)->build();
-    }
-
-    /**
-     * The prefix must end the name or be followed by an uppercase letter or
-     * digit, so "getaway" is not a get.
-     */
-    private function matchedPrefix(string $name): ?string
-    {
-        foreach (self::PREFIXES as $prefix) {
-            if (!str_starts_with($name, $prefix)) {
-                continue;
-            }
-
-            $rest = substr($name, strlen($prefix));
-            if ('' === $rest || 1 === preg_match('/^[A-Z0-9]/', $rest)) {
-                return $prefix;
-            }
-        }
-
-        return null;
     }
 }
